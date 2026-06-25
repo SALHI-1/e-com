@@ -25,3 +25,16 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'create'])->name('login');
+        Route::post('login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'store']);
+    });
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::post('logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'destroy'])->name('logout');
+    });
+});
