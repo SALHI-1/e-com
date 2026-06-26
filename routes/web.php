@@ -9,14 +9,18 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
+        'products' => \App\Models\Product::with('category')->get(),
+        'cartCount' => array_sum(session()->get('cart', []))
     ]);
-});
+})->name('home');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('dashboard');
+// Cart Routes
+Route::get('/panier', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+Route::post('/panier/ajouter', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::patch('/panier/modifier', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
+Route::delete('/panier/supprimer', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,5 +40,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'destroy'])->name('logout');
+        
+        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
+        Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
     });
 });

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('volume')->nullable();
             $table->boolean('is_new')->default(false);
             $table->boolean('is_bestseller')->default(false);
+            $table->string('image_url')->nullable();
             $table->timestamps();
         });
     }
