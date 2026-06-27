@@ -1,27 +1,36 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
+        'canLogin'    => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'products' => \App\Models\Product::with('category')->get(),
-        'cartCount' => array_sum(session()->get('cart', []))
+        'products'    => \App\Models\Product::with('category')->get(),
+        'cartCount'   => array_sum(session()->get('cart', [])),
     ]);
 })->name('home');
 
-// Cart Routes
+// ─── Panier ───────────────────────────────────────────────────────────────────
 Route::get('/panier', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/panier/ajouter', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
 Route::patch('/panier/modifier', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
 Route::delete('/panier/supprimer', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
 
+// Checkout — accessible aux clients connectés ET aux invités (sans auth middleware)
+Route::post('/panier/commander', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
 
+// ─── WhatsApp Webhook ─────────────────────────────────────────────────────────
+// Ces routes sont exclues du CSRF dans bootstrap/app.php
+Route::get('/webhook/whatsapp', [\App\Http\Controllers\WhatsApp\WebhookController::class, 'verify'])
+    ->name('webhook.whatsapp.verify');
 
+Route::post('/webhook/whatsapp', [\App\Http\Controllers\WhatsApp\WebhookController::class, 'handle'])
+    ->name('webhook.whatsapp.handle');
+
+// ─── Profil utilisateur ───────────────────────────────────────────────────────
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -30,7 +39,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-// Admin Routes
+// ─── Admin ────────────────────────────────────────────────────────────────────
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'create'])->name('login');
@@ -40,8 +49,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'destroy'])->name('logout');
-        
-        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
+
+        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show', 'destroy']);
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
     });
 });

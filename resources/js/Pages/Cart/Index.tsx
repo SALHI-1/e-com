@@ -1,153 +1,234 @@
 import { PageProps } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
+import { useState } from 'react';
+import ClientLayout from '@/Layouts/ClientLayout';
 
-export default function Index({
-    auth,
-    cartItems,
-    totalAmount,
-    cartCount,
-    flash,
-    errors
-}: PageProps<{ cartItems: any[], totalAmount: number, cartCount: number, flash?: { success?: string }, errors?: any }>) {
+interface CartItem {
+    product: {
+        id: number;
+        name: string;
+        price: number;
+        stock: number;
+        image_url?: string;
+        category?: { name: string };
+    };
+    quantity: number;
+    subtotal: number;
+}
+
+interface Props extends PageProps {
+    cartItems: CartItem[];
+    totalAmount: number;
+    cartCount: number;
+    flash?: { success?: string };
+    errors?: Record<string, string>;
+}
+
+export default function Index({ auth, cartItems, totalAmount, cartCount, flash, errors }: Props) {
+    const [showCheckout, setShowCheckout] = useState(false);
+
+    const { data, setData, post, processing, errors: formErrors } = useForm<{
+        shipping_address: string;
+        phone: string;
+        guest_name: string;
+        guest_email: string;
+    }>({
+        shipping_address: '',
+        phone: auth.user?.phone ?? '',
+        guest_name: '',
+        guest_email: '',
+    });
 
     const updateQuantity = (productId: number, quantity: number) => {
-        router.patch(route('cart.update'), { product_id: productId, quantity }, {
-            preserveScroll: true
-        });
+        router.patch(route('cart.update'), { product_id: productId, quantity }, { preserveScroll: true });
     };
 
     const removeItem = (productId: number) => {
-        router.delete(route('cart.remove'), { 
-            data: { product_id: productId },
-            preserveScroll: true 
-        });
+        router.delete(route('cart.remove'), { data: { product_id: productId }, preserveScroll: true });
+    };
+
+    const handleCheckout = (e: React.FormEvent) => {
+        e.preventDefault();
+        post(route('cart.checkout'));
     };
 
     return (
-        <div className="min-h-screen bg-gray-100 p-6">
-            <Head title="Mon Panier" />
+        <ClientLayout auth={auth} cartCount={cartCount} title="Mon Panier — Aurélia">
 
-            {/* Navigation Simple */}
-            <nav className="flex justify-between items-center bg-white p-4 rounded shadow mb-6">
-                <Link href={route('home')} className="text-xl font-bold text-gray-800 hover:text-indigo-600">
-                    Ma Boutique
-                </Link>
-                <div className="flex space-x-4 items-center">
-                    <div className="relative text-indigo-600 font-semibold mr-4 cursor-default">
-                        Mon Panier
-                        {cartCount > 0 && (
-                            <span className="absolute -top-2 -right-3 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
-                                {cartCount}
-                            </span>
-                        )}
-                    </div>
-
-                    {auth.user ? (
-                        <>
-                            <Link href={route('profile.edit')} className="text-gray-600 hover:text-gray-900">
-                                Profil
-                            </Link>
-                            <Link href={route('logout')} method="post" as="button" className="text-red-600 hover:text-red-900">
-                                Déconnexion
-                            </Link>
-                        </>
-                    ) : (
-                        <>
-                            <Link href={route('login')} className="text-gray-600 hover:text-gray-900">Se connecter</Link>
-                            <Link href={route('register')} className="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">S'inscrire</Link>
-                        </>
-                    )}
-                </div>
-            </nav>
-
-            {/* Flash Messages */}
-            {flash?.success && (
-                <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {flash.success}
-                </div>
-            )}
-            {errors?.quantity && (
-                <div className="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                    {errors.quantity}
-                </div>
+            {/* ── Flash / Errors ── */}
+            {flash?.success && <div className="au-flash">{flash.success}</div>}
+            {(errors?.cart || errors?.stock) && (
+                <div className="au-flash au-flash-error">{errors.cart || errors.stock}</div>
             )}
 
-            {/* Contenu du panier */}
-            <div className="max-w-4xl mx-auto bg-white p-6 shadow sm:rounded-lg">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Votre Panier</h2>
+            <div className="au-cart-section">
 
                 {cartItems.length === 0 ? (
-                    <div className="text-center py-10">
-                        <p className="text-gray-500 mb-4">Votre panier est vide.</p>
-                        <Link href={route('home')} className="text-indigo-600 hover:underline">
-                            Retourner à la boutique
-                        </Link>
+                    <div className="au-empty">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4A4038" strokeWidth="1" style={{ margin: '0 auto 1.5rem' }}>
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <path d="M16 10a4 4 0 01-8 0"/>
+                        </svg>
+                        <p>Votre panier est vide.</p>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Link href={route('home')} className="au-btn-gold">
+                                Retourner à la boutique
+                            </Link>
+                        </div>
                     </div>
                 ) : (
                     <>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="border-b">
-                                        <th className="pb-3 text-gray-600">Produit</th>
-                                        <th className="pb-3 text-gray-600">Prix unitaire</th>
-                                        <th className="pb-3 text-gray-600">Quantité</th>
-                                        <th className="pb-3 text-gray-600">Sous-total</th>
-                                        <th className="pb-3 text-gray-600 text-right">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {cartItems.map((item) => (
-                                        <tr key={item.product.id} className="border-b last:border-b-0">
-                                            <td className="py-4 flex items-center">
-                                                {item.product.image_url && (
-                                                    <img src={item.product.image_url} alt={item.product.name} className="w-16 h-16 object-cover rounded mr-4" />
-                                                )}
-                                                <div>
-                                                    <p className="font-semibold text-gray-800">{item.product.name}</p>
-                                                    <p className="text-sm text-gray-500">{item.product.category?.name}</p>
-                                                </div>
-                                            </td>
-                                            <td className="py-4 text-gray-800">{item.product.price} €</td>
-                                            <td className="py-4">
-                                                <input 
-                                                    type="number" 
-                                                    min="1" 
-                                                    max={item.product.stock}
-                                                    value={item.quantity}
-                                                    onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
-                                                    className="w-20 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-                                                />
-                                            </td>
-                                            <td className="py-4 font-semibold text-gray-800">{item.subtotal.toFixed(2)} €</td>
-                                            <td className="py-4 text-right">
-                                                <button 
-                                                    onClick={() => removeItem(item.product.id)}
-                                                    className="text-red-600 hover:text-red-900"
-                                                >
-                                                    Retirer
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                        <h1 className="au-cart-title">Votre Panier</h1>
+                        <div className="au-cart-grid">
 
-                        <div className="mt-8 flex justify-end">
-                            <div className="w-64 bg-gray-50 p-4 rounded shadow-inner">
-                                <div className="flex justify-between items-center mb-4">
-                                    <span className="font-semibold text-gray-600">Total</span>
-                                    <span className="text-xl font-bold text-indigo-600">{totalAmount.toFixed(2)} €</span>
+                            {/* ── Items ── */}
+                            <div className="au-cart-items">
+                                {cartItems.map((item) => (
+                                    <div key={item.product.id} className="au-cart-item">
+                                        {item.product.image_url && (
+                                            <img
+                                                src={item.product.image_url}
+                                                alt={item.product.name}
+                                                className="au-cart-item-img"
+                                            />
+                                        )}
+                                        <div className="au-cart-item-info">
+                                            <p className="au-cart-item-name">{item.product.name}</p>
+                                            {item.product.category && (
+                                                <p className="au-cart-item-cat">{item.product.category.name}</p>
+                                            )}
+                                            <p className="au-cart-item-price">{item.product.price} € / unité</p>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max={item.product.stock}
+                                            value={item.quantity}
+                                            onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
+                                            className="au-qty"
+                                        />
+                                        <span className="au-cart-item-subtotal">{item.subtotal.toFixed(2)} €</span>
+                                        <button
+                                            onClick={() => removeItem(item.product.id)}
+                                            className="au-cart-remove"
+                                            title="Retirer du panier"
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* ── Summary + Checkout ── */}
+                            <div className="au-cart-summary">
+                                <h2 className="au-cart-summary-title">Récapitulatif</h2>
+                                <div className="au-cart-summary-row">
+                                    <span>Sous-total</span>
+                                    <span>{totalAmount.toFixed(2)} €</span>
                                 </div>
-                                <button className="w-full bg-indigo-600 text-white py-3 rounded font-semibold hover:bg-indigo-700 transition">
-                                    Passer la commande
-                                </button>
+                                <div className="au-cart-summary-row">
+                                    <span>Livraison</span>
+                                    <span style={{ color: 'var(--au-success)' }}>Gratuite</span>
+                                </div>
+                                <div className="au-cart-summary-total">
+                                    <span>Total</span>
+                                    <span>{totalAmount.toFixed(2)} €</span>
+                                </div>
+
+                                {!showCheckout ? (
+                                    <button
+                                        onClick={() => setShowCheckout(true)}
+                                        className="au-btn-gold"
+                                        style={{ width: '100%', textAlign: 'center' }}
+                                    >
+                                        Passer la commande
+                                    </button>
+                                ) : (
+                                    <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                        <div className="au-checkout-note">
+                                            📱 Vous recevrez un message <strong>WhatsApp</strong> pour confirmer votre commande.
+                                        </div>
+
+                                        {/* Guest fields */}
+                                        {!auth.user && (
+                                            <>
+                                                <div>
+                                                    <label className="au-label">Votre nom *</label>
+                                                    <input
+                                                        type="text"
+                                                        value={data.guest_name}
+                                                        onChange={e => setData('guest_name', e.target.value)}
+                                                        placeholder="Jean Dupont"
+                                                        className="au-input"
+                                                    />
+                                                    {formErrors.guest_name && <p className="au-field-error">{formErrors.guest_name}</p>}
+                                                </div>
+                                                <div>
+                                                    <label className="au-label">Adresse e-mail *</label>
+                                                    <input
+                                                        type="email"
+                                                        value={data.guest_email}
+                                                        onChange={e => setData('guest_email', e.target.value)}
+                                                        placeholder="jean@exemple.fr"
+                                                        className="au-input"
+                                                    />
+                                                    {formErrors.guest_email && <p className="au-field-error">{formErrors.guest_email}</p>}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        <div>
+                                            <label className="au-label">
+                                                Numéro WhatsApp * <span className="au-label-hint">(ex: +33612345678)</span>
+                                            </label>
+                                            <input
+                                                type="tel"
+                                                value={data.phone}
+                                                onChange={e => setData('phone', e.target.value)}
+                                                placeholder="+33 6 12 34 56 78"
+                                                className="au-input"
+                                            />
+                                            {formErrors.phone && <p className="au-field-error">{formErrors.phone}</p>}
+                                        </div>
+
+                                        <div>
+                                            <label className="au-label">Adresse de livraison *</label>
+                                            <textarea
+                                                value={data.shipping_address}
+                                                onChange={e => setData('shipping_address', e.target.value)}
+                                                placeholder="12 rue de la Paix, 75001 Paris"
+                                                rows={3}
+                                                className="au-textarea"
+                                            />
+                                            {formErrors.shipping_address && <p className="au-field-error">{formErrors.shipping_address}</p>}
+                                        </div>
+
+                                        <div style={{ display: 'flex', gap: '0.6rem' }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowCheckout(false)}
+                                                className="au-btn-ghost"
+                                                style={{ flex: 1 }}
+                                            >
+                                                Retour
+                                            </button>
+                                            <button
+                                                type="submit"
+                                                disabled={processing}
+                                                className="au-btn-gold"
+                                                style={{ flex: 1, textAlign: 'center' }}
+                                            >
+                                                {processing ? 'Envoi…' : 'Confirmer'}
+                                            </button>
+                                        </div>
+                                    </form>
+                                )}
                             </div>
                         </div>
                     </>
                 )}
             </div>
-        </div>
+        </ClientLayout>
     );
 }

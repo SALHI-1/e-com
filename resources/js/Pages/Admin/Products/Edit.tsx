@@ -8,7 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import Checkbox from '@/Components/Checkbox';
 
 export default function Edit({ product, categories }: { product: any, categories: any[] }) {
-    const { data, setData, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: product.name,
         category_id: product.category_id,
         description: product.description,
@@ -16,13 +16,17 @@ export default function Edit({ product, categories }: { product: any, categories
         stock: product.stock,
         volume: product.volume || '',
         is_new: product.is_new,
+        // is_new: product.is_new,
         is_bestseller: product.is_bestseller,
-        image_url: product.image_url || '',
+        image: null as File | null,
+        _method: 'PUT',
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('admin.products.update', product.id));
+        post(route('admin.products.update', product.id), {
+            forceFormData: true,
+        });
     };
 
     return (
@@ -75,9 +79,42 @@ export default function Edit({ product, categories }: { product: any, categories
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="image_url" value="URL de l'image (optionnel)" />
-                                <TextInput id="image_url" type="text" className="mt-1 block w-full" value={data.image_url} onChange={(e) => setData('image_url', e.target.value)} />
-                                <InputError message={errors.image_url} className="mt-2" />
+                                <InputLabel htmlFor="image" value="Image du produit (optionnel)" />
+                                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md relative overflow-hidden group hover:border-indigo-500 transition-colors">
+                                    {data.image ? (
+                                        <div className="text-center w-full">
+                                            <p className="text-sm text-gray-600 mb-2">Nouveau fichier : {data.image.name}</p>
+                                            <img src={URL.createObjectURL(data.image)} alt="Preview" className="mx-auto max-h-48 object-contain mb-4" />
+                                            <button type="button" onClick={() => setData('image', null)} className="text-red-600 hover:text-red-800 text-sm">Retirer</button>
+                                        </div>
+                                    ) : product.image_url ? (
+                                        <div className="text-center w-full">
+                                            <p className="text-sm text-gray-600 mb-2">Image actuelle</p>
+                                            <img src={product.image_url} alt="Current" className="mx-auto max-h-48 object-contain mb-4" />
+                                            <div className="flex text-sm text-gray-600 justify-center">
+                                                <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span>Remplacer l'image</span>
+                                                    <input id="file-upload" name="image" type="file" className="sr-only" accept="image/*" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)} />
+                                                </label>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-1 text-center">
+                                            <svg className="mx-auto h-12 w-12 text-gray-400 group-hover:text-indigo-500 transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            <div className="flex text-sm text-gray-600 justify-center">
+                                                <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                    <span>Importer un fichier</span>
+                                                    <input id="file-upload" name="image" type="file" className="sr-only" accept="image/*" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)} />
+                                                </label>
+                                                <p className="pl-1">ou glisser-déposer</p>
+                                            </div>
+                                            <p className="text-xs text-gray-500">PNG, JPG, WEBP jusqu'à 10MB</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <InputError message={errors.image as string} className="mt-2" />
                             </div>
 
                             <div className="flex space-x-6">

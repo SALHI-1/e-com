@@ -37,10 +37,17 @@ class ProductController extends Controller
             'volume' => 'nullable|integer|min:0',
             'is_new' => 'boolean',
             'is_bestseller' => 'boolean',
-            'image_url' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:10240',
         ]);
 
-        Product::create($validated);
+        $data = collect($validated)->except('image')->toArray();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+
+        Product::create($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Produit ajouté avec succès.');
     }
@@ -65,17 +72,18 @@ class ProductController extends Controller
             'volume' => 'nullable|integer|min:0',
             'is_new' => 'boolean',
             'is_bestseller' => 'boolean',
-            'image_url' => 'nullable|string|max:255',
+            'image' => 'nullable|image|max:10240',
         ]);
 
-        $product->update($validated);
+        $data = collect($validated)->except('image')->toArray();
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image_url'] = '/storage/' . $path;
+        }
+
+        $product->update($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Produit modifié avec succès.');
-    }
-
-    public function destroy(Product $product)
-    {
-        $product->delete();
-        return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès.');
     }
 }

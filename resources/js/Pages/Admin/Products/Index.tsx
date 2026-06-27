@@ -47,9 +47,6 @@ export default function Index({ products }: { products: any[] }) {
                                             <Link href={route('admin.products.edit', product.id)} className="text-indigo-600 hover:text-indigo-900 mr-4">
                                                 Modifier
                                             </Link>
-                                            <Link href={route('admin.products.destroy', product.id)} method="delete" as="button" className="text-red-600 hover:text-red-900">
-                                                Supprimer
-                                            </Link>
                                         </td>
                                     </tr>
                                 ))}

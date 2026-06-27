@@ -1,8 +1,3 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -22,88 +17,63 @@ export default function Login({
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
+        post(route('login'), { onFinish: () => reset('password') });
     };
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Connexion — Aurélia" />
+            <h2 className="au-auth-title">Connexion</h2>
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            {status && <div className="au-flash au-flash-success" style={{ margin: '0 0 1rem' }}>{status}</div>}
 
-            <form onSubmit={submit}>
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
+                    <label className="au-label" htmlFor="email">Email</label>
+                    <input
+                        id="email" type="email" value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
+                        className="au-input" autoComplete="username" autoFocus
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    {errors.email && <p className="au-field-error">{errors.email}</p>}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
+                <div>
+                    <label className="au-label" htmlFor="password">Mot de passe</label>
+                    <input
+                        id="password" type="password" value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
+                        className="au-input" autoComplete="current-password"
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    {errors.password && <p className="au-field-error">{errors.password}</p>}
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData(
-                                    'remember',
-                                    (e.target.checked || false) as false,
-                                )
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                        type="checkbox" className="au-checkbox" id="remember"
+                        checked={data.remember}
+                        onChange={(e) => setData('remember', e.target.checked as false)}
+                    />
+                    <label htmlFor="remember" style={{ fontSize: '0.8rem', color: 'var(--au-text-muted)', cursor: 'pointer' }}>
+                        Se souvenir de moi
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5rem' }}>
                     {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                        >
-                            Forgot your password?
+                        <Link href={route('password.request')} className="au-auth-link">
+                            Mot de passe oublié ?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                    <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 2rem' }}>
+                        {processing ? 'Connexion…' : 'Se connecter'}
+                    </button>
                 </div>
+
+                <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--au-text-dim)', marginTop: '0.5rem' }}>
+                    Pas encore de compte ?{' '}
+                    <Link href={route('register')} className="au-auth-link">Créer un compte</Link>
+                </p>
             </form>
         </GuestLayout>
     );

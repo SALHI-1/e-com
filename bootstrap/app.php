@@ -11,7 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule): void {
+        // Annuler automatiquement les commandes "en attente" depuis plus de 24h
+        $schedule->command('orders:cancel-expired')->hourly();
+    })
     ->withMiddleware(function (Middleware $middleware): void {
+        // Exclure le webhook WhatsApp de la vérification CSRF
+        $middleware->validateCsrfTokens(except: [
+            'webhook/whatsapp',
+        ]);
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
@@ -20,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
         ]);
+        $middleware->trustProxies(at: '*');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

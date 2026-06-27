@@ -1,8 +1,3 @@
-import Checkbox from '@/Components/Checkbox';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
@@ -24,74 +19,47 @@ export default function Login({ status }: { status?: string }) {
 
     return (
         <GuestLayout>
-            <Head title="Admin Log in" />
+            <Head title="Administration — Aurélia" />
+            <h2 className="au-auth-title">Administration</h2>
 
-            {status && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+            {status && <div className="au-flash au-flash-success" style={{ margin: '0 0 1rem' }}>{status}</div>}
 
-            <div className="mb-6 text-center text-xl font-bold text-gray-800">
-                Administration
-            </div>
-
-            <form onSubmit={submit}>
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
+                    <label className="au-label" htmlFor="email">Email Admin</label>
+                    <input
+                        id="email" type="email" value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
+                        className="au-input" autoComplete="username" autoFocus
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
+                    {errors.email && <p className="au-field-error">{errors.email}</p>}
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
+                <div>
+                    <label className="au-label" htmlFor="password">Mot de passe</label>
+                    <input
+                        id="password" type="password" value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
+                        className="au-input" autoComplete="current-password"
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
+                    {errors.password && <p className="au-field-error">{errors.password}</p>}
                 </div>
 
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData(
-                                    'remember',
-                                    (e.target.checked || false) as false,
-                                )
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Se souvenir de moi
-                        </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <input
+                        type="checkbox" className="au-checkbox" id="remember"
+                        checked={data.remember}
+                        onChange={(e) => setData('remember', e.target.checked as false)}
+                    />
+                    <label htmlFor="remember" style={{ fontSize: '0.8rem', color: 'var(--cream-dim)', cursor: 'pointer' }}>
+                        Se souvenir de moi
                     </label>
                 </div>
 
-                <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Connexion
-                    </PrimaryButton>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                    <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 2rem' }}>
+                        {processing ? 'Connexion…' : 'Accéder au panel'}
+                    </button>
                 </div>
             </form>
         </GuestLayout>
