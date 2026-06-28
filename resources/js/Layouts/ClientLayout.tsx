@@ -267,10 +267,11 @@ interface ClientLayoutProps {
   auth?: { user: any };
   cartCount?: number;
   title?: string;
+  categories?: string[];
   children: ReactNode;
 }
 
-export default function ClientLayout({ auth, cartCount = 0, title, children }: ClientLayoutProps) {
+export default function ClientLayout({ auth, cartCount = 0, title, categories, children }: ClientLayoutProps) {
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('au_lang');
@@ -303,16 +304,9 @@ export default function ClientLayout({ auth, cartCount = 0, title, children }: C
     tagLabel,
   };
 
-  const navItems = [
-    { key: 'home', label: t.navHome, href: '/' },
-    { key: 'shop', label: t.navShop, href: '/shop' },
-    { key: 'cabello', label: t.navHair, href: '/category/cabello' },
-    { key: 'about', label: t.navAbout, href: '/about' },
-  ];
-
   return (
     <AureliaContext.Provider value={contextValue}>
-      <Head title={title ? `${title} · Aurélia` : 'Aurélia — Essential Care'} />
+      <Head title={title ? `${title} · Ourélia` : 'Ourélia — Essential Care'} />
 
       <div className="au-page">
         {/* announcement */}
@@ -321,18 +315,37 @@ export default function ClientLayout({ auth, cartCount = 0, title, children }: C
         {/* nav */}
         <header className="au-nav">
           <div className="au-nav-inner">
-            <Link href="/" className="au-logo">AURÉLIA</Link>
+            <Link href="/" className="au-logo">OURÉLIA</Link>
 
             <nav className="au-nav-links">
-              {navItems.map((n) => (
-                <Link
-                  key={n.key}
-                  href={n.href}
-                  className={`au-nav-link${url === n.href ? ' au-nav-link--active' : ''}`}
-                >
-                  {n.label}
-                </Link>
-              ))}
+              <Link
+                href="/"
+                className={`au-nav-link${url === '/' ? ' au-nav-link--active' : ''}`}
+              >
+                {t.navHome}
+              </Link>
+              
+              {categories && categories.length > 0 && (
+                <div className="au-nav-dropdown-wrap">
+                  <button className="au-nav-link au-nav-dropdown-btn">
+                    {t.navShop} ▾
+                  </button>
+                  <div className="au-nav-dropdown-menu">
+                    <Link href="/#collection" className="au-nav-dropdown-item">
+                      {t.allLabel}
+                    </Link>
+                    {categories.map(cat => (
+                      <Link
+                        key={cat}
+                        href={`/?category=${cat}#collection`}
+                        className="au-nav-dropdown-item"
+                      >
+                        {categoryLabel(cat)}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </nav>
 
             <div className="au-nav-right">
@@ -404,16 +417,27 @@ export default function ClientLayout({ auth, cartCount = 0, title, children }: C
           {/* slide-down mobile menu */}
           <div className={`au-mobile-panel${menuOpen ? ' is-open' : ''}`}>
             <div className="au-mobile-inner">
-              {navItems.map((n) => (
+              <Link href="/" className="au-mobile-link" onClick={() => setMenuOpen(false)}>
+                {t.navHome}
+              </Link>
+              <div className="au-mobile-link" style={{ pointerEvents: 'none', color: 'var(--au-text-muted)', paddingTop: '20px' }}>
+                {t.navShop}
+              </div>
+              <Link href="/#collection" className="au-mobile-link" onClick={() => setMenuOpen(false)} style={{ paddingLeft: '20px' }}>
+                {t.allLabel}
+              </Link>
+              {categories && categories.map((cat) => (
                 <Link
-                  key={n.key}
-                  href={n.href}
+                  key={cat}
+                  href={`/?category=${cat}#collection`}
                   className="au-mobile-link"
                   onClick={() => setMenuOpen(false)}
+                  style={{ paddingLeft: '20px' }}
                 >
-                  {n.label}
+                  {categoryLabel(cat)}
                 </Link>
               ))}
+              <div style={{ height: '16px' }} />
               {auth?.user ? (
                 <>
                   <Link href={route('profile.edit')} className="au-mobile-link au-mobile-link--muted" onClick={() => setMenuOpen(false)}>
@@ -487,7 +511,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, children }: C
         <footer className="au-footer">
           <div className="au-footer-grid">
             <div>
-              <div className="au-footer-logo">AURÉLIA</div>
+              <div className="au-footer-logo">OURÉLIA</div>
               <p className="au-footer-tagline">{t.footerTagline}</p>
             </div>
 
@@ -504,7 +528,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, children }: C
           </div>
 
           <div className="au-footer-bottom">
-            <span>© {new Date().getFullYear()} Aurélia</span>
+            <span>© {new Date().getFullYear()} Ourélia</span>
             <span>{t.footerNote}</span>
           </div>
         </footer>

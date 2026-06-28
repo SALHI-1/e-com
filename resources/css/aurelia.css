@@ -167,6 +167,59 @@
   border-bottom-color: var(--au-ink);
 }
 
+.au-nav-dropdown-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.au-nav-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.au-nav-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(251, 247, 240, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--au-border);
+  border-radius: 4px;
+  padding: 8px 0;
+  min-width: 160px;
+  box-shadow: 0 4px 12px rgba(33, 26, 20, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.au-nav-dropdown-wrap:hover .au-nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.au-nav-dropdown-item {
+  display: block;
+  padding: 8px 20px;
+  font-family: var(--au-font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--au-text-muted-2);
+  text-decoration: none;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.au-nav-dropdown-item:hover {
+  color: var(--au-ink);
+  background: var(--au-bg-soft);
+}
+
 .au-nav-right {
   display: flex;
   align-items: center;
@@ -1313,6 +1366,9 @@
   .au-cat-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .au-prod-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* ≤ 860px — collapse to stacked hero + mobile nav */
@@ -1481,14 +1537,14 @@
     padding: 20px 18px;
   }
 
-  /* one product per row so price + qty + add never overflow */
+  /* two products per row on phones */
   .au-prod-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px;
   }
 
   .au-prod-media {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;
   }
 
   .au-manifesto-inner {

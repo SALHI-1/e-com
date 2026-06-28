@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PageProps } from '@/types';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import ClientLayout, { useAurelia, Lang, ProductCategory, ProductTag } from '@/Layouts/ClientLayout';
 
 /* ============================================================================
@@ -26,7 +26,7 @@ const HOME_COPY: Record<Lang, HomeCopy> = {
     heroCta: 'Voir la collection', heroLink: 'Notre histoire', heroPanelCap: 'oro líquido', heroPanelTag: 'Huile d\'argan',
     manifestoKicker: 'La maison',
     manifestoText: 'Les bons soins n\'ont pas besoin d\'être compliqués ou chers. Nous sélectionnons des formules efficaces, avec des ingrédients que vous reconnaissez, et les présentons sans bruit — car la beauté honnête commence par l\'essentiel.',
-    spreadKicker: 'Icônes Aurélia', spreadTitle: 'Les signatures',
+    spreadKicker: 'Icônes Ourélia', spreadTitle: 'Les signatures',
     catTitle: 'Acheter par catégorie', catSub: 'Tout ce dont votre routine a besoin',
     bestTitle: 'Les favoris', bestSub: 'Ce que nos clientes choisissent le plus', viewAll: 'Tout voir', productsWord: 'Produits',
     darkKicker: 'Notre philosophie', darkTitle: 'Moins de produits.', darkTitleIt: 'De meilleures formules.',
@@ -44,7 +44,7 @@ const HOME_COPY: Record<Lang, HomeCopy> = {
     heroCta: 'Ver la colección', heroLink: 'Nuestra historia', heroPanelCap: 'oro líquido', heroPanelTag: 'Aceite de argán',
     manifestoKicker: 'La maison',
     manifestoText: 'El buen cuidado no necesita ser complicado ni caro. Seleccionamos fórmulas eficaces, con ingredientes que reconoces, y las presentamos sin ruido — porque la belleza honesta empieza por lo esencial.',
-    spreadKicker: 'Iconos Aurélia', spreadTitle: 'Las firmas',
+    spreadKicker: 'Iconos Ourélia', spreadTitle: 'Las firmas',
     catTitle: 'Compra por categoría', catSub: 'Todo lo que tu rutina necesita',
     bestTitle: 'Los favoritos', bestSub: 'Lo que más repiten nuestras clientas', viewAll: 'Ver todo', productsWord: 'Productos',
     darkKicker: 'Nuestra filosofía', darkTitle: 'Menos productos.', darkTitleIt: 'Mejores fórmulas.',
@@ -62,7 +62,7 @@ const HOME_COPY: Record<Lang, HomeCopy> = {
     heroCta: 'Shop the collection', heroLink: 'Our story', heroPanelCap: 'oro líquido', heroPanelTag: 'Argan oil',
     manifestoKicker: 'The maison',
     manifestoText: 'Good care doesn\u2019t need to be complicated or expensive. We choose effective formulas, with ingredients you recognise, and present them without the noise — because honest beauty starts with the essentials.',
-    spreadKicker: 'Aurélia icons', spreadTitle: 'The signatures',
+    spreadKicker: 'Ourélia icons', spreadTitle: 'The signatures',
     catTitle: 'Shop by category', catSub: 'Everything your routine needs',
     bestTitle: 'The favourites', bestSub: 'What our customers reach for again', viewAll: 'View all', productsWord: 'Products',
     darkKicker: 'Our philosophy', darkTitle: 'Fewer products.', darkTitleIt: 'Better formulas.',
@@ -169,7 +169,7 @@ function ProductIcon({ shape, cat, catLabel, scale = 1 }: { shape: string; cat: 
         boxShadow: 'inset 0 0 0 1px rgba(33,26,20,0.05)', ...style,
       }}
     >
-      <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 600, fontSize: s(8.5), letterSpacing: '0.2em', color: ICON_INK, lineHeight: 1, paddingLeft: '0.2em' }}>AURÉLIA</span>
+      <span style={{ fontFamily: "'Cormorant Garamond',serif", fontWeight: 600, fontSize: s(8.5), letterSpacing: '0.2em', color: ICON_INK, lineHeight: 1, paddingLeft: '0.2em' }}>Ourélia</span>
       <span style={{ width: s(18), height: 1, background: ICON_GOLD }} />
       <span style={{ fontFamily: "'Jost',sans-serif", fontWeight: 500, fontSize: s(5.5), letterSpacing: '0.18em', textTransform: 'uppercase', color: '#9A8460', lineHeight: 1 }}>{catLabel}</span>
     </div>
@@ -317,15 +317,34 @@ function ProductCard({ product }: { product: any }) {
  * Welcome Page
  * ========================================================================== */
 export default function Welcome(props: PageProps<{ products: any[]; cartCount: number; flash?: { success?: string }; errors?: any }>) {
+  const categoriesList = Array.from(new Set((props.products || []).map((p: any) => p.category.name))) as string[];
   return (
-    <ClientLayout auth={props.auth} cartCount={props.cartCount} title="Aurélia">
+    <ClientLayout auth={props.auth} cartCount={props.cartCount} title="Ourélia" categories={categoriesList}>
       <WelcomeContent {...props} />
     </ClientLayout>
   );
 }
 
 function WelcomeContent({ products = [], flash, errors }: any) {
+  const { url } = usePage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const parsedUrl = new URL(url, window.location.origin);
+      const cat = parsedUrl.searchParams.get('category');
+      
+      if (cat) {
+        setActiveCategory(cat);
+        setTimeout(() => {
+          const el = document.getElementById('collection');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      } else {
+        setActiveCategory(null);
+      }
+    }
+  }, [url]);
 
   const bestSellers = products.filter((p: any) => p.is_bestseller).slice(0, 8);
   const featured = bestSellers.length > 0 ? bestSellers : products.slice(0, 8);
@@ -387,7 +406,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         <div className="au-manifesto-inner">
           <div className="au-kicker">{copy.manifestoKicker}</div>
           <p className="au-quote">{copy.manifestoText}</p>
-          <div className="au-quote-sign">— Aurélia</div>
+          <div className="au-quote-sign">— Ourélia</div>
         </div>
       </div>
 
@@ -459,7 +478,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                   setActiveCategory(activeCategory === cat ? null : cat);
                 }}
                 className="au-cat-card"
-                style={{ 
+                style={{
                   background: categoryTint(cat),
                   border: activeCategory === cat ? '2px solid var(--au-gold)' : '2px solid transparent'
                 }}
@@ -490,8 +509,8 @@ function WelcomeContent({ products = [], flash, errors }: any) {
           {products
             .filter((p: any) => activeCategory ? p.category.name === activeCategory : true)
             .map((product: any) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+              <ProductCard key={product.id} product={product} />
+            ))}
         </div>
       </div>
 

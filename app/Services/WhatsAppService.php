@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Log;
 
 class WhatsAppService
 {
-    private string $apiUrl;
-    private string $phoneNumberId;
-    private string $accessToken;
+    private ?string $apiUrl = null;
+    private ?string $phoneNumberId = null;
+    private ?string $accessToken = null;
 
     public function __construct()
     {
