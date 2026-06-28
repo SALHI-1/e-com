@@ -1,7 +1,7 @@
 import { PageProps } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import ClientLayout from '@/Layouts/ClientLayout';
+import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
 
 interface CartItem {
     product: {
@@ -24,7 +24,16 @@ interface Props extends PageProps {
     errors?: Record<string, string>;
 }
 
-export default function Index({ auth, cartItems, totalAmount, cartCount, flash, errors }: Props) {
+export default function Index(props: Props) {
+    return (
+        <ClientLayout auth={props.auth} cartCount={props.cartCount} title="Aurélia">
+            <CartContent {...props} />
+        </ClientLayout>
+    );
+}
+
+function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
+    const { t } = useAurelia();
     const [showCheckout, setShowCheckout] = useState(false);
 
     const { data, setData, post, processing, errors: formErrors } = useForm<{
@@ -53,7 +62,8 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
     };
 
     return (
-        <ClientLayout auth={auth} cartCount={cartCount} title="Mon Panier — Aurélia">
+        <>
+            <Head title={`${t.cartTitle} — Aurélia`} />
 
             {/* ── Flash / Errors ── */}
             {flash?.success && <div className="au-flash">{flash.success}</div>}
@@ -70,16 +80,16 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                             <line x1="3" y1="6" x2="21" y2="6"/>
                             <path d="M16 10a4 4 0 01-8 0"/>
                         </svg>
-                        <p>Votre panier est vide.</p>
+                        <p>{t.cartEmpty}</p>
                         <div style={{ marginTop: '2rem' }}>
                             <Link href={route('home')} className="au-btn-gold">
-                                Retourner à la boutique
+                                {t.backShop}
                             </Link>
                         </div>
                     </div>
                 ) : (
                     <>
-                        <h1 className="au-cart-title">Votre Panier</h1>
+                        <h1 className="au-cart-title">{t.cartTitle}</h1>
                         <div className="au-cart-grid">
 
                             {/* ── Items ── */}
@@ -98,7 +108,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                             {item.product.category && (
                                                 <p className="au-cart-item-cat">{item.product.category.name}</p>
                                             )}
-                                            <p className="au-cart-item-price">{item.product.price} € / unité</p>
+                                            <p className="au-cart-item-price">{item.product.price} € / {t.unit}</p>
                                         </div>
                                         <input
                                             type="number"
@@ -124,15 +134,15 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                             <div className="au-cart-summary">
                                 <h2 className="au-cart-summary-title">Récapitulatif</h2>
                                 <div className="au-cart-summary-row">
-                                    <span>Sous-total</span>
+                                    <span>{t.subtotal}</span>
                                     <span>{totalAmount.toFixed(2)} €</span>
                                 </div>
                                 <div className="au-cart-summary-row">
-                                    <span>Livraison</span>
-                                    <span style={{ color: 'var(--au-success)' }}>Gratuite</span>
+                                    <span>{t.shipping}</span>
+                                    <span style={{ color: 'var(--au-gold)' }}>{t.free}</span>
                                 </div>
                                 <div className="au-cart-summary-total">
-                                    <span>Total</span>
+                                    <span>{t.total}</span>
                                     <span>{totalAmount.toFixed(2)} €</span>
                                 </div>
 
@@ -142,19 +152,17 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                         className="au-btn-gold"
                                         style={{ width: '100%', textAlign: 'center' }}
                                     >
-                                        Passer la commande
+                                        {t.checkout}
                                     </button>
                                 ) : (
                                     <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        <div className="au-checkout-note">
-                                            📱 Vous recevrez un message <strong>WhatsApp</strong> pour confirmer votre commande.
-                                        </div>
+                                        <div className="au-checkout-note" dangerouslySetInnerHTML={{ __html: t.waNote.replace('WhatsApp', '<strong>WhatsApp</strong>') }} />
 
                                         {/* Guest fields */}
                                         {!auth.user && (
                                             <>
                                                 <div>
-                                                    <label className="au-label">Votre nom *</label>
+                                                    <label className="au-label">{t.guestName}</label>
                                                     <input
                                                         type="text"
                                                         value={data.guest_name}
@@ -165,7 +173,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                                     {formErrors.guest_name && <p className="au-field-error">{formErrors.guest_name}</p>}
                                                 </div>
                                                 <div>
-                                                    <label className="au-label">Adresse e-mail *</label>
+                                                    <label className="au-label">{t.guestEmail}</label>
                                                     <input
                                                         type="email"
                                                         value={data.guest_email}
@@ -180,7 +188,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
 
                                         <div>
                                             <label className="au-label">
-                                                Numéro WhatsApp * <span className="au-label-hint">(ex: +33612345678)</span>
+                                                {t.waPhone} <span className="au-label-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>(ex: +33612345678)</span>
                                             </label>
                                             <input
                                                 type="tel"
@@ -193,7 +201,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                         </div>
 
                                         <div>
-                                            <label className="au-label">Adresse de livraison *</label>
+                                            <label className="au-label">{t.address}</label>
                                             <textarea
                                                 value={data.shipping_address}
                                                 onChange={e => setData('shipping_address', e.target.value)}
@@ -211,7 +219,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                                 className="au-btn-ghost"
                                                 style={{ flex: 1 }}
                                             >
-                                                Retour
+                                                {t.back}
                                             </button>
                                             <button
                                                 type="submit"
@@ -219,7 +227,7 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                                                 className="au-btn-gold"
                                                 style={{ flex: 1, textAlign: 'center' }}
                                             >
-                                                {processing ? 'Envoi…' : 'Confirmer'}
+                                                {processing ? t.sending : t.confirm}
                                             </button>
                                         </div>
                                     </form>
@@ -229,6 +237,6 @@ export default function Index({ auth, cartItems, totalAmount, cartCount, flash, 
                     </>
                 )}
             </div>
-        </ClientLayout>
+        </>
     );
 }

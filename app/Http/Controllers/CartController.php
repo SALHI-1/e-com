@@ -103,14 +103,11 @@ class CartController extends Controller
                     }
                 }
 
-                // ── 2. Vérifier le stock et décrémenter (lockForUpdate) ────
+                // ── 2. Vérifier le stock sans décrémenter ────
                 $totalAmount = 0;
                 $productIds  = array_keys($cart);
 
-                $products = Product::whereIn('id', $productIds)
-                    ->lockForUpdate()
-                    ->get()
-                    ->keyBy('id');
+                $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
                 foreach ($cart as $productId => $quantity) {
                     $product = $products->get($productId);
@@ -126,7 +123,7 @@ class CartController extends Controller
                         );
                     }
 
-                    $product->decrement('stock', $quantity);
+                    // Stock décrémenté uniquement lors de la confirmation manuelle
                     $totalAmount += $product->price * $quantity;
                 }
 
@@ -157,13 +154,13 @@ class CartController extends Controller
             session()->forget('cart');
 
             // ── 6. Envoyer le message WhatsApp avec boutons ───────────────
-            $order->load('user');
-            app(WhatsAppService::class)->sendOrderConfirmationButtons($order);
+            // $order->load('user');
+            // app(WhatsAppService::class)->sendOrderConfirmationButtons($order);
 
             return redirect()->route('home')->with(
                 'success',
                 "🎉 Commande #{$order->order_number} enregistrée ! "
-                . "Veuillez confirmer via le message WhatsApp que vous allez recevoir."
+                . "Notre équipe va la traiter prochainement."
             );
 
         } catch (\RuntimeException $e) {

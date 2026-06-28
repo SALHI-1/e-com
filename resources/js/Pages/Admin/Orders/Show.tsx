@@ -20,13 +20,13 @@ export default function Show({ order }: { order: any }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
-                    
+
                     {/* Header Info */}
                     <div className="bg-white p-6 shadow sm:rounded-lg flex justify-between items-center">
                         <div>
                             <h3 className="text-lg font-bold">Client : {order.user.name}</h3>
                             <p className="text-gray-600">{order.user.email} | {order.user.phone || 'Pas de téléphone'}</p>
-                            <p className="text-gray-600 mt-2"><strong>Adresse d'expédition :</strong> <br/> {order.shipping_address}</p>
+                            <p className="text-gray-600 mt-2"><strong>Adresse d'expédition :</strong> <br /> {order.shipping_address}</p>
                         </div>
                         <div className="text-right">
                             <h3 className="text-lg font-bold">Montant Total : {order.total_amount} €</h3>
@@ -35,7 +35,7 @@ export default function Show({ order }: { order: any }) {
                     </div>
 
                     {/* Status Update Form */}
-                    <div className="bg-white p-6 shadow sm:rounded-lg">
+                    {/* <div className="bg-white p-6 shadow sm:rounded-lg">
                         <h3 className="text-lg font-bold mb-4">Modifier le statut</h3>
                         <form onSubmit={submitStatus} className="flex items-center space-x-4">
                             <select 
@@ -57,7 +57,7 @@ export default function Show({ order }: { order: any }) {
                                 Mettre à jour
                             </button>
                         </form>
-                    </div>
+                    </div> */}
 
                     {/* Order Items */}
                     <div className="bg-white p-6 shadow sm:rounded-lg">

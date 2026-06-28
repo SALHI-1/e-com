@@ -8,11 +8,23 @@ use Illuminate\Database\Eloquent\Builder;
 class Order extends Model
 {
     // ─── Statuts (en français, cohérents avec la BDD) ──────────────────────
-    const STATUS_PENDING   = 'en attente';
-    const STATUS_SHIPPING  = 'expédiée';
-    const STATUS_CANCELLED = 'annulée';
-    const STATUS_PAID      = 'payée';
-    const STATUS_DELIVERED = 'livrée';
+    const STATUS_PENDING                    = 'en attente';
+    const STATUS_CANCELLED_BEFORE_CONFIRM   = 'annulé avant la confirmation';
+    const STATUS_CONFIRMED                  = 'confirmé';
+    const STATUS_DELIVERED                  = 'livré';
+    const STATUS_CANCELLED_AFTER_DELIVERY   = 'annulé après la livraison';
+    const STATUS_RECEIVED                   = 'reçu';
+
+    public static function getStatuses() {
+        return [
+            self::STATUS_PENDING,
+            self::STATUS_CANCELLED_BEFORE_CONFIRM,
+            self::STATUS_CONFIRMED,
+            self::STATUS_DELIVERED,
+            self::STATUS_CANCELLED_AFTER_DELIVERY,
+            self::STATUS_RECEIVED,
+        ];
+    }
 
     protected $fillable = [
         'user_id', 'order_number', 'total_amount', 'status', 'shipping_address',
