@@ -77,7 +77,7 @@ interface AureliaContextValue {
  * ========================================================================== */
 const COMMON: Record<Lang, CommonDict> = {
   fr: {
-    announce: 'Livraison gratuite pour les commandes de plus de 20 dh',
+    announce: 'Livraison gratuite  ',
     navHome: 'Accueil',
     navShop: 'Boutique',
     navHair: 'Cheveux',
@@ -130,7 +130,7 @@ const COMMON: Record<Lang, CommonDict> = {
     sending: 'Envoi…',
   },
   es: {
-    announce: 'Envío gratis en pedidos superiores a 20 dh',
+    announce: 'Envío gratis ',
     navHome: 'Inicio',
     navShop: 'Tienda',
     navHair: 'Cabello',
@@ -183,7 +183,7 @@ const COMMON: Record<Lang, CommonDict> = {
     sending: 'Enviando…',
   },
   en: {
-    announce: 'Free shipping on orders over 20 dh',
+    announce: 'Free shipping ',
     navHome: 'Home',
     navShop: 'Shop',
     navHair: 'Hair',

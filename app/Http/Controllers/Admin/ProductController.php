@@ -46,6 +46,9 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products');
+            if (!$path) {
+                return back()->withErrors(['image' => 'Erreur lors de l\'upload de l\'image. Vérifiez la configuration du stockage.']);
+            }
             $data['image_url'] = Storage::url($path);
         }
 
@@ -82,6 +85,9 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products');
+            if (!$path) {
+                return back()->withErrors(['image' => 'Erreur lors de l\'upload de l\'image. Vérifiez la configuration du stockage.']);
+            }
             $data['image_url'] = Storage::url($path);
         }
 
