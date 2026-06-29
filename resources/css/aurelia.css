@@ -1407,7 +1407,8 @@
   }
 
   .au-mobile-panel.is-open {
-    max-height: 520px;
+    max-height: 800px;
+    overflow-y: auto;
   }
 
   .au-mobile-inner {

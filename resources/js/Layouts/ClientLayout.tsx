@@ -271,7 +271,7 @@ interface ClientLayoutProps {
   children: ReactNode;
 }
 
-export default function ClientLayout({ auth, cartCount = 0, title, categories, children }: ClientLayoutProps) {
+export default function ClientLayout({ auth, cartCount = 0, title, categories = ['cabello', 'rostro', 'solar', 'perfume', 'bucal'], children }: ClientLayoutProps) {
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('au_lang');
