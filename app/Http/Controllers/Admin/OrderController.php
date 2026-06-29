@@ -9,11 +9,49 @@ use Inertia\Inertia;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('user')->latest()->get();
+        $query = Order::with('user')->latest();
+        
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', '>=', $request->date);
+        }
+
+        $orders = $query->get();
         return Inertia::render('Admin/Orders/Index', [
-            'orders' => $orders
+            'orders' => $orders,
+            'filters' => $request->only('date'),
+        ]);
+    }
+    
+    public function list(Request $request)
+    {
+        $query = Order::with('user')->latest();
+
+        if ($request->filled('order_number')) {
+            $query->where('order_number', 'like', '%' . $request->order_number . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('client_name')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->client_name . '%');
+            });
+        }
+
+        if ($request->filled('client_email')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('email', 'like', '%' . $request->client_email . '%');
+            });
+        }
+
+        $orders = $query->get();
+        return Inertia::render('Admin/Orders/List', [
+            'orders' => $orders,
+            'filters' => $request->only('order_number', 'status', 'client_name', 'client_email'),
         ]);
     }
 

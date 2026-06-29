@@ -8,9 +8,14 @@ export type Lang = 'es' | 'en' | 'fr';
 export type ProductCategory = 'cabello' | 'rostro' | 'solar' | 'perfume' | 'bucal';
 export type ProductTag = 'best' | 'new' | 'sale';
 
+interface FooterItem {
+  label: string;
+  href: string;
+}
+
 interface FooterColumn {
   title: string;
-  items: string[];
+  items: FooterItem[];
 }
 
 interface CommonDict {
@@ -26,11 +31,11 @@ interface CommonDict {
   best: string;
   newTag: string;
   sale: string;
-  cabello: string;
-  rostro: string;
-  solar: string;
-  perfume: string;
-  bucal: string;
+  'hair care': string;
+  'face care': string;
+  'makeup': string;
+  'body & bath': string;
+  'perfumes': string;
   marquee: string[];
   promiseKicker: string;
   promiseTitle: string;
@@ -89,11 +94,11 @@ const COMMON: Record<Lang, CommonDict> = {
     best: 'Best-seller',
     newTag: 'Nouveau',
     sale: 'Promo',
-    cabello: 'Cheveux',
-    rostro: 'Visage',
-    solar: 'Solaire',
-    perfume: 'Parfum',
-    bucal: 'Soins dentaires',
+    'hair care': 'Cheveux',
+    'face care': 'Visage',
+    'makeup': 'Maquillage',
+    'body & bath': 'Corps et Bain',
+    'perfumes': 'Parfums',
     marquee: ['Beauté honnête', 'Soins essentiels', 'Ingrédients réels', 'Pour chaque jour', 'Prix juste'],
     promiseKicker: 'Rejoignez-nous',
     promiseTitle: 'Prenez soin de vous',
@@ -103,9 +108,16 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Des soins essentiels pour chaque jour.',
     footerNote: 'Fait avec soin · Espagne',
     footer: [
-      { title: 'Boutique', items: ['Cheveux', 'Visage', 'Solaire', 'Parfum', 'Soins dentaires'] },
-      { title: 'Société', items: ['Notre histoire', 'Philosophie', 'Durabilité', 'Contact'] },
-      { title: 'Aide', items: ['Livraison', 'Retours', 'FAQ', 'Confidentialité'] },
+      { title: 'Boutique', items: [
+        { label: 'Cheveux', href: '/?category=Hair%20Care#collection' },
+        { label: 'Visage', href: '/?category=Face%20Care#collection' },
+        { label: 'Maquillage', href: '/?category=Makeup#collection' },
+        { label: 'Corps et Bain', href: '/?category=Body%20%26%20Bath#collection' },
+        { label: 'Parfums', href: '/?category=Perfumes#collection' }
+      ] },
+      { title: 'Société', items: [
+        { label: 'Notre histoire', href: '/about' }
+      ] },
     ],
     login: 'Connexion',
     register: 'Créer un compte',
@@ -142,11 +154,11 @@ const COMMON: Record<Lang, CommonDict> = {
     best: 'Más vendido',
     newTag: 'Nuevo',
     sale: 'Oferta',
-    cabello: 'Cabello',
-    rostro: 'Rostro',
-    solar: 'Solar',
-    perfume: 'Perfume',
-    bucal: 'Cuidado bucal',
+    'hair care': 'Cabello',
+    'face care': 'Rostro',
+    'makeup': 'Maquillaje',
+    'body & bath': 'Cuerpo y Baño',
+    'perfumes': 'Perfumes',
     marquee: ['Belleza honesta', 'Cuidado esencial', 'Ingredientes reales', 'Para cada día', 'Precio justo'],
     promiseKicker: 'Únete',
     promiseTitle: 'Cuídate con nosotras',
@@ -156,9 +168,16 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Cuidado esencial para cada día.',
     footerNote: 'Hecho con cariño · España',
     footer: [
-      { title: 'Tienda', items: ['Cabello', 'Rostro', 'Solar', 'Perfume', 'Cuidado bucal'] },
-      { title: 'Compañía', items: ['Nuestra historia', 'Filosofía', 'Sostenibilidad', 'Contacto'] },
-      { title: 'Ayuda', items: ['Envíos', 'Devoluciones', 'Preguntas frecuentes', 'Privacidad'] },
+      { title: 'Tienda', items: [
+        { label: 'Cabello', href: '/?category=Hair%20Care#collection' },
+        { label: 'Rostro', href: '/?category=Face%20Care#collection' },
+        { label: 'Maquillaje', href: '/?category=Makeup#collection' },
+        { label: 'Cuerpo y Baño', href: '/?category=Body%20%26%20Bath#collection' },
+        { label: 'Perfumes', href: '/?category=Perfumes#collection' }
+      ] },
+      { title: 'Compañía', items: [
+        { label: 'Nuestra historia', href: '/about' }
+      ] },
     ],
     login: 'Acceder',
     register: 'Crear cuenta',
@@ -195,11 +214,11 @@ const COMMON: Record<Lang, CommonDict> = {
     best: 'Best seller',
     newTag: 'New',
     sale: 'Sale',
-    cabello: 'Hair',
-    rostro: 'Face',
-    solar: 'Sun care',
-    perfume: 'Fragrance',
-    bucal: 'Oral care',
+    'hair care': 'Hair Care',
+    'face care': 'Face Care',
+    'makeup': 'Makeup',
+    'body & bath': 'Body & Bath',
+    'perfumes': 'Perfumes',
     marquee: ['Honest beauty', 'Essential care', 'Real ingredients', 'For every day', 'Fair pricing'],
     promiseKicker: 'Join us',
     promiseTitle: 'Take care, with us',
@@ -209,9 +228,16 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Essential care for every day.',
     footerNote: 'Made with care · Spain',
     footer: [
-      { title: 'Shop', items: ['Hair', 'Face', 'Sun care', 'Fragrance', 'Oral care'] },
-      { title: 'Company', items: ['Our story', 'Philosophy', 'Sustainability', 'Contact'] },
-      { title: 'Help', items: ['Shipping', 'Returns', 'FAQ', 'Privacy'] },
+      { title: 'Shop', items: [
+        { label: 'Hair Care', href: '/?category=Hair%20Care#collection' },
+        { label: 'Face Care', href: '/?category=Face%20Care#collection' },
+        { label: 'Makeup', href: '/?category=Makeup#collection' },
+        { label: 'Body & Bath', href: '/?category=Body%20%26%20Bath#collection' },
+        { label: 'Perfumes', href: '/?category=Perfumes#collection' }
+      ] },
+      { title: 'Company', items: [
+        { label: 'Our story', href: '/about' }
+      ] },
     ],
     login: 'Log in',
     register: 'Create account',
@@ -238,11 +264,11 @@ const COMMON: Record<Lang, CommonDict> = {
 };
 
 const CATEGORY_TINTS: Record<string, string> = {
-  cabello: '#ECE0CF',
-  rostro: '#E7E5D6',
-  solar: '#F2E3C6',
-  perfume: '#EBDFDB',
-  bucal: '#E4E7E1',
+  'hair care': '#ECE0CF',
+  'face care': '#E7E5D6',
+  'makeup': '#F2E3C6',
+  'perfumes': '#EBDFDB',
+  'body & bath': '#E4E7E1',
 };
 
 const LANGS: Lang[] = ['fr', 'en', 'es'];
@@ -271,7 +297,7 @@ interface ClientLayoutProps {
   children: ReactNode;
 }
 
-export default function ClientLayout({ auth, cartCount = 0, title, categories = ['cabello', 'rostro', 'solar', 'perfume', 'bucal'], children }: ClientLayoutProps) {
+export default function ClientLayout({ auth, cartCount = 0, title, categories = ['Hair Care', 'Face Care', 'Makeup', 'Perfumes', 'Body & Bath'], children }: ClientLayoutProps) {
   const [lang, setLangState] = useState<Lang>(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('au_lang');
@@ -536,7 +562,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
                 <div className="au-footer-col-title">{col.title}</div>
                 <div className="au-footer-col-links">
                   {col.items.map((item, j) => (
-                    <span className="au-footer-link" key={j}>{item}</span>
+                    <Link href={item.href} className="au-footer-link" key={j}>{item.label}</Link>
                   ))}
                 </div>
               </div>

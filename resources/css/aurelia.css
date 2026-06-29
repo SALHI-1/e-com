@@ -736,11 +736,11 @@
 
 .au-cat-card {
   position: relative;
-  height: 252px;
+  height: 120px;
   border: none;
   cursor: pointer;
   text-align: left;
-  padding: 26px 24px;
+  padding: 20px 20px;
   border-radius: 3px;
   overflow: hidden;
   display: flex;
@@ -1543,8 +1543,8 @@
   }
 
   .au-cat-card {
-    height: 200px;
-    padding: 20px 18px;
+    height: 110px;
+    padding: 16px 16px;
   }
 
   /* two products per row on phones */
@@ -1619,7 +1619,7 @@
   }
 
   .au-cat-card {
-    height: 180px;
+    height: 100px;
   }
   
   .au-add-btn {

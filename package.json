@@ -26,6 +26,8 @@
         "vite": "^8.0.0"
     },
     "dependencies": {
+        "react-is": "^19.2.7",
+        "recharts": "^3.9.0",
         "ziggy-js": "^2.6.3"
     }
 }

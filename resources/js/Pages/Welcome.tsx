@@ -145,9 +145,9 @@ function resolveShape(product: any): ProductShape {
   if (/(lingette|toallita|wipe|sachet|pouch)/.test(name)) return 'pouch';
 
   // category fallback
-  if (cat === 'perfume') return 'flacon';
-  if (cat === 'bucal' || cat === 'solar') return 'tube';
-  if (cat === 'rostro') return 'pump';
+  if (cat === 'perfumes') return 'flacon';
+  if (cat === 'body & bath' || cat === 'makeup') return 'tube';
+  if (cat === 'face care') return 'pump';
   return 'bottle';
 }
 
@@ -376,7 +376,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const copy = HOME_COPY[lang];
 
   const heroShape = heroProduct ? resolveShape(heroProduct) : 'bottle';
-  const heroCat = heroProduct?.category?.name || 'cabello';
+  const heroCat = heroProduct?.category?.name || 'Hair Care';
 
   return (
     <>
@@ -507,7 +507,6 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                   border: activeCategory === cat ? '2px solid var(--au-gold)' : '2px solid transparent'
                 }}
               >
-                <span className="au-cat-num">N°{String(count).padStart(2, '0')}</span>
                 <div>
                   <div className="au-cat-label">{categoryLabel(cat)}</div>
                   <div className="au-cat-discover">{t.discover}<span style={{ fontSize: 13 }}>→</span></div>

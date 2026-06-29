@@ -30,7 +30,10 @@ export default function Show({ order }: { order: any }) {
                         </div>
                         <div className="text-right">
                             <h3 className="text-lg font-bold">Montant Total : {order.total_amount} dh</h3>
-                            <p className="text-gray-500">Date : {new Date(order.created_at).toLocaleString()}</p>
+                            <p className="text-gray-500">Création : {new Date(order.created_at).toLocaleString()}</p>
+                            {order.status === 'reçu' && (
+                                <p className="text-green-700 font-bold mt-1">Reçue le : {new Date(order.updated_at).toLocaleString()}</p>
+                            )}
                         </div>
                     </div>
 

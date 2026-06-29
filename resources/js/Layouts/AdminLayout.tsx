@@ -41,9 +41,15 @@ export default function AdminLayout({
                                 </NavLink>
                                 <NavLink
                                     href={route('admin.orders.index')}
-                                    active={route().current('admin.orders.*')}
+                                    active={route().current('admin.orders.index')}
                                 >
-                                    Commandes
+                                    Kanban Commandes
+                                </NavLink>
+                                <NavLink
+                                    href={route('admin.orders.list')}
+                                    active={route().current('admin.orders.list')}
+                                >
+                                    Liste Commandes
                                 </NavLink>
                             </div>
                         </div>
@@ -152,9 +158,15 @@ export default function AdminLayout({
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('admin.orders.index')}
-                            active={route().current('admin.orders.*')}
+                            active={route().current('admin.orders.index')}
                         >
-                            Commandes
+                            Kanban Commandes
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route('admin.orders.list')}
+                            active={route().current('admin.orders.list')}
+                        >
+                            Liste Commandes
                         </ResponsiveNavLink>
                     </div>
 
