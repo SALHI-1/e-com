@@ -41,7 +41,7 @@ export default function Index({ products }: { products: any[] }) {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.id}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} €</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} dh</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.stock}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <Link href={route('admin.products.edit', product.id)} className="text-indigo-600 hover:text-indigo-900 mr-4">

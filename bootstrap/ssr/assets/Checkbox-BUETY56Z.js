@@ -1,0 +1,11 @@
+import { jsx } from "react/jsx-runtime";
+//#region resources/js/Components/Checkbox.tsx
+function Checkbox({ className = "", ...props }) {
+	return /* @__PURE__ */ jsx("input", {
+		...props,
+		type: "checkbox",
+		className: "rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 " + className
+	});
+}
+//#endregion
+export { Checkbox as t };

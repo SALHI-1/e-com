@@ -1,0 +1,110 @@
+{
+  "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
+  "resources/css/app.css": [],
+  "resources/js/Components/ApplicationLogo.tsx": [
+    "/build/assets/ResponsiveNavLink-Tbv55d25.js"
+  ],
+  "resources/js/Components/Checkbox.tsx": [
+    "/build/assets/Checkbox-BUETY56Z.js"
+  ],
+  "resources/js/Components/DangerButton.tsx": [
+    "/build/assets/DeleteUserForm-BacZSmvI.js"
+  ],
+  "resources/js/Components/Dropdown.tsx": [
+    "/build/assets/ResponsiveNavLink-Tbv55d25.js"
+  ],
+  "resources/js/Components/InputError.tsx": [
+    "/build/assets/InputError-CvL50cpz.js"
+  ],
+  "resources/js/Components/InputLabel.tsx": [
+    "/build/assets/InputLabel-4-xi2Z9Z.js"
+  ],
+  "resources/js/Components/Modal.tsx": [
+    "/build/assets/DeleteUserForm-BacZSmvI.js"
+  ],
+  "resources/js/Components/NavLink.tsx": [
+    "/build/assets/ResponsiveNavLink-Tbv55d25.js"
+  ],
+  "resources/js/Components/PrimaryButton.tsx": [
+    "/build/assets/PrimaryButton-C1EagpHT.js"
+  ],
+  "resources/js/Components/ResponsiveNavLink.tsx": [
+    "/build/assets/ResponsiveNavLink-Tbv55d25.js"
+  ],
+  "resources/js/Components/SecondaryButton.tsx": [
+    "/build/assets/DeleteUserForm-BacZSmvI.js"
+  ],
+  "resources/js/Components/TextInput.tsx": [
+    "/build/assets/InputError-CvL50cpz.js"
+  ],
+  "resources/js/Layouts/AdminLayout.tsx": [
+    "/build/assets/AdminLayout-nNytKXjc.js"
+  ],
+  "resources/js/Layouts/AuthenticatedLayout.tsx": [
+    "/build/assets/Edit-BFMOP19M.js"
+  ],
+  "resources/js/Layouts/ClientLayout.tsx": [
+    "/build/assets/ClientLayout-LgnMEJmu.js"
+  ],
+  "resources/js/Layouts/GuestLayout.tsx": [
+    "/build/assets/GuestLayout-CCZbzRNY.js"
+  ],
+  "resources/js/Pages/Admin/Dashboard.tsx": [
+    "/build/assets/Dashboard-KtRZZIEX.js"
+  ],
+  "resources/js/Pages/Admin/Login.tsx": [
+    "/build/assets/Login-BpuVsKBF.js"
+  ],
+  "resources/js/Pages/Admin/Orders/Index.tsx": [
+    "/build/assets/Index-DGOrEoja.js"
+  ],
+  "resources/js/Pages/Admin/Orders/Show.tsx": [
+    "/build/assets/Show-8EdnFQkQ.js"
+  ],
+  "resources/js/Pages/Admin/Products/Create.tsx": [
+    "/build/assets/Create-BGykU7Bp.js"
+  ],
+  "resources/js/Pages/Admin/Products/Edit.tsx": [
+    "/build/assets/Edit--74K0EEW.js"
+  ],
+  "resources/js/Pages/Admin/Products/Index.tsx": [
+    "/build/assets/Index-CvCKCUV7.js"
+  ],
+  "resources/js/Pages/Auth/ConfirmPassword.tsx": [
+    "/build/assets/ConfirmPassword-BL17ZLhq.js"
+  ],
+  "resources/js/Pages/Auth/ForgotPassword.tsx": [
+    "/build/assets/ForgotPassword-CWtuH0ZQ.js"
+  ],
+  "resources/js/Pages/Auth/Login.tsx": [
+    "/build/assets/Login-X2tOd8q0.js"
+  ],
+  "resources/js/Pages/Auth/Register.tsx": [
+    "/build/assets/Register-B9Ct5TYz.js"
+  ],
+  "resources/js/Pages/Auth/ResetPassword.tsx": [
+    "/build/assets/ResetPassword-C5iTigEy.js"
+  ],
+  "resources/js/Pages/Auth/VerifyEmail.tsx": [
+    "/build/assets/VerifyEmail-BoX6JN3j.js"
+  ],
+  "resources/js/Pages/Cart/Index.tsx": [
+    "/build/assets/Index-BChc9WUn.js"
+  ],
+  "resources/js/Pages/Profile/Edit.tsx": [
+    "/build/assets/Edit-BFMOP19M.js"
+  ],
+  "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
+    "/build/assets/DeleteUserForm-BacZSmvI.js"
+  ],
+  "resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx": [
+    "/build/assets/UpdatePasswordForm-D_Mzz8Mm.js"
+  ],
+  "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx": [
+    "/build/assets/UpdateProfileInformationForm-C7EIJ0L4.js"
+  ],
+  "resources/js/Pages/Welcome.tsx": [
+    "/build/assets/Welcome-D2C-XbkO.js"
+  ],
+  "resources/js/app.tsx": []
+}

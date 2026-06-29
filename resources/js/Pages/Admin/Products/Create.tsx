@@ -10,6 +10,7 @@ import Checkbox from '@/Components/Checkbox';
 export default function Create({ categories }: { categories: any[] }) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
+        brand: '',
         category_id: categories.length > 0 ? categories[0].id : '',
         description: '',
         price: '',
@@ -41,6 +42,12 @@ export default function Create({ categories }: { categories: any[] }) {
                             </div>
 
                             <div>
+                                <InputLabel htmlFor="brand" value="Marque (optionnel)" />
+                                <TextInput id="brand" type="text" className="mt-1 block w-full" value={data.brand} onChange={(e) => setData('brand', e.target.value)} />
+                                <InputError message={errors.brand} className="mt-2" />
+                            </div>
+
+                            <div>
                                 <InputLabel htmlFor="category_id" value="Catégorie" />
                                 <select id="category_id" className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value={data.category_id} onChange={(e) => setData('category_id', e.target.value)} required>
                                     <option value="" disabled>Sélectionner une catégorie</option>
@@ -59,7 +66,7 @@ export default function Create({ categories }: { categories: any[] }) {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <InputLabel htmlFor="price" value="Prix (€)" />
+                                    <InputLabel htmlFor="price" value="Prix (dh)" />
                                     <TextInput id="price" type="number" step="0.01" className="mt-1 block w-full" value={data.price} onChange={(e) => setData('price', e.target.value)} required />
                                     <InputError message={errors.price} className="mt-2" />
                                 </div>

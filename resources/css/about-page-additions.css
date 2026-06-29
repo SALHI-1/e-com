@@ -1,0 +1,210 @@
+/* ─────────────────────────────────────────────────────────────────────
+   ABOUT PAGE — additions to aurelia.css
+   Append these rules to your existing aurelia.css. They reuse the same
+   --au-* tokens already defined there, so colors/fonts stay in sync
+   automatically. Existing classes (au-page, au-container, au-kicker,
+   au-h1, au-manifesto, au-quote, au-dark-band, au-btn, au-spread-num…)
+   are NOT redefined here — only the new About-specific layout classes.
+   ───────────────────────────────────────────────────────────────────── */
+
+/* Hero */
+.au-about-hero {
+  background: var(--au-bg);
+  padding-top: 64px;
+}
+
+.au-about-hero-inner {
+  padding-top: 80px;
+  padding-bottom: 64px;
+  max-width: 760px;
+}
+
+.au-about-lead {
+  font-family: var(--au-font-sans);
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--au-text-muted);
+  margin-top: 24px;
+  max-width: 640px;
+}
+
+/* Journey / timeline */
+.au-journey {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+.au-timeline {
+  display: flex;
+  flex-direction: column;
+  margin-top: 56px;
+}
+
+.au-timeline-item {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  align-items: start;
+  gap: 32px;
+  padding: 40px 0;
+  border-bottom: 1px solid var(--au-border);
+}
+
+.au-timeline-item:first-child {
+  padding-top: 0;
+}
+
+.au-timeline-item:last-child {
+  border-bottom: none;
+}
+
+.au-timeline-num {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.au-timeline-title {
+  font-family: var(--au-font-serif);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--au-ink);
+  margin-bottom: 12px;
+}
+
+.au-timeline-text {
+  font-family: var(--au-font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--au-text-muted);
+  max-width: 560px;
+}
+
+/* Values grid (sits inside the existing au-dark-band / au-dark-inner) */
+.au-values-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  margin-top: 64px;
+}
+
+.au-value-card {
+  border-top: 1px solid var(--au-dark-border-2);
+  padding-top: 28px;
+}
+
+.au-value-num {
+  font-family: var(--au-font-serif);
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--au-gold-light);
+  margin-bottom: 16px;
+}
+
+.au-value-title {
+  font-family: var(--au-font-serif);
+  font-weight: 500;
+  font-size: 26px;
+  color: var(--au-bg);
+  margin-bottom: 12px;
+}
+
+.au-value-text {
+  font-family: var(--au-font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--au-cream-3);
+}
+
+/* Stats */
+.au-stats-section {
+  padding-top: 96px;
+  padding-bottom: 96px;
+}
+
+.au-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+  text-align: center;
+}
+
+.au-stat {
+  padding: 32px 16px;
+  border: 1px solid var(--au-border);
+  border-radius: 4px;
+}
+
+.au-stat-figure {
+  font-family: var(--au-font-serif);
+  font-weight: 600;
+  font-size: 48px;
+  color: var(--au-gold);
+  -webkit-text-stroke: 1px var(--au-gold-pale);
+}
+
+.au-stat-label {
+  font-family: var(--au-font-sans);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  color: var(--au-text-muted);
+  margin-top: 8px;
+}
+
+/* Closing CTA */
+.au-about-closing-text {
+  font-family: var(--au-font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--au-text-muted);
+  max-width: 520px;
+  margin: 20px auto 0;
+}
+
+.au-about-closing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.au-about-closing .au-btn-outline-dark {
+  color: var(--au-ink);
+  border-color: var(--au-border-3);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .au-values-grid,
+  .au-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .au-about-hero-inner {
+    padding-top: 56px;
+    padding-bottom: 48px;
+  }
+
+  .au-timeline-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .au-timeline-num {
+    font-size: 48px;
+  }
+
+  .au-values-grid,
+  .au-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .au-journey,
+  .au-stats-section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}

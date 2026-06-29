@@ -7,6 +7,7 @@ sed -i "s/\${PORT}/${PORT:-8080}/g" /etc/nginx/nginx.conf
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+php artisan storage:link --force
 
 # Lancer supervisor
 exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

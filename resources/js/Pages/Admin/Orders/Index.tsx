@@ -99,7 +99,7 @@ export default function Index({ orders }: { orders: any[] }) {
                                                 {order.user?.name || 'Client'}
                                             </div>
                                             <div className="text-sm font-semibold text-gray-900 mb-3">
-                                                {order.total_amount} €
+                                                {order.total_amount} dh
                                             </div>
                                             <div className="text-right">
                                                 <Link href={route('admin.orders.show', order.id)} className="text-xs text-indigo-600 hover:underline">

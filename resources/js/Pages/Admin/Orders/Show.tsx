@@ -29,7 +29,7 @@ export default function Show({ order }: { order: any }) {
                             <p className="text-gray-600 mt-2"><strong>Adresse d'expédition :</strong> <br /> {order.shipping_address}</p>
                         </div>
                         <div className="text-right">
-                            <h3 className="text-lg font-bold">Montant Total : {order.total_amount} €</h3>
+                            <h3 className="text-lg font-bold">Montant Total : {order.total_amount} dh</h3>
                             <p className="text-gray-500">Date : {new Date(order.created_at).toLocaleString()}</p>
                         </div>
                     </div>
@@ -75,9 +75,9 @@ export default function Show({ order }: { order: any }) {
                                 {order.items.map((item: any) => (
                                     <tr key={item.id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.product.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.unit_price} €</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.unit_price} dh</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{item.quantity}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{(item.unit_price * item.quantity).toFixed(2)} €</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{(item.unit_price * item.quantity).toFixed(2)} dh</td>
                                     </tr>
                                 ))}
                             </tbody>

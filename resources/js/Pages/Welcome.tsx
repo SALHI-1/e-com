@@ -265,16 +265,23 @@ function ProductCard({ product }: { product: any }) {
     });
   };
 
+  const isOut = product.stock === 0;
   const isNew = product.is_new && !product.is_bestseller;
   const isBest = product.is_bestseller;
   const isSale = !!product.price_old || !!product.is_sale;
-  const tag = isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
+  
+  // 'out' tag takes precedence
+  const tag = isOut ? 'out' : isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
   const shape = resolveShape(product);
 
   return (
-    <div className="au-prod-card">
-      <div className="au-prod-media" style={{ background: categoryTint(product.category.name) }}>
-        {tag && <div className="au-prod-tag">{tagLabel(tag)}</div>}
+    <div className={`au-prod-card ${isOut ? 'is-out-of-stock' : ''}`} style={isOut ? { opacity: 0.6 } : {}}>
+      <div className="au-prod-media" style={{ background: categoryTint(product.category.name), filter: isOut ? 'grayscale(100%)' : 'none' }}>
+        {tag && (
+          <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)' } : {}}>
+            {tag === 'out' ? copy.soldOut : tagLabel(tag)}
+          </div>
+        )}
         {product.image_url ? (
           <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
@@ -286,15 +293,15 @@ function ProductCard({ product }: { product: any }) {
         <div className="au-prod-name">{product.name}</div>
         <div className="au-prod-note">{product.description || copy.essentialCare}</div>
       </div>
-      <div className="au-prod-footer">
+      <div className="au-prod-footer" style={{ pointerEvents: isOut ? 'none' : 'auto' }}>
         <div className="au-prod-price-group">
           {product.price_old && (
-            <span className="au-prod-price-old">€ {Number(product.price_old).toFixed(2)}</span>
+            <span className="au-prod-price-old">{Number(product.price_old).toFixed(2)} dh</span>
           )}
-          <span className={`au-prod-price${isSale ? ' au-prod-price--sale' : ''}`}>€ {Number(product.price).toFixed(2)}</span>
+          <span className={`au-prod-price${isSale && !isOut ? ' au-prod-price--sale' : ''}`}>{Number(product.price).toFixed(2)} dh</span>
         </div>
 
-        <div className="au-qty-add" onClick={(e) => e.preventDefault()}>
+        <div className="au-qty-add" onClick={(e) => { if (isOut) e.preventDefault(); }}>
           <input
             type="number"
             min="1"
@@ -303,9 +310,10 @@ function ProductCard({ product }: { product: any }) {
             onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
             className="au-qty-input"
             aria-label="Quantity"
+            disabled={isOut}
           />
-          <button type="button" className="au-add-btn" onClick={addToCart} disabled={loading || product.stock === 0}>
-            {loading ? '…' : product.stock === 0 ? copy.soldOut : t.add}
+          <button type="button" className="au-add-btn" onClick={addToCart} disabled={loading || isOut}>
+            {loading ? '…' : isOut ? copy.soldOut : t.add}
           </button>
         </div>
       </div>
@@ -328,6 +336,7 @@ export default function Welcome(props: PageProps<{ products: any[]; cartCount: n
 function WelcomeContent({ products = [], flash, errors }: any) {
   const { url } = usePage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [activeBrand, setActiveBrand] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -353,8 +362,15 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const spreadProducts = products.slice(0, 3);
   const heroProduct = products.length > 0 ? products[0] : null;
 
-  // categories with real per-category counts
-  const categoriesList = Array.from(new Set(products.map((p: any) => p.category.name))) as string[];
+  // brands list
+  const brandsList = Array.from(new Set(products.map((p: any) => p.brand).filter(Boolean))) as string[];
+
+  // categories with real per-category counts (filtered by brand if selected)
+  const categoriesList = Array.from(new Set(
+    products
+      .filter((p: any) => activeBrand ? p.brand === activeBrand : true)
+      .map((p: any) => p.category.name)
+  )) as string[];
 
   const { lang, t, categoryLabel, categoryTint, tagLabel } = useAurelia();
   const copy = HOME_COPY[lang];
@@ -364,6 +380,14 @@ function WelcomeContent({ products = [], flash, errors }: any) {
 
   return (
     <>
+      <Head>
+        <title>{activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : 'Ourélia'}</title>
+        <meta head-key="description" name="description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub} />
+        <meta head-key="keywords" name="keywords" content={activeCategory ? `${categoryLabel(activeCategory).toLowerCase()}, soins, beauté, Ourélia, cosmétiques` : "soins, beauté, cosmétiques, parfums, Ourélia, argan, bien-être"} />
+        <meta head-key="og:title" property="og:title" content={activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : 'Ourélia'} />
+        <meta head-key="og:description" property="og:description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub} />
+      </Head>
+
       {/* ── Flash Messages ── */}
       {(flash?.success || errors?.quantity) && (
         <div className="au-flash" style={{ background: errors?.quantity ? 'var(--au-sale)' : 'var(--au-gold)' }}>
@@ -446,7 +470,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                     ))}
                   </div>
                   <div className="au-price-row">
-                    <span className="au-price-lg">€ {Number(product.price).toFixed(2)}</span>
+                    <span className="au-price-lg">{Number(product.price).toFixed(2)} dh</span>
                     <button type="button" className="au-btn-sm" onClick={() => router.post(route('cart.add'), { product_id: product.id, quantity: 1 }, { preserveScroll: true })}>
                       {t.addCart}
                     </button>
@@ -468,7 +492,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         </div>
         <div className="au-cat-grid">
           {categoriesList.map((cat, i) => {
-            const count = products.filter((p: any) => p.category.name === cat).length;
+            const count = products.filter((p: any) => p.category.name === cat && (activeBrand ? p.brand === activeBrand : true)).length;
             return (
               <a
                 key={cat}
@@ -501,13 +525,26 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             <div className="au-section-eyebrow">{copy.bestTitle}</div>
             <h2 className="au-section-title">{copy.bestSub}</h2>
           </div>
-          <span className="au-link-underline cursor-pointer" onClick={() => setActiveCategory(null)}>
-            {activeCategory ? `Tout voir (${products.length})` : `${products.length} ${copy.productsWord}`}
-          </span>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            {brandsList.length > 0 && (
+              <select 
+                value={activeBrand || ''} 
+                onChange={(e) => setActiveBrand(e.target.value || null)}
+                style={{ padding: '6px 12px', fontSize: '14px', borderRadius: '4px', border: '1px solid var(--au-border)', background: 'transparent', fontFamily: 'var(--au-font-sans)', outline: 'none' }}
+              >
+                <option value="">Toutes les marques</option>
+                {brandsList.map(b => <option key={b} value={b}>{b}</option>)}
+              </select>
+            )}
+            <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
+              {activeCategory || activeBrand ? `Tout voir (${products.length})` : `${products.length} ${copy.productsWord}`}
+            </span>
+          </div>
         </div>
         <div className="au-prod-grid">
           {products
             .filter((p: any) => activeCategory ? p.category.name === activeCategory : true)
+            .filter((p: any) => activeBrand ? p.brand === activeBrand : true)
             .map((product: any) => (
               <ProductCard key={product.id} product={product} />
             ))}

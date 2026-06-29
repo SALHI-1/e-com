@@ -1,4 +1,5 @@
 @import './aurelia.css';
+@import './about-page-additions.css';
 
 @tailwind base;
 @tailwind components;

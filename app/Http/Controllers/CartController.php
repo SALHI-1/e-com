@@ -10,7 +10,9 @@ use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Inertia\Inertia;
+use App\Notifications\NewOrderNotification;
 
 class CartController extends Controller
 {
@@ -57,11 +59,11 @@ class CartController extends Controller
         // ── Validation des champs selon le type de client ─────────────────
         $rules = [
             'shipping_address' => 'required|string|max:500',
-            'phone'            => 'required|string|max:25',
+            'phone'            => ['required', 'string', 'regex:/^\+212(0[67][0-9]{8}|[67][0-9]{8})$/'],
         ];
 
         // Champs supplémentaires pour les invités (Shadow Account)
-        if (! Auth::check()) {
+        if (! Auth::check() || Auth::user()->is_admin) {
             $rules['guest_name']  = 'required|string|max:255';
             $rules['guest_email'] = 'required|email|max:255';
         }
@@ -69,6 +71,7 @@ class CartController extends Controller
         $validated = $request->validate($rules, [
             'shipping_address.required' => "L'adresse de livraison est obligatoire.",
             'phone.required'            => 'Le numéro de téléphone WhatsApp est obligatoire.',
+            'phone.regex'               => 'Le numéro de téléphone doit être au format +21206xxxxxxxx ou +2126xxxxxxxx.',
             'guest_name.required'       => 'Votre nom est obligatoire.',
             'guest_email.required'      => 'Votre adresse e-mail est obligatoire.',
             'guest_email.email'         => "L'adresse e-mail n'est pas valide.",
@@ -78,7 +81,7 @@ class CartController extends Controller
             $order = DB::transaction(function () use ($cart, $validated) {
 
                 // ── 1. Résoudre l'utilisateur (connecté ou Shadow Account) ──
-                if (Auth::check()) {
+                if (Auth::check() && !Auth::user()->is_admin) {
                     $user = Auth::user();
 
                     // Mettre à jour le téléphone si l'utilisateur le modifie
@@ -156,6 +159,12 @@ class CartController extends Controller
             // ── 6. Envoyer le message WhatsApp avec boutons ───────────────
             // $order->load('user');
             // app(WhatsAppService::class)->sendOrderConfirmationButtons($order);
+
+            // ── 7. Notifier les admins par e-mail ─────────────────────────
+            $admins = User::where('is_admin', true)->get();
+            if ($admins->isNotEmpty()) {
+                Notification::send($admins, new NewOrderNotification($order));
+            }
 
             return redirect()->route('home')->with(
                 'success',

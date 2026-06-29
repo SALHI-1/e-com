@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -30,6 +31,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'brand' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
@@ -43,8 +45,8 @@ class ProductController extends Controller
         $data = collect($validated)->except('image')->toArray();
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image_url'] = '/storage/' . $path;
+            $path = $request->file('image')->store('products');
+            $data['image_url'] = Storage::url($path);
         }
 
         Product::create($data);
@@ -65,6 +67,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'brand' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
@@ -78,8 +81,8 @@ class ProductController extends Controller
         $data = collect($validated)->except('image')->toArray();
 
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('products', 'public');
-            $data['image_url'] = '/storage/' . $path;
+            $path = $request->file('image')->store('products');
+            $data['image_url'] = Storage::url($path);
         }
 
         $product->update($data);

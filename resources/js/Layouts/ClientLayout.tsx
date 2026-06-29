@@ -77,7 +77,7 @@ interface AureliaContextValue {
  * ========================================================================== */
 const COMMON: Record<Lang, CommonDict> = {
   fr: {
-    announce: 'Livraison gratuite pour les commandes de plus de 20 €',
+    announce: 'Livraison gratuite pour les commandes de plus de 20 dh',
     navHome: 'Accueil',
     navShop: 'Boutique',
     navHair: 'Cheveux',
@@ -130,7 +130,7 @@ const COMMON: Record<Lang, CommonDict> = {
     sending: 'Envoi…',
   },
   es: {
-    announce: 'Envío gratis en pedidos superiores a 20 €',
+    announce: 'Envío gratis en pedidos superiores a 20 dh',
     navHome: 'Inicio',
     navShop: 'Tienda',
     navHair: 'Cabello',
@@ -183,7 +183,7 @@ const COMMON: Record<Lang, CommonDict> = {
     sending: 'Enviando…',
   },
   en: {
-    announce: 'Free shipping on orders over €20',
+    announce: 'Free shipping on orders over 20 dh',
     navHome: 'Home',
     navShop: 'Shop',
     navHair: 'Hair',
@@ -306,7 +306,14 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
 
   return (
     <AureliaContext.Provider value={contextValue}>
-      <Head title={title ? `${title} · Ourélia` : 'Ourélia — Essential Care'} />
+      <Head title={title ? (title === 'Ourélia' ? 'Ourélia' : `${title} · Ourélia`) : 'Ourélia — Essential Care'}>
+        <meta head-key="description" name="description" content="Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être." />
+        <meta head-key="og:title" property="og:title" content={title ? (title === 'Ourélia' ? 'Ourélia' : `${title} · Ourélia`) : 'Ourélia — Essential Care'} />
+        <meta head-key="og:description" property="og:description" content="Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être." />
+        <meta head-key="og:image" property="og:image" content="/assets/og-default.jpg" />
+        <meta head-key="og:type" property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
 
       <div className="au-page">
         {/* announcement */}
@@ -315,6 +322,25 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
         {/* nav */}
         <header className="au-nav">
           <div className="au-nav-inner">
+            {/* mobile hamburger — only visible under 860px via CSS */}
+            <button
+              type="button"
+              className="au-burger"
+              aria-label="Menu"
+              aria-expanded={menuOpen}
+              onClick={() => setMenuOpen((o) => !o)}
+            >
+              {menuOpen ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
+                  <path d="M3 6h18M3 12h18M3 18h18" />
+                </svg>
+              )}
+            </button>
+
             <Link href="/" className="au-logo">OURÉLIA</Link>
 
             <nav className="au-nav-links">
@@ -324,7 +350,13 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
               >
                 {t.navHome}
               </Link>
-              
+              <Link
+                href="/about"
+                className={`au-nav-link${url.startsWith('/about') ? ' au-nav-link--active' : ''}`}
+              >
+                {t.navAbout}
+              </Link>
+
               {categories && categories.length > 0 && (
                 <div className="au-nav-dropdown-wrap">
                   <button className="au-nav-link au-nav-dropdown-btn">
@@ -337,7 +369,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
                     {categories.map(cat => (
                       <Link
                         key={cat}
-                        href={`/?category=${cat}#collection`}
+                        href={`/?category=${encodeURIComponent(cat)}#collection`}
                         className="au-nav-dropdown-item"
                       >
                         {categoryLabel(cat)}
@@ -392,25 +424,6 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
                 </svg>
                 {cartCount > 0 && <span className="au-cart-badge">{cartCount}</span>}
               </Link>
-
-              {/* mobile hamburger — only visible under 860px via CSS */}
-              <button
-                type="button"
-                className="au-burger"
-                aria-label="Menu"
-                aria-expanded={menuOpen}
-                onClick={() => setMenuOpen((o) => !o)}
-              >
-                {menuOpen ? (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
-                    <path d="M6 6l12 12M18 6L6 18" />
-                  </svg>
-                ) : (
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.6}>
-                    <path d="M3 6h18M3 12h18M3 18h18" />
-                  </svg>
-                )}
-              </button>
             </div>
           </div>
 
@@ -419,6 +432,9 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
             <div className="au-mobile-inner">
               <Link href="/" className="au-mobile-link" onClick={() => setMenuOpen(false)}>
                 {t.navHome}
+              </Link>
+              <Link href="/about" className="au-mobile-link" onClick={() => setMenuOpen(false)}>
+                {t.navAbout}
               </Link>
               <div className="au-mobile-link" style={{ pointerEvents: 'none', color: 'var(--au-text-muted)', paddingTop: '20px' }}>
                 {t.navShop}
@@ -429,7 +445,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories, c
               {categories && categories.map((cat) => (
                 <Link
                   key={cat}
-                  href={`/?category=${cat}#collection`}
+                  href={`/?category=${encodeURIComponent(cat)}#collection`}
                   className="au-mobile-link"
                   onClick={() => setMenuOpen(false)}
                   style={{ paddingLeft: '20px' }}

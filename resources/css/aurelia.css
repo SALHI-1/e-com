@@ -55,6 +55,7 @@
   color: var(--au-ink);
   font-family: var(--au-font-sans);
   min-height: 100vh;
+  overflow-x: clip;
 }
 
 .au-page ::selection {
@@ -534,7 +535,8 @@
    Signature spreads
    ------------------------------------------------------------------------ */
 .au-spreads {
-  padding: 104px 0 40px;
+  padding-top: 104px;
+  padding-bottom: 40px;
 }
 
 .au-spreads-head {
@@ -685,11 +687,13 @@
    Generic section headers (categories / best sellers)
    ------------------------------------------------------------------------ */
 .au-categories {
-  padding: 64px 0 100px;
+  padding-top: 64px;
+  padding-bottom: 100px;
 }
 
 .au-bestsellers {
-  padding: 0 0 104px;
+  padding-top: 0;
+  padding-bottom: 104px;
 }
 
 .au-section-head {
@@ -792,6 +796,7 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 .au-prod-media {
@@ -861,6 +866,8 @@
   justify-content: space-between;
   margin-top: auto;
   padding-top: 6px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .au-prod-price-group {
@@ -918,7 +925,8 @@
 }
 
 .au-dark-inner {
-  padding: 108px 0;
+  padding-top: 108px;
+  padding-bottom: 108px;
 }
 
 .au-dark-head {
@@ -1494,7 +1502,8 @@
   }
 
   .au-dark-inner {
-    padding: 72px 0;
+    padding-top: 72px;
+    padding-bottom: 72px;
   }
 
   .au-footer-grid {
@@ -1552,15 +1561,18 @@
   }
 
   .au-categories {
-    padding: 48px 0 64px;
+    padding-top: 48px;
+    padding-bottom: 64px;
   }
 
   .au-bestsellers {
-    padding: 0 0 64px;
+    padding-top: 0;
+    padding-bottom: 64px;
   }
 
   .au-spreads {
-    padding: 64px 0 24px;
+    padding-top: 64px;
+    padding-bottom: 24px;
   }
 
   .au-newsletter {
@@ -1588,7 +1600,17 @@
 /* ≤ 420px — very small phones: keep product footer tidy */
 @media (max-width: 420px) {
   .au-prod-footer {
-    gap: 12px;
+    gap: 6px;
+  }
+  
+  .au-prod-price-group {
+    width: 100%;
+    margin-bottom: 4px;
+  }
+  
+  .au-qty-add {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .au-spread-num {
@@ -1597,6 +1619,13 @@
 
   .au-cat-card {
     height: 180px;
+  }
+  
+  .au-add-btn {
+    padding: 8px 12px;
+    font-size: 9px;
+    flex: 1;
+    text-align: center;
   }
 }
 

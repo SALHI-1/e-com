@@ -13,6 +13,12 @@ Route::get('/', function () {
     ]);
 })->name('home');
 
+Route::get('/about', function () {
+    return Inertia::render('About', [
+        'cartCount' => array_sum(session()->get('cart', [])),
+    ]);
+})->name('about');
+
 // ─── Panier ───────────────────────────────────────────────────────────────────
 Route::get('/panier', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::post('/panier/ajouter', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');

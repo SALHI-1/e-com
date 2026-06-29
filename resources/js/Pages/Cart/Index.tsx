@@ -43,7 +43,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
         guest_email: string;
     }>({
         shipping_address: '',
-        phone: auth.user?.phone ?? '',
+        phone: auth.user?.phone || '+212',
         guest_name: '',
         guest_email: '',
     });
@@ -76,9 +76,9 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                 {cartItems.length === 0 ? (
                     <div className="au-empty">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#4A4038" strokeWidth="1" style={{ margin: '0 auto 1.5rem' }}>
-                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-                            <line x1="3" y1="6" x2="21" y2="6"/>
-                            <path d="M16 10a4 4 0 01-8 0"/>
+                            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                            <line x1="3" y1="6" x2="21" y2="6" />
+                            <path d="M16 10a4 4 0 01-8 0" />
                         </svg>
                         <p>{t.cartEmpty}</p>
                         <div style={{ marginTop: '2rem' }}>
@@ -108,7 +108,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             {item.product.category && (
                                                 <p className="au-cart-item-cat">{item.product.category.name}</p>
                                             )}
-                                            <p className="au-cart-item-price">{item.product.price} € / {t.unit}</p>
+                                            <p className="au-cart-item-price">{item.product.price} dh / {t.unit}</p>
                                         </div>
                                         <input
                                             type="number"
@@ -118,7 +118,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
                                             className="au-qty"
                                         />
-                                        <span className="au-cart-item-subtotal">{item.subtotal.toFixed(2)} €</span>
+                                        <span className="au-cart-item-subtotal">{item.subtotal.toFixed(2)} dh</span>
                                         <button
                                             onClick={() => removeItem(item.product.id)}
                                             className="au-cart-remove"
@@ -135,7 +135,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                 <h2 className="au-cart-summary-title">Récapitulatif</h2>
                                 <div className="au-cart-summary-row">
                                     <span>{t.subtotal}</span>
-                                    <span>{totalAmount.toFixed(2)} €</span>
+                                    <span>{totalAmount.toFixed(2)} dh</span>
                                 </div>
                                 <div className="au-cart-summary-row">
                                     <span>{t.shipping}</span>
@@ -143,7 +143,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                 </div>
                                 <div className="au-cart-summary-total">
                                     <span>{t.total}</span>
-                                    <span>{totalAmount.toFixed(2)} €</span>
+                                    <span>{totalAmount.toFixed(2)} dh</span>
                                 </div>
 
                                 {!showCheckout ? (
@@ -188,13 +188,25 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
 
                                         <div>
                                             <label className="au-label">
-                                                {t.waPhone} <span className="au-label-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>(ex: +33612345678)</span>
+                                                {t.waPhone} <span className="au-label-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>(ex: +212612345678)</span>
                                             </label>
                                             <input
                                                 type="tel"
                                                 value={data.phone}
-                                                onChange={e => setData('phone', e.target.value)}
-                                                placeholder="+33 6 12 34 56 78"
+                                                onChange={e => {
+                                                    let val = e.target.value;
+                                                    if (!val.startsWith('+212')) {
+                                                        val = '+212' + val.replace(/^\+?212/, '');
+                                                    }
+                                                    let rest = val.slice(4).replace(/[^0-9]/g, '');
+                                                    if (rest.startsWith('0')) {
+                                                        rest = rest.slice(0, 10);
+                                                    } else {
+                                                        rest = rest.slice(0, 9);
+                                                    }
+                                                    setData('phone', '+212' + rest);
+                                                }}
+                                                placeholder="+212 6 12 34 56 78"
                                                 className="au-input"
                                             />
                                             {formErrors.phone && <p className="au-field-error">{formErrors.phone}</p>}
