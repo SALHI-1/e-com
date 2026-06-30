@@ -110,14 +110,33 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             )}
                                             <p className="au-cart-item-price">{item.product.price} dh / {t.unit}</p>
                                         </div>
-                                        <input
-                                            type="number"
-                                            min="1"
-                                            max={item.product.stock}
-                                            value={item.quantity}
-                                            onChange={(e) => updateQuantity(item.product.id, parseInt(e.target.value) || 1)}
-                                            className="au-qty"
-                                        />
+                                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '80px', height: '36px' }}>
+                                            <button
+                                                type="button"
+                                                onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
+                                                disabled={item.quantity <= 1}
+                                                style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: item.quantity <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max={item.product.stock}
+                                                value={item.quantity}
+                                                onChange={(e) => updateQuantity(item.product.id, Math.min(item.product.stock, Math.max(1, parseInt(e.target.value) || 1)))}
+                                                className="au-qty"
+                                                style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '100%', MozAppearance: 'textfield', padding: 0 }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => updateQuantity(item.product.id, Math.min(item.product.stock, item.quantity + 1))}
+                                                disabled={item.quantity >= item.product.stock}
+                                                style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: item.quantity >= item.product.stock ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
                                         <span className="au-cart-item-subtotal">{item.subtotal.toFixed(2)} dh</span>
                                         <button
                                             onClick={() => removeItem(item.product.id)}

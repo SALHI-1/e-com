@@ -19,8 +19,11 @@ Route::get('/about', function () {
     ]);
 })->name('about');
 
+Route::get('/produit/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+
 // ─── Panier ───────────────────────────────────────────────────────────────────
 Route::get('/panier', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+Route::get('/panier/succes', [\App\Http\Controllers\CartController::class, 'success'])->name('cart.success');
 Route::post('/panier/ajouter', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
 Route::patch('/panier/modifier', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
 Route::delete('/panier/supprimer', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');

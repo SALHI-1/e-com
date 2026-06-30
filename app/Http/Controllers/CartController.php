@@ -44,6 +44,13 @@ class CartController extends Controller
         ]);
     }
 
+    public function success()
+    {
+        return Inertia::render('Cart/Success', [
+            'cartCount' => array_sum(session()->get('cart', [])),
+        ]);
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
     // Checkout — Validation du panier et création de commande
     // ─────────────────────────────────────────────────────────────────────────
@@ -166,11 +173,7 @@ class CartController extends Controller
                 Notification::send($admins, new NewOrderNotification($order));
             }
 
-            return redirect()->route('home')->with(
-                'success',
-                "🎉 Commande #{$order->order_number} enregistrée ! "
-                . "Notre équipe va la traiter prochainement."
-            );
+            return redirect()->route('cart.success');
 
         } catch (\RuntimeException $e) {
             return back()->withErrors(['stock' => $e->getMessage()]);

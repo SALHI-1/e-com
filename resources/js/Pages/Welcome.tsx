@@ -276,7 +276,7 @@ function ProductCard({ product }: { product: any }) {
 
   return (
     <div className={`au-prod-card ${isOut ? 'is-out-of-stock' : ''}`} style={isOut ? { opacity: 0.6 } : {}}>
-      <div className="au-prod-media" style={{ background: categoryTint(product.category.name), filter: isOut ? 'grayscale(100%)' : 'none' }}>
+      <Link href={route('product.show', product.id)} className="au-prod-media" style={{ background: categoryTint(product.category.name), filter: isOut ? 'grayscale(100%)' : 'none' }}>
         {tag && (
           <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)' } : {}}>
             {tag === 'out' ? copy.soldOut : tagLabel(tag)}
@@ -287,10 +287,10 @@ function ProductCard({ product }: { product: any }) {
         ) : (
           <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />
         )}
-      </div>
+      </Link>
       <div className="au-prod-info">
         <div className="au-prod-cat">{categoryLabel(product.category.name)}</div>
-        <div className="au-prod-name">{product.name}</div>
+        <Link href={route('product.show', product.id)} className="au-prod-name" style={{ textDecoration: 'none', color: 'inherit' }}>{product.name}</Link>
         <div className="au-prod-note">{product.description || copy.essentialCare}</div>
       </div>
       <div className="au-prod-footer" style={{ pointerEvents: isOut ? 'none' : 'auto' }}>
@@ -302,16 +302,35 @@ function ProductCard({ product }: { product: any }) {
         </div>
 
         <div className="au-qty-add" onClick={(e) => { if (isOut) e.preventDefault(); }}>
-          <input
-            type="number"
-            min="1"
-            max={product.stock}
-            value={quantity}
-            onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-            className="au-qty-input"
-            aria-label="Quantity"
-            disabled={isOut}
-          />
+          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', height: '100%' }}>
+            <button
+              type="button"
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              disabled={isOut || quantity <= 1}
+              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: isOut || quantity <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+            >
+              -
+            </button>
+            <input
+              type="number"
+              min="1"
+              max={product.stock}
+              value={quantity}
+              onChange={(e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1)))}
+              className="au-qty-input"
+              aria-label="Quantity"
+              disabled={isOut}
+              style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '40px', MozAppearance: 'textfield' }}
+            />
+            <button
+              type="button"
+              onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+              disabled={isOut || quantity >= product.stock}
+              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: isOut || quantity >= product.stock ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+            >
+              +
+            </button>
+          </div>
           <button type="button" className="au-add-btn" onClick={addToCart} disabled={loading || isOut}>
             {loading ? '…' : isOut ? copy.soldOut : t.add}
           </button>

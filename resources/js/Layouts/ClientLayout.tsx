@@ -66,6 +66,10 @@ interface CommonDict {
   back: string;
   confirm: string;
   sending: string;
+  successTitle: string;
+  successMessage: string;
+  successContact: string;
+  continueShopping: string;
 }
 
 interface AureliaContextValue {
@@ -140,6 +144,10 @@ const COMMON: Record<Lang, CommonDict> = {
     back: 'Retour',
     confirm: 'Confirmer',
     sending: 'Envoi…',
+    successTitle: 'Merci pour votre confiance !',
+    successMessage: 'Votre commande a bien été enregistrée.',
+    successContact: 'Nous allons vous contacter le plus tôt possible pour confirmer la commande.',
+    continueShopping: 'Continuer mes achats',
   },
   es: {
     announce: 'Envío gratis ',
@@ -200,6 +208,10 @@ const COMMON: Record<Lang, CommonDict> = {
     back: 'Atrás',
     confirm: 'Confirmar',
     sending: 'Enviando…',
+    successTitle: '¡Gracias por su confianza!',
+    successMessage: 'Su pedido ha sido registrado con éxito.',
+    successContact: 'Nos pondremos en contacto con usted lo antes posible para confirmar el pedido.',
+    continueShopping: 'Seguir comprando',
   },
   en: {
     announce: 'Free shipping ',
@@ -260,6 +272,10 @@ const COMMON: Record<Lang, CommonDict> = {
     back: 'Back',
     confirm: 'Confirm',
     sending: 'Sending…',
+    successTitle: 'Thank you for your trust!',
+    successMessage: 'Your order has been successfully recorded.',
+    successContact: 'We will contact you as soon as possible to confirm the order.',
+    continueShopping: 'Continue shopping',
   },
 };
 
