@@ -52,6 +52,7 @@ class DatabaseSeeder extends Seeder
             'price'       => 89.00,
             'stock'       => 60,
             'is_new'      => true,
+            'image_url'   => 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catFace->id,
@@ -60,6 +61,7 @@ class DatabaseSeeder extends Seeder
             'price'       => 120.00,
             'stock'       => 45,
             'is_bestseller' => true,
+            'image_url'   => 'https://images.unsplash.com/photo-1608248593802-8631bc2b3922?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catFace->id,
@@ -67,6 +69,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'A rich yet lightweight cream with hyaluronic acid, peptides and ceramides. Delivers 72h hydration and plumps fine lines.',
             'price'       => 74.50,
             'stock'       => 80,
+            'image_url'   => 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
 
         // Perfumes
@@ -78,6 +81,7 @@ class DatabaseSeeder extends Seeder
             'stock'         => 30,
             'is_new'        => true,
             'is_bestseller' => true,
+            'image_url'     => 'https://images.unsplash.com/photo-1594035910387-fea47794261f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catPerfum->id,
@@ -85,6 +89,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'A bold, smoky oriental with precious oud wood, earthy vetiver and black pepper. A statement fragrance for evenings.',
             'price'         => 195.00,
             'stock'         => 20,
+            'image_url'     => 'https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
 
         // Makeup
@@ -95,6 +100,7 @@ class DatabaseSeeder extends Seeder
             'price'         => 58.00,
             'stock'         => 100,
             'is_bestseller' => true,
+            'image_url'     => 'https://images.unsplash.com/photo-1599305090598-fe179d501227?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catMakeup->id,
@@ -102,6 +108,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'An intensely pigmented matte lipstick enriched with vitamin E and shea butter. Long-wearing comfort without dryness. 18 shades.',
             'price'       => 36.00,
             'stock'       => 150,
+            'image_url'   => 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catMakeup->id,
@@ -110,6 +117,7 @@ class DatabaseSeeder extends Seeder
             'price'       => 49.00,
             'stock'       => 70,
             'is_new'      => true,
+            'image_url'   => 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
 
         // Body & Bath
@@ -119,6 +127,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'A luxurious whipped body butter with shea, cocoa butter and jasmine extract. Melts into skin for 24h silky softness.',
             'price'       => 52.00,
             'stock'       => 90,
+            'image_url'   => 'https://images.unsplash.com/photo-1617897903246-719242758050?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id'   => $catBody->id,
@@ -127,6 +136,7 @@ class DatabaseSeeder extends Seeder
             'price'         => 38.00,
             'stock'         => 55,
             'is_bestseller' => true,
+            'image_url'     => 'https://images.unsplash.com/photo-1583417646197-cba2d5eb10b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
 
         // Hair Care
@@ -137,6 +147,7 @@ class DatabaseSeeder extends Seeder
             'price'       => 68.00,
             'stock'       => 40,
             'is_new'      => true,
+            'image_url'   => 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
         $products->push(\App\Models\Product::create([
             'category_id' => $catHair->id,
@@ -144,6 +155,7 @@ class DatabaseSeeder extends Seeder
             'description' => 'A lightweight serum with salicylic acid, peppermint and biotin to rebalance the scalp and stimulate healthy hair growth.',
             'price'       => 75.00,
             'stock'       => 35,
+            'image_url'   => 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         ]));
 
         // 4. Orders
