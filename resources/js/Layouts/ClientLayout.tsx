@@ -89,7 +89,7 @@ interface AureliaContextValue {
  * ========================================================================== */
 const COMMON: Record<Lang, CommonDict> = {
   fr: {
-    announce: 'Livraison gratuite  ',
+    announce: 'Livraison gratuite dès 300 DH ou partout à Casa & Tanger',
     navHome: 'Accueil',
     navShop: 'Boutique',
     navHair: 'Cheveux',
@@ -115,16 +115,20 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Des soins essentiels pour chaque jour.',
     footerNote: 'Fait avec soin · Espagne',
     footer: [
-      { title: 'Boutique', items: [
-        { label: 'Cheveux', href: '/?category=Hair%20Care#collection' },
-        { label: 'Visage', href: '/?category=Face%20Care#collection' },
-        { label: 'Maquillage', href: '/?category=Makeup#collection' },
-        { label: 'Corps et Bain', href: '/?category=Body%20%26%20Bath#collection' },
-        { label: 'Parfums', href: '/?category=Perfumes#collection' }
-      ] },
-      { title: 'Société', items: [
-        { label: 'Notre histoire', href: '/about' }
-      ] },
+      {
+        title: 'Boutique', items: [
+          { label: 'Cheveux', href: '/?category=Hair%20Care#collection' },
+          { label: 'Visage', href: '/?category=Face%20Care#collection' },
+          { label: 'Maquillage', href: '/?category=Makeup#collection' },
+          { label: 'Corps et Bain', href: '/?category=Body%20%26%20Bath#collection' },
+          { label: 'Parfums', href: '/?category=Perfumes#collection' }
+        ]
+      },
+      {
+        title: 'Société', items: [
+          { label: 'Notre histoire', href: '/about' }
+        ]
+      },
     ],
     login: 'Connexion',
     register: 'Créer un compte',
@@ -156,7 +160,7 @@ const COMMON: Record<Lang, CommonDict> = {
     continueShopping: 'Continuer mes achats',
   },
   es: {
-    announce: 'Envío gratis ',
+    announce: 'Envío gratis desde 300 DH o para Casa y Tánger',
     navHome: 'Inicio',
     navShop: 'Tienda',
     navHair: 'Cabello',
@@ -182,16 +186,20 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Cuidado esencial para cada día.',
     footerNote: 'Hecho con cariño · España',
     footer: [
-      { title: 'Tienda', items: [
-        { label: 'Cabello', href: '/?category=Hair%20Care#collection' },
-        { label: 'Rostro', href: '/?category=Face%20Care#collection' },
-        { label: 'Maquillaje', href: '/?category=Makeup#collection' },
-        { label: 'Cuerpo y Baño', href: '/?category=Body%20%26%20Bath#collection' },
-        { label: 'Perfumes', href: '/?category=Perfumes#collection' }
-      ] },
-      { title: 'Compañía', items: [
-        { label: 'Nuestra historia', href: '/about' }
-      ] },
+      {
+        title: 'Tienda', items: [
+          { label: 'Cabello', href: '/?category=Hair%20Care#collection' },
+          { label: 'Rostro', href: '/?category=Face%20Care#collection' },
+          { label: 'Maquillaje', href: '/?category=Makeup#collection' },
+          { label: 'Cuerpo y Baño', href: '/?category=Body%20%26%20Bath#collection' },
+          { label: 'Perfumes', href: '/?category=Perfumes#collection' }
+        ]
+      },
+      {
+        title: 'Compañía', items: [
+          { label: 'Nuestra historia', href: '/about' }
+        ]
+      },
     ],
     login: 'Acceder',
     register: 'Crear cuenta',
@@ -223,7 +231,7 @@ const COMMON: Record<Lang, CommonDict> = {
     continueShopping: 'Seguir comprando',
   },
   en: {
-    announce: 'Free shipping ',
+    announce: 'Free shipping from 300 DH or to Casa & Tangier',
     navHome: 'Home',
     navShop: 'Shop',
     navHair: 'Hair',
@@ -249,16 +257,20 @@ const COMMON: Record<Lang, CommonDict> = {
     footerTagline: 'Essential care for every day.',
     footerNote: 'Made with care · Spain',
     footer: [
-      { title: 'Shop', items: [
-        { label: 'Hair Care', href: '/?category=Hair%20Care#collection' },
-        { label: 'Face Care', href: '/?category=Face%20Care#collection' },
-        { label: 'Makeup', href: '/?category=Makeup#collection' },
-        { label: 'Body & Bath', href: '/?category=Body%20%26%20Bath#collection' },
-        { label: 'Perfumes', href: '/?category=Perfumes#collection' }
-      ] },
-      { title: 'Company', items: [
-        { label: 'Our story', href: '/about' }
-      ] },
+      {
+        title: 'Shop', items: [
+          { label: 'Hair Care', href: '/?category=Hair%20Care#collection' },
+          { label: 'Face Care', href: '/?category=Face%20Care#collection' },
+          { label: 'Makeup', href: '/?category=Makeup#collection' },
+          { label: 'Body & Bath', href: '/?category=Body%20%26%20Bath#collection' },
+          { label: 'Perfumes', href: '/?category=Perfumes#collection' }
+        ]
+      },
+      {
+        title: 'Company', items: [
+          { label: 'Our story', href: '/about' }
+        ]
+      },
     ],
     login: 'Log in',
     register: 'Create account',
