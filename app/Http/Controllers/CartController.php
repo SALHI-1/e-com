@@ -67,25 +67,29 @@ class CartController extends Controller
         $rules = [
             'shipping_address' => 'required|string|max:500',
             'phone'            => ['required', 'string', 'regex:/^\+212(0[67][0-9]{8}|[67][0-9]{8})$/'],
+            'delivery_city'    => 'required|string|max:100',
         ];
 
         // Champs supplémentaires pour les invités (Shadow Account)
         if (! Auth::check() || Auth::user()->is_admin) {
-            $rules['guest_name']  = 'required|string|max:255';
-            $rules['guest_email'] = 'required|email|max:255';
+            $rules['guest_name'] = 'required|string|max:255';
         }
 
         $validated = $request->validate($rules, [
             'shipping_address.required' => "L'adresse de livraison est obligatoire.",
             'phone.required'            => 'Le numéro de téléphone WhatsApp est obligatoire.',
             'phone.regex'               => 'Le numéro de téléphone doit être au format +21206xxxxxxxx ou +2126xxxxxxxx.',
+            'delivery_city.required'    => 'Veuillez choisir une ville de livraison.',
             'guest_name.required'       => 'Votre nom est obligatoire.',
-            'guest_email.required'      => 'Votre adresse e-mail est obligatoire.',
-            'guest_email.email'         => "L'adresse e-mail n'est pas valide.",
         ]);
 
+        // ── Calcul des frais de livraison ─────────────────────────────────
+        $freeCities    = ['casablanca', 'tanger'];
+        $deliveryThreshold = 300;
+        $deliveryFee   = 20;
+
         try {
-            $order = DB::transaction(function () use ($cart, $validated) {
+            $order = DB::transaction(function () use ($cart, $validated, $freeCities, $deliveryThreshold, $deliveryFee) {
 
                 // ── 1. Résoudre l'utilisateur (connecté ou Shadow Account) ──
                 if (Auth::check() && !Auth::user()->is_admin) {
@@ -96,21 +100,16 @@ class CartController extends Controller
                         $user->update(['phone' => $validated['phone']]);
                     }
                 } else {
-                    // Shadow Account : créer ou récupérer un invité par e-mail
-                    $user = User::firstOrCreate(
-                        ['email' => $validated['guest_email']],
-                        [
-                            'name'     => $validated['guest_name'],
-                            'phone'    => $validated['phone'],
-                            'password' => null,
-                            'is_guest' => true,
-                        ]
-                    );
-
-                    // Mettre à jour le téléphone si l'invité l'a changé
-                    if ($user->phone !== $validated['phone']) {
-                        $user->update(['phone' => $validated['phone']]);
-                    }
+                    // Guest (invité) : chaque commande crée un enregistrement indépendant.
+                    // Pas de déduplication — deux commandes du même numéro = deux lignes guest.
+                    // Les contraintes d'unicité (email, téléphone) ne concernent que is_guest = false.
+                    $user = User::create([
+                        'name'     => $validated['guest_name'],
+                        'phone'    => $validated['phone'],
+                        'email'    => null,
+                        'password' => null,
+                        'is_guest' => true,
+                    ]);
                 }
 
                 // ── 2. Vérifier le stock sans décrémenter ────
@@ -137,13 +136,21 @@ class CartController extends Controller
                     $totalAmount += $product->price * $quantity;
                 }
 
+                // ── Calcul frais de livraison ─────────────────────────────
+                $cityLower = strtolower($validated['delivery_city']);
+                $fee = (in_array($cityLower, $freeCities) || $totalAmount >= $deliveryThreshold)
+                    ? 0
+                    : $deliveryFee;
+
+                $grandTotal = $totalAmount + $fee;
+
                 // ── 3. Créer la commande ───────────────────────────────────
                 $order = Order::create([
                     'user_id'          => $user->id,
                     'order_number'     => Order::generateOrderNumber(),
-                    'total_amount'     => round($totalAmount, 2),
+                    'total_amount'     => round($grandTotal, 2),
                     'status'           => Order::STATUS_PENDING,
-                    'shipping_address' => $validated['shipping_address'],
+                    'shipping_address' => $validated['delivery_city'] . ' — ' . $validated['shipping_address'],
                 ]);
 
                 // ── 4. Créer les lignes de commande ────────────────────────

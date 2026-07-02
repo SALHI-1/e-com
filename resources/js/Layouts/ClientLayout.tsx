@@ -60,7 +60,10 @@ interface CommonDict {
   checkout: string;
   waNote: string;
   guestName: string;
-  guestEmail: string;
+  deliveryCity: string;
+  deliveryFee: string;
+  deliveryFree: string;
+  orderTotal: string;
   waPhone: string;
   address: string;
   back: string;
@@ -138,7 +141,10 @@ const COMMON: Record<Lang, CommonDict> = {
     checkout: 'Passer la commande',
     waNote: '📱 Vous recevrez un message WhatsApp pour confirmer votre commande.',
     guestName: 'Votre nom *',
-    guestEmail: 'Adresse e-mail *',
+    deliveryCity: 'Ville de livraison *',
+    deliveryFee: 'Frais de livraison',
+    deliveryFree: 'Gratuit',
+    orderTotal: 'Total commande',
     waPhone: 'Numéro WhatsApp *',
     address: 'Adresse de livraison *',
     back: 'Retour',
@@ -202,7 +208,10 @@ const COMMON: Record<Lang, CommonDict> = {
     checkout: 'Realizar pedido',
     waNote: '📱 Recibirás un mensaje de WhatsApp para confirmar tu pedido.',
     guestName: 'Tu nombre *',
-    guestEmail: 'Correo electrónico *',
+    deliveryCity: 'Ciudad de entrega *',
+    deliveryFee: 'Gastos de envío',
+    deliveryFree: 'Gratis',
+    orderTotal: 'Total pedido',
     waPhone: 'Número de WhatsApp *',
     address: 'Dirección de envío *',
     back: 'Atrás',
@@ -266,7 +275,10 @@ const COMMON: Record<Lang, CommonDict> = {
     checkout: 'Checkout',
     waNote: '📱 You will receive a WhatsApp message to confirm your order.',
     guestName: 'Your name *',
-    guestEmail: 'Email address *',
+    deliveryCity: 'Delivery city *',
+    deliveryFee: 'Delivery fee',
+    deliveryFree: 'Free',
+    orderTotal: 'Order total',
     waPhone: 'WhatsApp number *',
     address: 'Shipping address *',
     back: 'Back',

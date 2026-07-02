@@ -1,6 +1,6 @@
 import { PageProps } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
 
 interface CartItem {
@@ -24,6 +24,39 @@ interface Props extends PageProps {
     errors?: Record<string, string>;
 }
 
+// Toutes les villes du Maroc
+const MOROCCO_CITIES = [
+    'Casablanca', 'Rabat', 'Marrakech', 'Fès', 'Tanger', 'Agadir', 'Meknès',
+    'Oujda', 'Kénitra', 'Tétouan', 'Safi', 'Mohammedia', 'El Jadida', 'Khouribga',
+    'Béni Mellal', 'Nador', 'Taza', 'Settat', 'Berrechid', 'Khémisset',
+    'Inezgane', 'Laâyoune', 'Ksar El Kébir', 'Larache', 'Guelmim', 'Berkane',
+    'Al Hoceïma', 'Taourirt', 'Dakhla', 'Errachidia', 'Ouarzazate', 'Tiznit',
+    'Ifrane', 'Azrou', 'Midelt', 'Sefrou', 'Boujdour', 'Smara', 'Tan-Tan',
+    'Taroudant', 'Essaouira', 'Sidi Ifni', 'Zagora', 'Tinghir', 'Boulemane',
+    'Figuig', 'Chefchaouen', 'Fnideq', 'Martil', 'M\'diq', 'Ait Melloul',
+    'Deroua', 'Bouskoura', 'Médiouna', 'Nouaceur', 'Salé', 'Skhirate',
+    'Témara', 'Harhoura', 'Ain Aouda', 'Sidi Yahia', 'Benslimane', 'Azemmour',
+    'Bir Jdid', 'Oualidia', 'Youssoufia', 'Ben Guerir', 'Fquih Ben Salah',
+    'Azilal', 'Souk Sebt', 'Oulad Teima', 'Ait Baha', 'Biougra', 'Chtouka',
+    'Drarga', 'Lqliaa', 'Reggada', 'Imzouren', 'Beni Ansar', 'Selouane',
+    'Zaio', 'Ahfir', 'Oujda Angad', 'Ain Beni Mathar', 'Jerada',
+    'Taourirt Autre', 'Tafraout', 'Assa', 'Foum Zguid', 'Tata',
+    'Goulmima', 'Erfoud', 'Rissani', 'Arfoud', 'Khénifra', 'Mrirt',
+    'El Hajeb', 'Beni Mellal-Khenifra', 'Sidi Bennour', 'Oulad Frej',
+];
+
+// Villes avec livraison gratuite (peu importe le montant)
+const FREE_DELIVERY_CITIES = ['casablanca', 'tanger'];
+const FREE_DELIVERY_THRESHOLD = 300; // DH
+const DELIVERY_FEE = 20; // DH
+
+function getDeliveryFee(city: string, subtotal: number): number {
+    if (!city) return DELIVERY_FEE;
+    if (FREE_DELIVERY_CITIES.includes(city.toLowerCase())) return 0;
+    if (subtotal >= FREE_DELIVERY_THRESHOLD) return 0;
+    return DELIVERY_FEE;
+}
+
 export default function Index(props: Props) {
     return (
         <ClientLayout auth={props.auth} cartCount={props.cartCount} title="Aurélia">
@@ -40,13 +73,20 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
         shipping_address: string;
         phone: string;
         guest_name: string;
-        guest_email: string;
+        delivery_city: string;
     }>({
         shipping_address: '',
         phone: auth.user?.phone || '+212',
         guest_name: '',
-        guest_email: '',
+        delivery_city: '',
     });
+
+    // Calcul dynamique des frais de livraison
+    const deliveryFee = useMemo(
+        () => getDeliveryFee(data.delivery_city, totalAmount),
+        [data.delivery_city, totalAmount]
+    );
+    const grandTotal = totalAmount + deliveryFee;
 
     const updateQuantity = (productId: number, quantity: number) => {
         router.patch(route('cart.update'), { product_id: productId, quantity }, { preserveScroll: true });
@@ -156,13 +196,39 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                     <span>{t.subtotal}</span>
                                     <span>{totalAmount.toFixed(2)} dh</span>
                                 </div>
+
+                                {/* Frais de livraison — toujours affichés */}
                                 <div className="au-cart-summary-row">
-                                    <span>{t.shipping}</span>
-                                    <span style={{ color: 'var(--au-gold)' }}>{t.free}</span>
+                                    <span>{t.deliveryFee}</span>
+                                    {deliveryFee === 0 ? (
+                                        <span style={{ color: 'var(--au-gold)', fontWeight: 600 }}>
+                                            {t.deliveryFree} ✓
+                                        </span>
+                                    ) : (
+                                        <span style={{ fontWeight: 600 }}>
+                                            {deliveryFee.toFixed(2)} dh
+                                        </span>
+                                    )}
                                 </div>
+
+                                {/* Note livraison gratuite si ville non choisie ou hors seuil */}
+                                {deliveryFee > 0 && (
+                                    <div style={{
+                                        fontSize: '0.72rem',
+                                        color: 'var(--au-text-muted)',
+                                        background: 'var(--au-surface)',
+                                        borderRadius: '6px',
+                                        padding: '0.4rem 0.6rem',
+                                        marginBottom: '0.4rem',
+                                        lineHeight: 1.4,
+                                    }}>
+                                        💡 Livraison gratuite pour Casablanca & Tanger, ou dès 300 dh d'achat.
+                                    </div>
+                                )}
+
                                 <div className="au-cart-summary-total">
-                                    <span>{t.total}</span>
-                                    <span>{totalAmount.toFixed(2)} dh</span>
+                                    <span>{t.orderTotal}</span>
+                                    <span>{grandTotal.toFixed(2)} dh</span>
                                 </div>
 
                                 {!showCheckout ? (
@@ -177,34 +243,22 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                     <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                         <div className="au-checkout-note" dangerouslySetInnerHTML={{ __html: t.waNote.replace('WhatsApp', '<strong>WhatsApp</strong>') }} />
 
-                                        {/* Guest fields */}
+                                        {/* Guest fields (sans email) */}
                                         {!auth.user && (
-                                            <>
-                                                <div>
-                                                    <label className="au-label">{t.guestName}</label>
-                                                    <input
-                                                        type="text"
-                                                        value={data.guest_name}
-                                                        onChange={e => setData('guest_name', e.target.value)}
-                                                        placeholder="Jean Dupont"
-                                                        className="au-input"
-                                                    />
-                                                    {formErrors.guest_name && <p className="au-field-error">{formErrors.guest_name}</p>}
-                                                </div>
-                                                <div>
-                                                    <label className="au-label">{t.guestEmail}</label>
-                                                    <input
-                                                        type="email"
-                                                        value={data.guest_email}
-                                                        onChange={e => setData('guest_email', e.target.value)}
-                                                        placeholder="jean@exemple.fr"
-                                                        className="au-input"
-                                                    />
-                                                    {formErrors.guest_email && <p className="au-field-error">{formErrors.guest_email}</p>}
-                                                </div>
-                                            </>
+                                            <div>
+                                                <label className="au-label">{t.guestName}</label>
+                                                <input
+                                                    type="text"
+                                                    value={data.guest_name}
+                                                    onChange={e => setData('guest_name', e.target.value)}
+                                                    placeholder="Jean Dupont"
+                                                    className="au-input"
+                                                />
+                                                {formErrors.guest_name && <p className="au-field-error">{formErrors.guest_name}</p>}
+                                            </div>
                                         )}
 
+                                        {/* Téléphone */}
                                         <div>
                                             <label className="au-label">
                                                 {t.waPhone} <span className="au-label-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>(ex: +212612345678)</span>
@@ -231,12 +285,38 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             {formErrors.phone && <p className="au-field-error">{formErrors.phone}</p>}
                                         </div>
 
+                                        {/* Ville de livraison */}
+                                        <div>
+                                            <label className="au-label">{t.deliveryCity}</label>
+                                            <select
+                                                value={data.delivery_city}
+                                                onChange={e => setData('delivery_city', e.target.value)}
+                                                className="au-input"
+                                                style={{ cursor: 'pointer' }}
+                                            >
+                                                <option value="">— Choisir une ville —</option>
+                                                {MOROCCO_CITIES.map(city => (
+                                                    <option key={city} value={city}>{city}</option>
+                                                ))}
+                                            </select>
+                                            {formErrors.delivery_city && <p className="au-field-error">{formErrors.delivery_city}</p>}
+                                            {/* Aperçu frais dès qu'une ville est choisie */}
+                                            {data.delivery_city && (
+                                                <p style={{ fontSize: '0.78rem', marginTop: '0.3rem', color: deliveryFee === 0 ? 'var(--au-gold)' : 'var(--au-text-muted)' }}>
+                                                    {deliveryFee === 0
+                                                        ? `✓ Livraison gratuite pour ${data.delivery_city}`
+                                                        : `Frais de livraison : ${deliveryFee} dh`}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Adresse */}
                                         <div>
                                             <label className="au-label">{t.address}</label>
                                             <textarea
                                                 value={data.shipping_address}
                                                 onChange={e => setData('shipping_address', e.target.value)}
-                                                placeholder="12 rue de la Paix, 75001 Paris"
+                                                placeholder="Rue, quartier, code postal…"
                                                 rows={3}
                                                 className="au-textarea"
                                             />

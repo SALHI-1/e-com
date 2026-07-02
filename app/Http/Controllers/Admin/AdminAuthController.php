@@ -11,13 +11,23 @@ class AdminAuthController extends Controller
 {
     public function create()
     {
+        // Si un admin est déjà connecté, rediriger vers le dashboard
+        if (Auth::check() && Auth::user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+
         return Inertia::render('Admin/Login');
     }
 
     public function store(Request $request)
     {
+        // Si déjà connecté en tant qu'admin, rediriger vers le dashboard
+        if (Auth::check() && Auth::user()->is_admin) {
+            return redirect()->route('admin.dashboard');
+        }
+
         $credentials = $request->validate([
-            'email' => ['required', 'email'],
+            'email'    => ['required', 'email'],
             'password' => ['required'],
         ]);
 
