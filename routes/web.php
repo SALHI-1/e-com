@@ -21,6 +21,40 @@ Route::get('/about', function () {
 
 Route::get('/produit/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
 
+Route::get('/sitemap.xml', function () {
+    $products = \App\Models\Product::all();
+    
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>';
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    
+    // Page d'accueil
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/') . '</loc>';
+    $xml .= '<changefreq>daily</changefreq>';
+    $xml .= '<priority>1.0</priority>';
+    $xml .= '</url>';
+
+    // Page À propos
+    $xml .= '<url>';
+    $xml .= '<loc>' . url('/about') . '</loc>';
+    $xml .= '<changefreq>monthly</changefreq>';
+    $xml .= '<priority>0.5</priority>';
+    $xml .= '</url>';
+
+    // Pages Produits
+    foreach ($products as $product) {
+        $xml .= '<url>';
+        $xml .= '<loc>' . route('product.show', $product->id) . '</loc>';
+        $xml .= '<lastmod>' . $product->updated_at->tz('UTC')->toAtomString() . '</lastmod>';
+        $xml .= '<changefreq>weekly</changefreq>';
+        $xml .= '<priority>0.8</priority>';
+        $xml .= '</url>';
+    }
+    
+    $xml .= '</urlset>';
+    
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
 // ─── Panier ───────────────────────────────────────────────────────────────────
 Route::get('/panier', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
 Route::get('/panier/succes', [\App\Http\Controllers\CartController::class, 'success'])->name('cart.success');

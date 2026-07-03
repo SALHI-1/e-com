@@ -2,8 +2,8 @@ import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
 import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
 import { useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import { useRef, useState } from "react";
+import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 //#region resources/js/Components/DangerButton.tsx
 function DangerButton({ className = "", disabled, children, ...props }) {
 	return /* @__PURE__ */ jsx("button", {

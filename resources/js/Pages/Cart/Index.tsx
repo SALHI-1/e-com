@@ -1,6 +1,6 @@
 import { PageProps } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
 
 interface CartItem {
@@ -47,15 +47,106 @@ const MOROCCO_CITIES = [
 
 // Villes avec livraison gratuite (peu importe le montant)
 const FREE_DELIVERY_CITIES = ['casablanca', 'tanger'];
-const FREE_DELIVERY_THRESHOLD = 300; // DH
+const FREE_DELIVERY_THRESHOLD = 299; // DH — livraison gratuite si subtotal STRICTEMENT supérieur à 299 DH
 const DELIVERY_FEE = 20; // DH
 
 function getDeliveryFee(city: string, subtotal: number): number {
-    if (!city) return DELIVERY_FEE;
-    if (FREE_DELIVERY_CITIES.includes(city.toLowerCase())) return 0;
-    if (subtotal >= FREE_DELIVERY_THRESHOLD) return 0;
+    // 1. Toujours gratuit si commande STRICTEMENT supérieure à 299 DH (quelle que soit la ville)
+    if (subtotal > FREE_DELIVERY_THRESHOLD) return 0;
+    // 2. Gratuit pour Casablanca et Tanger (quelle que soit la valeur)
+    if (city && FREE_DELIVERY_CITIES.includes(city.toLowerCase())) return 0;
+    // 3. Sinon frais standard
     return DELIVERY_FEE;
 }
+
+/* ── Toast Ourélia ─────────────────────────────────────────────────── */
+function Toast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error'; onClose: () => void }) {
+    useEffect(() => {
+        const timer = setTimeout(onClose, 3000);
+        return () => clearTimeout(timer);
+    }, [onClose]);
+
+    const isSuccess = type === 'success';
+
+    return (
+        <div style={{
+            position: 'fixed',
+            top: '88px',
+            right: '24px',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: '14px',
+            padding: '18px 22px',
+            borderRadius: '6px',
+            background: isSuccess ? 'var(--au-dark, #211A14)' : '#5c1f1f',
+            boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
+            color: 'var(--au-bg, #F6F0E4)',
+            minWidth: '290px',
+            maxWidth: '400px',
+            animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
+            borderLeft: `4px solid ${isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070'}`,
+            fontFamily: 'var(--au-font-sans, sans-serif)',
+        }}>
+            {/* Icône */}
+            <span style={{
+                fontSize: '18px',
+                lineHeight: 1,
+                flexShrink: 0,
+                marginTop: '2px',
+                color: isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070',
+                fontFamily: 'var(--au-font-serif)',
+            }}>
+                {isSuccess ? '✓' : '✕'}
+            </span>
+            <div style={{ flex: 1 }}>
+                {/* Titre de marque */}
+                <p style={{
+                    margin: 0,
+                    fontSize: '11px',
+                    fontWeight: 500,
+                    letterSpacing: '.2em',
+                    textTransform: 'uppercase',
+                    color: 'var(--au-gold, #C2A063)',
+                    lineHeight: 1,
+                    marginBottom: '6px',
+                }}>
+                    {isSuccess ? 'Ourélia' : 'Erreur'}
+                </p>
+                {/* Message */}
+                <p style={{
+                    margin: 0,
+                    fontSize: '13px',
+                    fontWeight: 300,
+                    color: 'var(--au-cream, #F0E6D4)',
+                    lineHeight: 1.5,
+                    letterSpacing: '.01em',
+                }}>
+                    {message}
+                </p>
+            </div>
+            {/* Fermer */}
+            <button
+                onClick={onClose}
+                style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'rgba(240,230,212,.45)',
+                    cursor: 'pointer',
+                    fontSize: '16px',
+                    lineHeight: 1,
+                    padding: '0 0 0 6px',
+                    flexShrink: 0,
+                    marginTop: '1px',
+                }}
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+        </div>
+    );
+}
+
 
 export default function Index(props: Props) {
     return (
@@ -68,6 +159,7 @@ export default function Index(props: Props) {
 function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
     const { t } = useAurelia();
     const [showCheckout, setShowCheckout] = useState(false);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
     const { data, setData, post, processing, errors: formErrors } = useForm<{
         shipping_address: string;
@@ -80,6 +172,15 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
         guest_name: '',
         delivery_city: '',
     });
+
+    // Afficher les flash/errors comme toast au montage
+    useEffect(() => {
+        if (flash?.success) {
+            setToast({ message: flash.success, type: 'success' });
+        } else if (errors?.cart || errors?.stock) {
+            setToast({ message: errors.cart || errors.stock || 'Une erreur est survenue.', type: 'error' });
+        }
+    }, [flash?.success, errors?.cart, errors?.stock]);
 
     // Calcul dynamique des frais de livraison
     const deliveryFee = useMemo(
@@ -105,10 +206,13 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
         <>
             <Head title={`${t.cartTitle} — Aurélia`} />
 
-            {/* ── Flash / Errors ── */}
-            {flash?.success && <div className="au-flash">{flash.success}</div>}
-            {(errors?.cart || errors?.stock) && (
-                <div className="au-flash au-flash-error">{errors.cart || errors.stock}</div>
+            {/* ── Toast notifications ── */}
+            {toast && (
+                <Toast
+                    message={toast.message}
+                    type={toast.type}
+                    onClose={() => setToast(null)}
+                />
             )}
 
             <div className="au-cart-section">
@@ -201,8 +305,9 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                 <div className="au-cart-summary-row">
                                     <span>{t.deliveryFee}</span>
                                     {deliveryFee === 0 ? (
-                                        <span style={{ color: 'var(--au-gold)', fontWeight: 600 }}>
-                                            {t.deliveryFree} ✓
+                                        <span style={{ color: 'var(--au-gold)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <span style={{ textDecoration: 'line-through', color: 'var(--au-text-muted)', fontWeight: 400, fontSize: '0.85em' }}>20 dh</span>
+                                            <span>0 DH ✓</span>
                                         </span>
                                     ) : (
                                         <span style={{ fontWeight: 600 }}>
@@ -222,7 +327,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                         marginBottom: '0.4rem',
                                         lineHeight: 1.4,
                                     }}>
-                                        💡 Livraison gratuite pour Casablanca & Tanger, ou dès 300 dh d'achat.
+                                        💡 Livraison gratuite pour Casablanca & Tanger, ou pour toute commande supérieure à 299 dh.
                                     </div>
                                 )}
 

@@ -75,6 +75,107 @@ const HOME_COPY: Record<Lang, HomeCopy> = {
   },
 };
 
+/* ============================================================================
+ * Toast Ourélia — notification dans le thème de l'application
+ * ========================================================================== */
+function OureliaToast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error'; onClose: () => void }) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  const isSuccess = type === 'success';
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: '88px',
+      right: '24px',
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '14px',
+      padding: '18px 22px',
+      borderRadius: '6px',
+      background: isSuccess ? 'var(--au-dark, #211A14)' : '#5c1f1f',
+      boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
+      color: 'var(--au-bg, #F6F0E4)',
+      minWidth: '290px',
+      maxWidth: '400px',
+      animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
+      borderLeft: `4px solid ${isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070'}`,
+      fontFamily: 'var(--au-font-sans, sans-serif)',
+    }}>
+      {/* Icône */}
+      <span style={{
+        fontSize: '18px',
+        lineHeight: 1,
+        flexShrink: 0,
+        marginTop: '2px',
+        color: isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070',
+        fontFamily: 'var(--au-font-serif)',
+      }}>
+        {isSuccess ? '✓' : '✕'}
+      </span>
+      <div style={{ flex: 1 }}>
+        {/* Titre */}
+        <p style={{
+          margin: 0,
+          fontSize: '11px',
+          fontWeight: 500,
+          letterSpacing: '.2em',
+          textTransform: 'uppercase',
+          color: 'var(--au-gold, #C2A063)',
+          lineHeight: 1,
+          marginBottom: '6px',
+        }}>
+          {isSuccess ? 'Ourélia' : 'Erreur'}
+        </p>
+        {/* Message */}
+        <p style={{
+          margin: 0,
+          fontSize: '13px',
+          fontWeight: 300,
+          color: 'var(--au-cream, #F0E6D4)',
+          lineHeight: 1.5,
+          letterSpacing: '.01em',
+        }}>
+          {message}
+        </p>
+      </div>
+      {/* Fermer */}
+      <button
+        onClick={onClose}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: 'rgba(240,230,212,.45)',
+          cursor: 'pointer',
+          fontSize: '16px',
+          lineHeight: 1,
+          padding: '0 0 0 6px',
+          flexShrink: 0,
+          marginTop: '1px',
+        }}
+        aria-label="Fermer"
+      >
+        ×
+      </button>
+    </div>
+  );
+}
+
+/* ============================================================================
+ * Helpers
+ * ========================================================================== */
+/** Scroll fluide vers un élément par son id */
+function smoothScrollTo(id: string) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
 const SPREADS = [
   {
     num: '01',
@@ -356,6 +457,16 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const { url } = usePage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  // Déclencher le toast dès qu'un flash/error arrive
+  useEffect(() => {
+    if (flash?.success) {
+      setToast({ message: flash.success, type: 'success' });
+    } else if (errors?.quantity) {
+      setToast({ message: errors.quantity, type: 'error' });
+    }
+  }, [flash?.success, errors?.quantity]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -407,11 +518,13 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         <meta head-key="og:description" property="og:description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub} />
       </Head>
 
-      {/* ── Flash Messages ── */}
-      {(flash?.success || errors?.quantity) && (
-        <div className="au-flash" style={{ background: errors?.quantity ? 'var(--au-sale)' : 'var(--au-gold)' }}>
-          {flash?.success || errors?.quantity}
-        </div>
+      {/* ── Toast Ourélia ── */}
+      {toast && (
+        <OureliaToast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
       )}
 
       {/* ---------------- HERO ---------------- */}
@@ -426,7 +539,13 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             <div className="au-h1-italic">{copy.heroItalic}</div>
             <p className="au-lead">{copy.heroSub}</p>
             <div className="au-cta-row">
-              <a href="#collection" className="au-btn">{copy.heroCta}</a>
+              <button
+                type="button"
+                className="au-btn"
+                onClick={() => smoothScrollTo('collection')}
+              >
+                {copy.heroCta}
+              </button>
               <Link href="/about" className="au-link-underline">{copy.heroLink}</Link>
             </div>
           </div>
@@ -517,8 +636,10 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 key={cat}
                 href="#collection"
                 onClick={(e) => {
-                  // Allows scrolling to #collection but also updates the filter
+                  e.preventDefault();
                   setActiveCategory(activeCategory === cat ? null : cat);
+                  // Petit délai pour que le filtre s'applique avant le scroll
+                  setTimeout(() => smoothScrollTo('collection'), 60);
                 }}
                 className="au-cat-card"
                 style={{

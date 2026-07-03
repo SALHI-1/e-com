@@ -1,4 +1,4 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-LgnMEJmu.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-CXCiJW1n.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -104,6 +104,97 @@ var HOME_COPY = {
 		essentialCare: "Essential care"
 	}
 };
+function OureliaToast({ message, type = "success", onClose }) {
+	useEffect(() => {
+		const timer = setTimeout(onClose, 3e3);
+		return () => clearTimeout(timer);
+	}, [onClose]);
+	const isSuccess = type === "success";
+	return /* @__PURE__ */ jsxs("div", {
+		style: {
+			position: "fixed",
+			top: "88px",
+			right: "24px",
+			zIndex: 9999,
+			display: "flex",
+			alignItems: "flex-start",
+			gap: "14px",
+			padding: "18px 22px",
+			borderRadius: "6px",
+			background: isSuccess ? "var(--au-dark, #211A14)" : "#5c1f1f",
+			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
+			color: "var(--au-bg, #F6F0E4)",
+			minWidth: "290px",
+			maxWidth: "400px",
+			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
+			borderLeft: `4px solid ${isSuccess ? "var(--au-gold, #C2A063)" : "#e07070"}`,
+			fontFamily: "var(--au-font-sans, sans-serif)"
+		},
+		children: [
+			/* @__PURE__ */ jsx("span", {
+				style: {
+					fontSize: "18px",
+					lineHeight: 1,
+					flexShrink: 0,
+					marginTop: "2px",
+					color: isSuccess ? "var(--au-gold, #C2A063)" : "#e07070",
+					fontFamily: "var(--au-font-serif)"
+				},
+				children: isSuccess ? "✓" : "✕"
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				style: { flex: 1 },
+				children: [/* @__PURE__ */ jsx("p", {
+					style: {
+						margin: 0,
+						fontSize: "11px",
+						fontWeight: 500,
+						letterSpacing: ".2em",
+						textTransform: "uppercase",
+						color: "var(--au-gold, #C2A063)",
+						lineHeight: 1,
+						marginBottom: "6px"
+					},
+					children: isSuccess ? "Ourélia" : "Erreur"
+				}), /* @__PURE__ */ jsx("p", {
+					style: {
+						margin: 0,
+						fontSize: "13px",
+						fontWeight: 300,
+						color: "var(--au-cream, #F0E6D4)",
+						lineHeight: 1.5,
+						letterSpacing: ".01em"
+					},
+					children: message
+				})]
+			}),
+			/* @__PURE__ */ jsx("button", {
+				onClick: onClose,
+				style: {
+					background: "none",
+					border: "none",
+					color: "rgba(240,230,212,.45)",
+					cursor: "pointer",
+					fontSize: "16px",
+					lineHeight: 1,
+					padding: "0 0 0 6px",
+					flexShrink: 0,
+					marginTop: "1px"
+				},
+				"aria-label": "Fermer",
+				children: "×"
+			})
+		]
+	});
+}
+/** Scroll fluide vers un élément par son id */
+function smoothScrollTo(id) {
+	const el = document.getElementById(id);
+	if (el) el.scrollIntoView({
+		behavior: "smooth",
+		block: "start"
+	});
+}
 var SPREADS = [
 	{
 		num: "01",
@@ -234,9 +325,9 @@ function resolveShape(product) {
 	if (/(dentifrice|dentífrico|toothpaste|exfoliant|exfoliante|crème solaire|solar|sunscreen|tube)/.test(name)) return "tube";
 	if (/(parfum|perfume|eau de|fragrance|flacon)/.test(name)) return "flacon";
 	if (/(lingette|toallita|wipe|sachet|pouch)/.test(name)) return "pouch";
-	if (cat === "perfume") return "flacon";
-	if (cat === "bucal" || cat === "solar") return "tube";
-	if (cat === "rostro") return "pump";
+	if (cat === "perfumes") return "flacon";
+	if (cat === "body & bath" || cat === "makeup") return "tube";
+	if (cat === "face care") return "pump";
 	return "bottle";
 }
 function ProductIcon({ shape, cat, catLabel, scale = 1 }) {
@@ -617,7 +708,8 @@ function ProductCard({ product }) {
 		className: `au-prod-card ${isOut ? "is-out-of-stock" : ""}`,
 		style: isOut ? { opacity: .6 } : {},
 		children: [
-			/* @__PURE__ */ jsxs("div", {
+			/* @__PURE__ */ jsxs(Link, {
+				href: route("product.show", product.id),
 				className: "au-prod-media",
 				style: {
 					background: categoryTint(product.category.name),
@@ -651,8 +743,13 @@ function ProductCard({ product }) {
 						className: "au-prod-cat",
 						children: categoryLabel(product.category.name)
 					}),
-					/* @__PURE__ */ jsx("div", {
+					/* @__PURE__ */ jsx(Link, {
+						href: route("product.show", product.id),
 						className: "au-prod-name",
+						style: {
+							textDecoration: "none",
+							color: "inherit"
+						},
 						children: product.name
 					}),
 					/* @__PURE__ */ jsx("div", {
@@ -678,15 +775,60 @@ function ProductCard({ product }) {
 					onClick: (e) => {
 						if (isOut) e.preventDefault();
 					},
-					children: [/* @__PURE__ */ jsx("input", {
-						type: "number",
-						min: "1",
-						max: product.stock,
-						value: quantity,
-						onChange: (e) => setQuantity(parseInt(e.target.value) || 1),
-						className: "au-qty-input",
-						"aria-label": "Quantity",
-						disabled: isOut
+					children: [/* @__PURE__ */ jsxs("div", {
+						style: {
+							display: "flex",
+							alignItems: "center",
+							border: "1px solid var(--au-border)",
+							borderRadius: "4px",
+							overflow: "hidden",
+							height: "100%"
+						},
+						children: [
+							/* @__PURE__ */ jsx("button", {
+								type: "button",
+								onClick: () => setQuantity(Math.max(1, quantity - 1)),
+								disabled: isOut || quantity <= 1,
+								style: {
+									padding: "0 10px",
+									background: "transparent",
+									border: "none",
+									cursor: isOut || quantity <= 1 ? "not-allowed" : "pointer",
+									color: "var(--au-text)"
+								},
+								children: "-"
+							}),
+							/* @__PURE__ */ jsx("input", {
+								type: "number",
+								min: "1",
+								max: product.stock,
+								value: quantity,
+								onChange: (e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1))),
+								className: "au-qty-input",
+								"aria-label": "Quantity",
+								disabled: isOut,
+								style: {
+									border: "none",
+									borderRadius: 0,
+									textAlign: "center",
+									width: "40px",
+									MozAppearance: "textfield"
+								}
+							}),
+							/* @__PURE__ */ jsx("button", {
+								type: "button",
+								onClick: () => setQuantity(Math.min(product.stock, quantity + 1)),
+								disabled: isOut || quantity >= product.stock,
+								style: {
+									padding: "0 10px",
+									background: "transparent",
+									border: "none",
+									cursor: isOut || quantity >= product.stock ? "not-allowed" : "pointer",
+									color: "var(--au-text)"
+								},
+								children: "+"
+							})
+						]
 					}), /* @__PURE__ */ jsx("button", {
 						type: "button",
 						className: "au-add-btn",
@@ -713,6 +855,17 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const { url } = usePage();
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [activeBrand, setActiveBrand] = useState(null);
+	const [toast, setToast] = useState(null);
+	useEffect(() => {
+		if (flash?.success) setToast({
+			message: flash.success,
+			type: "success"
+		});
+		else if (errors?.quantity) setToast({
+			message: errors.quantity,
+			type: "error"
+		});
+	}, [flash?.success, errors?.quantity]);
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			const cat = new URL(url, window.location.origin).searchParams.get("category");
@@ -733,7 +886,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const { lang, t, categoryLabel, categoryTint, tagLabel } = useAurelia();
 	const copy = HOME_COPY[lang];
 	const heroShape = heroProduct ? resolveShape(heroProduct) : "bottle";
-	const heroCat = heroProduct?.category?.name || "cabello";
+	const heroCat = heroProduct?.category?.name || "Hair Care";
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsxs(Head, { children: [
 			/* @__PURE__ */ jsx("title", { children: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : "Ourélia" }),
@@ -758,10 +911,10 @@ function WelcomeContent({ products = [], flash, errors }) {
 				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub
 			})
 		] }),
-		(flash?.success || errors?.quantity) && /* @__PURE__ */ jsx("div", {
-			className: "au-flash",
-			style: { background: errors?.quantity ? "var(--au-sale)" : "var(--au-gold)" },
-			children: flash?.success || errors?.quantity
+		toast && /* @__PURE__ */ jsx(OureliaToast, {
+			message: toast.message,
+			type: toast.type,
+			onClose: () => setToast(null)
 		}),
 		/* @__PURE__ */ jsx("div", {
 			className: "au-container au-hero",
@@ -789,9 +942,10 @@ function WelcomeContent({ products = [], flash, errors }) {
 					}),
 					/* @__PURE__ */ jsxs("div", {
 						className: "au-cta-row",
-						children: [/* @__PURE__ */ jsx("a", {
-							href: "#collection",
+						children: [/* @__PURE__ */ jsx("button", {
+							type: "button",
 							className: "au-btn",
+							onClick: () => smoothScrollTo("collection"),
 							children: copy.heroCta
 						}), /* @__PURE__ */ jsx(Link, {
 							href: "/about",
@@ -949,21 +1103,20 @@ function WelcomeContent({ products = [], flash, errors }) {
 			}), /* @__PURE__ */ jsx("div", {
 				className: "au-cat-grid",
 				children: categoriesList.map((cat, i) => {
-					const count = products.filter((p) => p.category.name === cat && (activeBrand ? p.brand === activeBrand : true)).length;
-					return /* @__PURE__ */ jsxs("a", {
+					products.filter((p) => p.category.name === cat && (activeBrand ? p.brand === activeBrand : true)).length;
+					return /* @__PURE__ */ jsx("a", {
 						href: "#collection",
 						onClick: (e) => {
+							e.preventDefault();
 							setActiveCategory(activeCategory === cat ? null : cat);
+							setTimeout(() => smoothScrollTo("collection"), 60);
 						},
 						className: "au-cat-card",
 						style: {
 							background: categoryTint(cat),
 							border: activeCategory === cat ? "2px solid var(--au-gold)" : "2px solid transparent"
 						},
-						children: [/* @__PURE__ */ jsxs("span", {
-							className: "au-cat-num",
-							children: ["N°", String(count).padStart(2, "0")]
-						}), /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
+						children: /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
 							className: "au-cat-label",
 							children: categoryLabel(cat)
 						}), /* @__PURE__ */ jsxs("div", {
@@ -972,7 +1125,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 								style: { fontSize: 13 },
 								children: "→"
 							})]
-						})] })]
+						})] })
 					}, cat);
 				})
 			})]

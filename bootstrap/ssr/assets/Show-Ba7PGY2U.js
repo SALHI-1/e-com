@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-nNytKXjc.js";
+import { t as AdminLayout } from "./AdminLayout-DMbOqy-e.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Orders/Show.tsx
@@ -40,17 +40,24 @@ function Show({ order }) {
 						})
 					] }), /* @__PURE__ */ jsxs("div", {
 						className: "text-right",
-						children: [/* @__PURE__ */ jsxs("h3", {
-							className: "text-lg font-bold",
-							children: [
-								"Montant Total : ",
-								order.total_amount,
-								" dh"
-							]
-						}), /* @__PURE__ */ jsxs("p", {
-							className: "text-gray-500",
-							children: ["Date : ", new Date(order.created_at).toLocaleString()]
-						})]
+						children: [
+							/* @__PURE__ */ jsxs("h3", {
+								className: "text-lg font-bold",
+								children: [
+									"Montant Total : ",
+									order.total_amount,
+									" dh"
+								]
+							}),
+							/* @__PURE__ */ jsxs("p", {
+								className: "text-gray-500",
+								children: ["Création : ", new Date(order.created_at).toLocaleString()]
+							}),
+							order.status === "reçu" && /* @__PURE__ */ jsxs("p", {
+								className: "text-green-700 font-bold mt-1",
+								children: ["Reçue le : ", new Date(order.updated_at).toLocaleString()]
+							})
+						]
 					})]
 				}), /* @__PURE__ */ jsxs("div", {
 					className: "bg-white p-6 shadow sm:rounded-lg",

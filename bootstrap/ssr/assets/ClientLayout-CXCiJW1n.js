@@ -4,7 +4,7 @@ import { Fragment as Fragment$1, createContext, useContext, useState } from "rea
 //#region resources/js/Layouts/ClientLayout.tsx
 var COMMON = {
 	fr: {
-		announce: "Livraison gratuite pour les commandes de plus de 20 dh",
+		announce: "Livraison gratuite dès 300 DH ou partout à Casa & Tanger",
 		navHome: "Accueil",
 		navShop: "Boutique",
 		navHair: "Cheveux",
@@ -16,11 +16,11 @@ var COMMON = {
 		best: "Best-seller",
 		newTag: "Nouveau",
 		sale: "Promo",
-		cabello: "Cheveux",
-		rostro: "Visage",
-		solar: "Solaire",
-		perfume: "Parfum",
-		bucal: "Soins dentaires",
+		"hair care": "Cheveux",
+		"face care": "Visage",
+		"makeup": "Maquillage",
+		"body & bath": "Corps et Bain",
+		"perfumes": "Parfums",
 		marquee: [
 			"Beauté honnête",
 			"Soins essentiels",
@@ -35,36 +35,37 @@ var COMMON = {
 		subscribe: "S'abonner",
 		footerTagline: "Des soins essentiels pour chaque jour.",
 		footerNote: "Fait avec soin · Espagne",
-		footer: [
-			{
-				title: "Boutique",
-				items: [
-					"Cheveux",
-					"Visage",
-					"Solaire",
-					"Parfum",
-					"Soins dentaires"
-				]
-			},
-			{
-				title: "Société",
-				items: [
-					"Notre histoire",
-					"Philosophie",
-					"Durabilité",
-					"Contact"
-				]
-			},
-			{
-				title: "Aide",
-				items: [
-					"Livraison",
-					"Retours",
-					"FAQ",
-					"Confidentialité"
-				]
-			}
-		],
+		footer: [{
+			title: "Boutique",
+			items: [
+				{
+					label: "Cheveux",
+					href: "/?category=Hair%20Care#collection"
+				},
+				{
+					label: "Visage",
+					href: "/?category=Face%20Care#collection"
+				},
+				{
+					label: "Maquillage",
+					href: "/?category=Makeup#collection"
+				},
+				{
+					label: "Corps et Bain",
+					href: "/?category=Body%20%26%20Bath#collection"
+				},
+				{
+					label: "Parfums",
+					href: "/?category=Perfumes#collection"
+				}
+			]
+		}, {
+			title: "Société",
+			items: [{
+				label: "Notre histoire",
+				href: "/about"
+			}]
+		}],
 		login: "Connexion",
 		register: "Créer un compte",
 		profile: "Profil",
@@ -80,15 +81,22 @@ var COMMON = {
 		checkout: "Passer la commande",
 		waNote: "📱 Vous recevrez un message WhatsApp pour confirmer votre commande.",
 		guestName: "Votre nom *",
-		guestEmail: "Adresse e-mail *",
+		deliveryCity: "Ville de livraison *",
+		deliveryFee: "Frais de livraison",
+		deliveryFree: "Gratuit",
+		orderTotal: "Total commande",
 		waPhone: "Numéro WhatsApp *",
 		address: "Adresse de livraison *",
 		back: "Retour",
 		confirm: "Confirmer",
-		sending: "Envoi…"
+		sending: "Envoi…",
+		successTitle: "Merci pour votre confiance !",
+		successMessage: "Votre commande a bien été enregistrée.",
+		successContact: "Nous allons vous contacter le plus tôt possible pour confirmer la commande.",
+		continueShopping: "Continuer mes achats"
 	},
 	es: {
-		announce: "Envío gratis en pedidos superiores a 20 dh",
+		announce: "Envío gratis desde 300 DH o para Casa y Tánger",
 		navHome: "Inicio",
 		navShop: "Tienda",
 		navHair: "Cabello",
@@ -100,11 +108,11 @@ var COMMON = {
 		best: "Más vendido",
 		newTag: "Nuevo",
 		sale: "Oferta",
-		cabello: "Cabello",
-		rostro: "Rostro",
-		solar: "Solar",
-		perfume: "Perfume",
-		bucal: "Cuidado bucal",
+		"hair care": "Cabello",
+		"face care": "Rostro",
+		"makeup": "Maquillaje",
+		"body & bath": "Cuerpo y Baño",
+		"perfumes": "Perfumes",
 		marquee: [
 			"Belleza honesta",
 			"Cuidado esencial",
@@ -119,36 +127,37 @@ var COMMON = {
 		subscribe: "Suscribirme",
 		footerTagline: "Cuidado esencial para cada día.",
 		footerNote: "Hecho con cariño · España",
-		footer: [
-			{
-				title: "Tienda",
-				items: [
-					"Cabello",
-					"Rostro",
-					"Solar",
-					"Perfume",
-					"Cuidado bucal"
-				]
-			},
-			{
-				title: "Compañía",
-				items: [
-					"Nuestra historia",
-					"Filosofía",
-					"Sostenibilidad",
-					"Contacto"
-				]
-			},
-			{
-				title: "Ayuda",
-				items: [
-					"Envíos",
-					"Devoluciones",
-					"Preguntas frecuentes",
-					"Privacidad"
-				]
-			}
-		],
+		footer: [{
+			title: "Tienda",
+			items: [
+				{
+					label: "Cabello",
+					href: "/?category=Hair%20Care#collection"
+				},
+				{
+					label: "Rostro",
+					href: "/?category=Face%20Care#collection"
+				},
+				{
+					label: "Maquillaje",
+					href: "/?category=Makeup#collection"
+				},
+				{
+					label: "Cuerpo y Baño",
+					href: "/?category=Body%20%26%20Bath#collection"
+				},
+				{
+					label: "Perfumes",
+					href: "/?category=Perfumes#collection"
+				}
+			]
+		}, {
+			title: "Compañía",
+			items: [{
+				label: "Nuestra historia",
+				href: "/about"
+			}]
+		}],
 		login: "Acceder",
 		register: "Crear cuenta",
 		profile: "Perfil",
@@ -164,15 +173,22 @@ var COMMON = {
 		checkout: "Realizar pedido",
 		waNote: "📱 Recibirás un mensaje de WhatsApp para confirmar tu pedido.",
 		guestName: "Tu nombre *",
-		guestEmail: "Correo electrónico *",
+		deliveryCity: "Ciudad de entrega *",
+		deliveryFee: "Gastos de envío",
+		deliveryFree: "Gratis",
+		orderTotal: "Total pedido",
 		waPhone: "Número de WhatsApp *",
 		address: "Dirección de envío *",
 		back: "Atrás",
 		confirm: "Confirmar",
-		sending: "Enviando…"
+		sending: "Enviando…",
+		successTitle: "¡Gracias por su confianza!",
+		successMessage: "Su pedido ha sido registrado con éxito.",
+		successContact: "Nos pondremos en contacto con usted lo antes posible para confirmar el pedido.",
+		continueShopping: "Seguir comprando"
 	},
 	en: {
-		announce: "Free shipping on orders over 20 dh",
+		announce: "Free shipping from 300 DH or to Casa & Tangier",
 		navHome: "Home",
 		navShop: "Shop",
 		navHair: "Hair",
@@ -184,11 +200,11 @@ var COMMON = {
 		best: "Best seller",
 		newTag: "New",
 		sale: "Sale",
-		cabello: "Hair",
-		rostro: "Face",
-		solar: "Sun care",
-		perfume: "Fragrance",
-		bucal: "Oral care",
+		"hair care": "Hair Care",
+		"face care": "Face Care",
+		"makeup": "Makeup",
+		"body & bath": "Body & Bath",
+		"perfumes": "Perfumes",
 		marquee: [
 			"Honest beauty",
 			"Essential care",
@@ -203,36 +219,37 @@ var COMMON = {
 		subscribe: "Subscribe",
 		footerTagline: "Essential care for every day.",
 		footerNote: "Made with care · Spain",
-		footer: [
-			{
-				title: "Shop",
-				items: [
-					"Hair",
-					"Face",
-					"Sun care",
-					"Fragrance",
-					"Oral care"
-				]
-			},
-			{
-				title: "Company",
-				items: [
-					"Our story",
-					"Philosophy",
-					"Sustainability",
-					"Contact"
-				]
-			},
-			{
-				title: "Help",
-				items: [
-					"Shipping",
-					"Returns",
-					"FAQ",
-					"Privacy"
-				]
-			}
-		],
+		footer: [{
+			title: "Shop",
+			items: [
+				{
+					label: "Hair Care",
+					href: "/?category=Hair%20Care#collection"
+				},
+				{
+					label: "Face Care",
+					href: "/?category=Face%20Care#collection"
+				},
+				{
+					label: "Makeup",
+					href: "/?category=Makeup#collection"
+				},
+				{
+					label: "Body & Bath",
+					href: "/?category=Body%20%26%20Bath#collection"
+				},
+				{
+					label: "Perfumes",
+					href: "/?category=Perfumes#collection"
+				}
+			]
+		}, {
+			title: "Company",
+			items: [{
+				label: "Our story",
+				href: "/about"
+			}]
+		}],
 		login: "Log in",
 		register: "Create account",
 		profile: "Profile",
@@ -248,20 +265,27 @@ var COMMON = {
 		checkout: "Checkout",
 		waNote: "📱 You will receive a WhatsApp message to confirm your order.",
 		guestName: "Your name *",
-		guestEmail: "Email address *",
+		deliveryCity: "Delivery city *",
+		deliveryFee: "Delivery fee",
+		deliveryFree: "Free",
+		orderTotal: "Order total",
 		waPhone: "WhatsApp number *",
 		address: "Shipping address *",
 		back: "Back",
 		confirm: "Confirm",
-		sending: "Sending…"
+		sending: "Sending…",
+		successTitle: "Thank you for your trust!",
+		successMessage: "Your order has been successfully recorded.",
+		successContact: "We will contact you as soon as possible to confirm the order.",
+		continueShopping: "Continue shopping"
 	}
 };
 var CATEGORY_TINTS = {
-	cabello: "#ECE0CF",
-	rostro: "#E7E5D6",
-	solar: "#F2E3C6",
-	perfume: "#EBDFDB",
-	bucal: "#E4E7E1"
+	"hair care": "#ECE0CF",
+	"face care": "#E7E5D6",
+	"makeup": "#F2E3C6",
+	"perfumes": "#EBDFDB",
+	"body & bath": "#E4E7E1"
 };
 var LANGS = [
 	"fr",
@@ -274,7 +298,13 @@ function useAurelia() {
 	if (!ctx) throw new Error("useAurelia() must be called from within <ClientLayout>.");
 	return ctx;
 }
-function ClientLayout({ auth, cartCount = 0, title, categories, children }) {
+function ClientLayout({ auth, cartCount = 0, title, categories = [
+	"Hair Care",
+	"Face Care",
+	"Makeup",
+	"Perfumes",
+	"Body & Bath"
+], children }) {
 	const [lang, setLangState] = useState(() => {
 		if (typeof window !== "undefined") {
 			const saved = localStorage.getItem("au_lang");
@@ -378,28 +408,36 @@ function ClientLayout({ auth, cartCount = 0, title, categories, children }) {
 							}),
 							/* @__PURE__ */ jsxs("nav", {
 								className: "au-nav-links",
-								children: [/* @__PURE__ */ jsx(Link, {
-									href: "/",
-									className: `au-nav-link${url === "/" ? " au-nav-link--active" : ""}`,
-									children: t.navHome
-								}), categories && categories.length > 0 && /* @__PURE__ */ jsxs("div", {
-									className: "au-nav-dropdown-wrap",
-									children: [/* @__PURE__ */ jsxs("button", {
-										className: "au-nav-link au-nav-dropdown-btn",
-										children: [t.navShop, " ▾"]
-									}), /* @__PURE__ */ jsxs("div", {
-										className: "au-nav-dropdown-menu",
-										children: [/* @__PURE__ */ jsx(Link, {
-											href: "/#collection",
-											className: "au-nav-dropdown-item",
-											children: t.allLabel
-										}), categories.map((cat) => /* @__PURE__ */ jsx(Link, {
-											href: `/?category=${encodeURIComponent(cat)}#collection`,
-											className: "au-nav-dropdown-item",
-											children: categoryLabel(cat)
-										}, cat))]
-									})]
-								})]
+								children: [
+									/* @__PURE__ */ jsx(Link, {
+										href: "/",
+										className: `au-nav-link${url === "/" ? " au-nav-link--active" : ""}`,
+										children: t.navHome
+									}),
+									/* @__PURE__ */ jsx(Link, {
+										href: "/about",
+										className: `au-nav-link${url.startsWith("/about") ? " au-nav-link--active" : ""}`,
+										children: t.navAbout
+									}),
+									categories && categories.length > 0 && /* @__PURE__ */ jsxs("div", {
+										className: "au-nav-dropdown-wrap",
+										children: [/* @__PURE__ */ jsxs("button", {
+											className: "au-nav-link au-nav-dropdown-btn",
+											children: [t.navShop, " ▾"]
+										}), /* @__PURE__ */ jsxs("div", {
+											className: "au-nav-dropdown-menu",
+											children: [/* @__PURE__ */ jsx(Link, {
+												href: "/#collection",
+												className: "au-nav-dropdown-item",
+												children: t.allLabel
+											}), categories.map((cat) => /* @__PURE__ */ jsx(Link, {
+												href: `/?category=${encodeURIComponent(cat)}#collection`,
+												className: "au-nav-dropdown-item",
+												children: categoryLabel(cat)
+											}, cat))]
+										})]
+									})
+								]
 							}),
 							/* @__PURE__ */ jsxs("div", {
 								className: "au-nav-right",
@@ -465,6 +503,12 @@ function ClientLayout({ auth, cartCount = 0, title, categories, children }) {
 									className: "au-mobile-link",
 									onClick: () => setMenuOpen(false),
 									children: t.navHome
+								}),
+								/* @__PURE__ */ jsx(Link, {
+									href: "/about",
+									className: "au-mobile-link",
+									onClick: () => setMenuOpen(false),
+									children: t.navAbout
 								}),
 								/* @__PURE__ */ jsx("div", {
 									className: "au-mobile-link",
@@ -590,9 +634,10 @@ function ClientLayout({ auth, cartCount = 0, title, categories, children }) {
 							children: col.title
 						}), /* @__PURE__ */ jsx("div", {
 							className: "au-footer-col-links",
-							children: col.items.map((item, j) => /* @__PURE__ */ jsx("span", {
+							children: col.items.map((item, j) => /* @__PURE__ */ jsx(Link, {
+								href: item.href,
 								className: "au-footer-link",
-								children: item
+								children: item.label
 							}, j))
 						})] }, i))]
 					}), /* @__PURE__ */ jsxs("div", {

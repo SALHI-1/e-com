@@ -42,7 +42,7 @@ function SuccessContent() {
                 {trans.successContact || 'Nous allons vous contacter le plus tôt possible pour confirmer la commande.'}
             </p>
             
-            <Link href={route('home')} className="au-btn">
+            <Link href={route('home')} className="au-btn" style={{ display: 'inline-block', alignSelf: 'center', textAlign: 'center' }}>
                 {trans.continueShopping || 'Continuer mes achats'}
             </Link>
         </div>

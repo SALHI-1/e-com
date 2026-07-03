@@ -10,7 +10,7 @@ RUN npm run build
 FROM php:8.4-fpm-alpine 
 
 # Installer les extensions PHP nécessaires pour PostgreSQL et Laravel
-RUN apk add --no-cache nginx supervisor curl libpq-dev \
+RUN apk add --no-cache nginx supervisor curl libpq-dev nodejs npm \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Configurer Nginx et Supervisor
@@ -24,13 +24,16 @@ WORKDIR /var/www/html
 COPY . .
 # Copier les assets compilés depuis le Stage 1
 COPY --from=asset-builder /app/public/build ./public/build
+COPY --from=asset-builder /app/bootstrap/ssr ./bootstrap/ssr
 
 # Installer Composer et les dépendances PHP
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
-# Donner les bons droits d'accès
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Donner les bons droits d'accès (storage, cache, icônes publiques et ssr)
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/bootstrap/ssr \
+    && chmod -R 755 /var/www/html/public/icon \
+    && chmod -R 755 /var/www/html/public/build
 
 # Exposer le script de démarrage
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh

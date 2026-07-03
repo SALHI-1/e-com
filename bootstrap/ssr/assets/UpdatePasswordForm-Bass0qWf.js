@@ -3,8 +3,8 @@ import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.j
 import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { Transition } from "@headlessui/react";
 import { useRef } from "react";
+import { Transition } from "@headlessui/react";
 //#region resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx
 function UpdatePasswordForm({ className = "" }) {
 	const passwordInput = useRef(null);
