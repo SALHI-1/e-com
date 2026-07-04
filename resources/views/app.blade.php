@@ -24,6 +24,62 @@
         <meta name="twitter:title" content="{{ config('app.name', 'Ourélia') }}">
         <meta name="twitter:description" content="Découvrez notre boutique en ligne avec les meilleurs produits au meilleur prix.">
 
+        {{-- Schema.org JSON-LD — Données structurées pour Google --}}
+        <script type="application/ld+json">
+        {
+            "@@context": "https://schema.org",
+            "@@graph": [
+                {
+                    "@@type": "Organization",
+                    "@@id": "{{ url('/') }}/#organization",
+                    "name": "Ourélia",
+                    "alternateName": "Ourelia Beauty",
+                    "url": "{{ url('/') }}",
+                    "logo": {
+                        "@@type": "ImageObject",
+                        "url": "{{ asset('icon/android-chrome-192x192.png') }}",
+                        "width": 192,
+                        "height": 192
+                    },
+                    "description": "Ourélia est une boutique de beauté en ligne proposant des soins visage, parfums, maquillage, soins corps et soins capillaires de qualité premium.",
+                    "foundingDate": "2024",
+                    "sameAs": []
+                },
+                {
+                    "@@type": "WebSite",
+                    "@@id": "{{ url('/') }}/#website",
+                    "url": "{{ url('/') }}",
+                    "name": "Ourélia",
+                    "description": "Boutique beauté en ligne — soins visage, parfums, maquillage, corps & bain, soins capillaires.",
+                    "publisher": {
+                        "@@id": "{{ url('/') }}/#organization"
+                    },
+                    "potentialAction": {
+                        "@@type": "SearchAction",
+                        "target": {
+                            "@@type": "EntryPoint",
+                            "urlTemplate": "{{ url('/') }}?q={search_term_string}"
+                        },
+                        "query-input": "required name=search_term_string"
+                    },
+                    "inLanguage": "fr-MA"
+                },
+                {
+                    "@@type": "OnlineStore",
+                    "@@id": "{{ url('/') }}/#store",
+                    "name": "Ourélia",
+                    "url": "{{ url('/') }}",
+                    "currenciesAccepted": "MAD",
+                    "priceRange": "$$",
+                    "description": "Boutique beauté en ligne proposant des produits de soin visage, parfums, maquillage, corps & bain et soins capillaires.",
+                    "parentOrganization": {
+                        "@@id": "{{ url('/') }}/#organization"
+                    }
+                }
+            ]
+        }
+        </script>
+
         {{-- Favicon — affiché dans l'onglet du navigateur (dev & prod, espace admin & client) --}}
         <link rel="shortcut icon" href="{{ asset('icon/favicon.ico') }}" type="image/x-icon">
         <link rel="icon" type="image/png" sizes="16x16"  href="{{ asset('icon/favicon-16x16.png') }}">

@@ -1,10 +1,10 @@
+import { t as Ke } from "./transition-MXKqs4Qd.js";
 import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
 import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
 import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useRef } from "react";
-import { Transition } from "@headlessui/react";
 //#region resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx
 function UpdatePasswordForm({ className = "" }) {
 	const passwordInput = useRef(null);
@@ -104,7 +104,7 @@ function UpdatePasswordForm({ className = "" }) {
 					children: [/* @__PURE__ */ jsx(PrimaryButton, {
 						disabled: processing,
 						children: "Save"
-					}), /* @__PURE__ */ jsx(Transition, {
+					}), /* @__PURE__ */ jsx(Ke, {
 						show: recentlySuccessful,
 						enter: "transition ease-in-out",
 						enterFrom: "opacity-0",

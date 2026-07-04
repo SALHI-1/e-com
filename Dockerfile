@@ -30,6 +30,11 @@ COPY --from=asset-builder /app/bootstrap/ssr ./bootstrap/ssr
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
+# Installer les dépendances npm de production (nécessaires pour le serveur SSR Node.js)
+COPY --from=asset-builder /app/package*.json ./
+RUN npm ci --omit=dev --legacy-peer-deps
+
+
 # Donner les bons droits d'accès (storage, cache, icônes publiques et ssr)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/bootstrap/ssr \
     && chmod -R 755 /var/www/html/public/icon \

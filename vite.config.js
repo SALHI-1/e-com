@@ -11,6 +11,12 @@ export default defineConfig({
         }),
         react(),
     ],
+    ssr: {
+        // Ces packages sont en devDependencies mais importés dans les pages SSR.
+        // On les bundle dans le fichier ssr.js pour qu'ils soient disponibles
+        // sans node_modules en production.
+        noExternal: ['laravel-vite-plugin', '@headlessui/react'],
+    },
     server: {
         // 1. Autorise le CORS pour que l'URL Ngrok puisse lire les fichiers de Vite
         cors: true,
@@ -22,3 +28,4 @@ export default defineConfig({
         },
     },
 });
+

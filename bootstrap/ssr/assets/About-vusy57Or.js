@@ -1,4 +1,4 @@
-import { t as ClientLayout } from "./ClientLayout-CXCiJW1n.js";
+import { t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/About.tsx

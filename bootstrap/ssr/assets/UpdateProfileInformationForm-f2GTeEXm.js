@@ -1,9 +1,9 @@
+import { t as Ke } from "./transition-MXKqs4Qd.js";
 import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
 import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
 import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
-import { Transition } from "@headlessui/react";
 //#region resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx
 function UpdateProfileInformation({ mustVerifyEmail, status, className = "" }) {
 	const user = usePage().props.auth.user;
@@ -83,7 +83,7 @@ function UpdateProfileInformation({ mustVerifyEmail, status, className = "" }) {
 					children: [/* @__PURE__ */ jsx(PrimaryButton, {
 						disabled: processing,
 						children: "Save"
-					}), /* @__PURE__ */ jsx(Transition, {
+					}), /* @__PURE__ */ jsx(Ke, {
 						show: recentlySuccessful,
 						enter: "transition ease-in-out",
 						enterFrom: "opacity-0",

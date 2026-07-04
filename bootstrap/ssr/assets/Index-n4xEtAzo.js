@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-DMbOqy-e.js";
+import { t as AdminLayout } from "./AdminLayout-DQBf1_fF.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Products/Index.tsx

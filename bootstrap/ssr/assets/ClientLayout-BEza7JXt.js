@@ -306,10 +306,12 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 	"Body & Bath"
 ], children }) {
 	const [lang, setLangState] = useState(() => {
-		if (typeof window !== "undefined") {
-			const saved = localStorage.getItem("au_lang");
-			if (saved === "fr" || saved === "en" || saved === "es") return saved;
-		}
+		try {
+			if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+				const saved = localStorage.getItem("au_lang");
+				if (saved === "fr" || saved === "en" || saved === "es") return saved;
+			}
+		} catch {}
 		return "fr";
 	});
 	const setLang = (newLang) => {

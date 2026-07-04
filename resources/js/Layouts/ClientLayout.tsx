@@ -339,9 +339,13 @@ interface ClientLayoutProps {
 
 export default function ClientLayout({ auth, cartCount = 0, title, categories = ['Hair Care', 'Face Care', 'Makeup', 'Perfumes', 'Body & Bath'], children }: ClientLayoutProps) {
   const [lang, setLangState] = useState<Lang>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('au_lang');
-      if (saved === 'fr' || saved === 'en' || saved === 'es') return saved as Lang;
+    try {
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        const saved = localStorage.getItem('au_lang');
+        if (saved === 'fr' || saved === 'en' || saved === 'es') return saved as Lang;
+      }
+    } catch {
+      // localStorage inaccessible en SSR (Node.js) — on utilise la langue par défaut
     }
     return 'fr';
   });

@@ -1,4 +1,4 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-CXCiJW1n.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useMemo, useState } from "react";
