@@ -13,8 +13,15 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
     const handleFilter = (key: string, value: string) => {
         const newFilters = { ...filterState, [key]: value };
         setFilterState(newFilters);
-        router.get(route('admin.orders.list'), newFilters, { preserveState: true, preserveScroll: true });
     };
+
+    const filteredOrders = orders.filter(order => {
+        const matchNumber = order.order_number?.toLowerCase().includes(filterState.order_number.toLowerCase()) ?? true;
+        const matchName = !filterState.client_name || (order.user?.name?.toLowerCase().includes(filterState.client_name.toLowerCase()));
+        const matchEmail = !filterState.client_email || (order.user?.email?.toLowerCase().includes(filterState.client_email.toLowerCase()));
+        const matchStatus = !filterState.status || order.status === filterState.status;
+        return matchNumber && matchName && matchEmail && matchStatus;
+    });
 
     const STATUSES = [
         'en attente',
@@ -108,7 +115,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {orders.map((order) => (
+                                    {filteredOrders.map((order) => (
                                         <tr key={order.id} className="hover:bg-gray-50">
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                 {order.order_number}
@@ -137,7 +144,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                             </td>
                                         </tr>
                                     ))}
-                                    {orders.length === 0 && (
+                                    {filteredOrders.length === 0 && (
                                         <tr>
                                             <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                                 Aucune commande trouvée.

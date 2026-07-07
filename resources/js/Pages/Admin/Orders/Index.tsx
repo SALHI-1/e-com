@@ -18,8 +18,12 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
     const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const date = e.target.value;
         setDateFilter(date);
-        router.get(route('admin.orders.index'), { date }, { preserveState: true, preserveScroll: true });
     };
+
+    const filteredOrders = orders.filter(order => {
+        if (!dateFilter) return true;
+        return order.created_at.substring(0, 10) >= dateFilter;
+    });
 
     const handleDragStart = (e: React.DragEvent, orderId: number) => {
         setDraggingId(orderId);
@@ -76,7 +80,7 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
                         />
                         {dateFilter && (
                             <button 
-                                onClick={() => { setDateFilter(''); router.get(route('admin.orders.index'), { date: '' }, { preserveState: true, preserveScroll: true }); }}
+                                onClick={() => setDateFilter('')}
                                 className="text-sm text-gray-500 hover:text-gray-700 underline"
                             >
                                 Effacer
@@ -94,11 +98,11 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
                                 <div className={`p-3 border-b border-gray-300 rounded-t-lg font-bold capitalize text-sm text-center ${status.includes('annulé') ? 'bg-red-100 text-red-800' : 'bg-gray-200 text-gray-700'}`}>
                                     {status}
                                     <span className="ml-2 text-xs font-normal text-gray-500">
-                                        ({orders.filter(o => o.status === status).length})
+                                        ({filteredOrders.filter((o: any) => o.status === status).length})
                                     </span>
                                 </div>
                                 <div className="p-3 flex-1 overflow-y-auto space-y-3">
-                                    {orders.filter(o => o.status === status).map(order => {
+                                    {filteredOrders.filter((o: any) => o.status === status).map((order: any) => {
                                         const isCancelled = status.includes('annulé');
                                         return (
                                         <div 
@@ -152,7 +156,7 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
                                         </div>
                                         );
                                     })}
-                                    {orders.filter(o => o.status === status).length === 0 && (
+                                    {filteredOrders.filter((o: any) => o.status === status).length === 0 && (
                                         <div className="text-center text-sm text-gray-400 italic py-4">
                                             Aucune commande
                                         </div>

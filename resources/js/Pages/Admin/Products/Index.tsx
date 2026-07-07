@@ -6,17 +6,11 @@ export default function Index({ products, filters }: { products: any[], filters?
     const [search, setSearch] = useState(filters?.search || '');
     const [lowStock, setLowStock] = useState(filters?.low_stock === 'true' || filters?.low_stock === true);
 
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            router.get(
-                route('admin.products.index'),
-                { search, low_stock: lowStock },
-                { preserveState: true, replace: true, preserveScroll: true }
-            );
-        }, 300);
-
-        return () => clearTimeout(timeoutId);
-    }, [search, lowStock]);
+    const filteredProducts = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
+        const matchesStock = lowStock ? product.stock < 5 : true;
+        return matchesSearch && matchesStock;
+    });
 
     return (
         <AdminLayout
@@ -73,7 +67,7 @@ export default function Index({ products, filters }: { products: any[], filters?
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {products.map((product) => (
+                                {filteredProducts.map((product) => (
                                     <tr key={product.id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.id}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
@@ -95,7 +89,7 @@ export default function Index({ products, filters }: { products: any[], filters?
                                 ))}
                             </tbody>
                         </table>
-                        {products.length === 0 && (
+                        {filteredProducts.length === 0 && (
                              <div className="p-6 text-center text-gray-500">Aucun produit trouvé.</div>
                         )}
                     </div>

@@ -95,6 +95,12 @@ class ProductController extends Controller
         $data = collect($validated)->except('image')->toArray();
 
         if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($product->image_url) {
+                $oldImagePath = 'products/' . basename($product->image_url);
+                Storage::delete($oldImagePath);
+            }
+
             $path = $request->file('image')->store('products');
             if (!$path) {
                 return back()->withErrors(['image' => 'Erreur lors de l\'upload de l\'image. Vérifiez la configuration du stockage.']);
