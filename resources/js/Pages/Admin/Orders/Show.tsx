@@ -15,7 +15,7 @@ export default function Show({ order }: { order: any }) {
     };
 
     return (
-        <AdminLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Détails de la Commande {order.order_number}</h2>}>
+        <AdminLayout header={<h2 className="au-h3">Détails de la Commande {order.order_number}</h2>}>
             <Head title={`Commande ${order.order_number}`} />
 
             <div className="py-12">
@@ -44,7 +44,7 @@ export default function Show({ order }: { order: any }) {
                             <select 
                                 value={data.status} 
                                 onChange={(e) => setData('status', e.target.value)}
-                                className="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+                                className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
                             >
                                 <option value="en attente">En attente</option>
                                 <option value="payée">Payée</option>
@@ -55,7 +55,7 @@ export default function Show({ order }: { order: any }) {
                             <button 
                                 type="submit" 
                                 disabled={processing}
-                                className="bg-indigo-600 px-4 py-2 text-white rounded hover:bg-indigo-700"
+                                className="au-btn"
                             >
                                 Mettre à jour
                             </button>

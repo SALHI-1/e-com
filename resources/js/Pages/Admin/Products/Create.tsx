@@ -28,7 +28,7 @@ export default function Create({ categories }: { categories: any[] }) {
     };
 
     return (
-        <AdminLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Ajouter un produit</h2>}>
+        <AdminLayout header={<h2 className="au-h3">Ajouter un produit</h2>}>
             <Head title="Ajouter un produit" />
 
             <div className="py-12">
@@ -49,7 +49,7 @@ export default function Create({ categories }: { categories: any[] }) {
 
                             <div>
                                 <InputLabel htmlFor="category_id" value="Catégorie" />
-                                <select id="category_id" className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" value={data.category_id} onChange={(e) => setData('category_id', e.target.value)} required>
+                                <select id="category_id" className="mt-1 block w-full border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm" value={data.category_id} onChange={(e) => setData('category_id', e.target.value)} required>
                                     <option value="" disabled>Sélectionner une catégorie</option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -60,7 +60,7 @@ export default function Create({ categories }: { categories: any[] }) {
 
                             <div>
                                 <InputLabel htmlFor="description" value="Description" />
-                                <textarea id="description" className="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" rows={4} value={data.description} onChange={(e) => setData('description', e.target.value)} required />
+                                <textarea id="description" className="mt-1 block w-full border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm" rows={4} value={data.description} onChange={(e) => setData('description', e.target.value)} required />
                                 <InputError message={errors.description} className="mt-2" />
                             </div>
 
@@ -85,7 +85,7 @@ export default function Create({ categories }: { categories: any[] }) {
 
                             <div>
                                 <InputLabel htmlFor="image" value="Image du produit (optionnel)" />
-                                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md relative overflow-hidden group hover:border-indigo-500 transition-colors">
+                                <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md relative overflow-hidden group hover:border-gray-500 transition-colors">
                                     {data.image ? (
                                         <div className="text-center w-full">
                                             <p className="text-sm text-gray-600 mb-2">Fichier sélectionné : {data.image.name}</p>
@@ -94,11 +94,11 @@ export default function Create({ categories }: { categories: any[] }) {
                                         </div>
                                     ) : (
                                         <div className="space-y-1 text-center">
-                                            <svg className="mx-auto h-12 w-12 text-gray-400 group-hover:text-indigo-500 transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                                            <svg className="mx-auto h-12 w-12 text-gray-400 group-hover:text-gray-500 transition-colors" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                                                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                             </svg>
                                             <div className="flex text-sm text-gray-600 justify-center">
-                                                <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium au-link-underline focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-500">
                                                     <span>Importer un fichier</span>
                                                     <input id="file-upload" name="image" type="file" className="sr-only" accept="image/*" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)} />
                                                 </label>

@@ -1,12 +1,9 @@
-import { i as ApplicationLogo, n as NavLink, r as Dropdown, t as ResponsiveNavLink } from "./ResponsiveNavLink-CiqJ4Q4a.js";
-import DeleteUserForm from "./DeleteUserForm-BXewx4_g.js";
-import UpdatePasswordForm from "./UpdatePasswordForm-B4fQr3uE.js";
-import UpdateProfileInformation from "./UpdateProfileInformationForm-f2GTeEXm.js";
-import { Head, Link, usePage } from "@inertiajs/react";
+import { i as ApplicationLogo, n as NavLink, r as Dropdown, t as ResponsiveNavLink } from "./ResponsiveNavLink-B_OBySzW.js";
+import { Link, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
-//#region resources/js/Layouts/AuthenticatedLayout.tsx
-function Authenticated({ header, children }) {
+//#region resources/js/Layouts/AdminLayout.tsx
+function AdminLayout({ header, children }) {
 	const user = usePage().props.auth.user;
 	const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 	return /* @__PURE__ */ jsxs("div", {
@@ -24,16 +21,33 @@ function Authenticated({ header, children }) {
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "flex shrink-0 items-center",
 									children: /* @__PURE__ */ jsx(Link, {
-										href: "/",
+										href: "/admin/dashboard",
 										children: /* @__PURE__ */ jsx(ApplicationLogo, { className: "block h-9 w-auto fill-current text-gray-800" })
 									})
-								}), /* @__PURE__ */ jsx("div", {
+								}), /* @__PURE__ */ jsxs("div", {
 									className: "hidden space-x-8 sm:-my-px sm:ms-10 sm:flex",
-									children: /* @__PURE__ */ jsx(NavLink, {
-										href: route("dashboard"),
-										active: route().current("dashboard"),
-										children: "Dashboard"
-									})
+									children: [
+										/* @__PURE__ */ jsx(NavLink, {
+											href: route("admin.dashboard"),
+											active: route().current("admin.dashboard"),
+											children: "Tableau de bord"
+										}),
+										/* @__PURE__ */ jsx(NavLink, {
+											href: route("admin.products.index"),
+											active: route().current("admin.products.*"),
+											children: "Produits"
+										}),
+										/* @__PURE__ */ jsx(NavLink, {
+											href: route("admin.orders.index"),
+											active: route().current("admin.orders.index"),
+											children: "Kanban Commandes"
+										}),
+										/* @__PURE__ */ jsx(NavLink, {
+											href: route("admin.orders.list"),
+											active: route().current("admin.orders.list"),
+											children: "Liste Commandes"
+										})
+									]
 								})]
 							}),
 							/* @__PURE__ */ jsx("div", {
@@ -45,7 +59,7 @@ function Authenticated({ header, children }) {
 										children: /* @__PURE__ */ jsxs("button", {
 											type: "button",
 											className: "inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none",
-											children: [user.name, /* @__PURE__ */ jsx("svg", {
+											children: [user?.name || "Admin", /* @__PURE__ */ jsx("svg", {
 												className: "-me-0.5 ms-2 h-4 w-4",
 												xmlns: "http://www.w3.org/2000/svg",
 												viewBox: "0 0 20 20",
@@ -57,15 +71,12 @@ function Authenticated({ header, children }) {
 												})
 											})]
 										})
-									}) }), /* @__PURE__ */ jsxs(Dropdown.Content, { children: [/* @__PURE__ */ jsx(Dropdown.Link, {
-										href: route("profile.edit"),
-										children: "Profile"
-									}), /* @__PURE__ */ jsx(Dropdown.Link, {
-										href: route("logout"),
+									}) }), /* @__PURE__ */ jsx(Dropdown.Content, { children: /* @__PURE__ */ jsx(Dropdown.Link, {
+										href: route("admin.logout"),
 										method: "post",
 										as: "button",
-										children: "Log Out"
-									})] })] })
+										children: "Déconnexion"
+									}) })] })
 								})
 							}),
 							/* @__PURE__ */ jsx("div", {
@@ -98,35 +109,49 @@ function Authenticated({ header, children }) {
 					})
 				}), /* @__PURE__ */ jsxs("div", {
 					className: (showingNavigationDropdown ? "block" : "hidden") + " sm:hidden",
-					children: [/* @__PURE__ */ jsx("div", {
+					children: [/* @__PURE__ */ jsxs("div", {
 						className: "space-y-1 pb-3 pt-2",
-						children: /* @__PURE__ */ jsx(ResponsiveNavLink, {
-							href: route("dashboard"),
-							active: route().current("dashboard"),
-							children: "Dashboard"
-						})
+						children: [
+							/* @__PURE__ */ jsx(ResponsiveNavLink, {
+								href: route("admin.dashboard"),
+								active: route().current("admin.dashboard"),
+								children: "Tableau de bord"
+							}),
+							/* @__PURE__ */ jsx(ResponsiveNavLink, {
+								href: route("admin.products.index"),
+								active: route().current("admin.products.*"),
+								children: "Produits"
+							}),
+							/* @__PURE__ */ jsx(ResponsiveNavLink, {
+								href: route("admin.orders.index"),
+								active: route().current("admin.orders.index"),
+								children: "Kanban Commandes"
+							}),
+							/* @__PURE__ */ jsx(ResponsiveNavLink, {
+								href: route("admin.orders.list"),
+								active: route().current("admin.orders.list"),
+								children: "Liste Commandes"
+							})
+						]
 					}), /* @__PURE__ */ jsxs("div", {
 						className: "border-t border-gray-200 pb-1 pt-4",
 						children: [/* @__PURE__ */ jsxs("div", {
 							className: "px-4",
 							children: [/* @__PURE__ */ jsx("div", {
 								className: "text-base font-medium text-gray-800",
-								children: user.name
+								children: user?.name
 							}), /* @__PURE__ */ jsx("div", {
 								className: "text-sm font-medium text-gray-500",
-								children: user.email
+								children: user?.email
 							})]
-						}), /* @__PURE__ */ jsxs("div", {
+						}), /* @__PURE__ */ jsx("div", {
 							className: "mt-3 space-y-1",
-							children: [/* @__PURE__ */ jsx(ResponsiveNavLink, {
-								href: route("profile.edit"),
-								children: "Profile"
-							}), /* @__PURE__ */ jsx(ResponsiveNavLink, {
+							children: /* @__PURE__ */ jsx(ResponsiveNavLink, {
 								method: "post",
-								href: route("logout"),
+								href: route("admin.logout"),
 								as: "button",
-								children: "Log Out"
-							})]
+								children: "Déconnexion"
+							})
 						})]
 					})]
 				})]
@@ -143,38 +168,4 @@ function Authenticated({ header, children }) {
 	});
 }
 //#endregion
-//#region resources/js/Pages/Profile/Edit.tsx
-function Edit({ mustVerifyEmail, status }) {
-	return /* @__PURE__ */ jsxs(Authenticated, {
-		header: /* @__PURE__ */ jsx("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
-			children: "Profile"
-		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: "Profile" }), /* @__PURE__ */ jsx("div", {
-			className: "py-12",
-			children: /* @__PURE__ */ jsxs("div", {
-				className: "mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8",
-				children: [
-					/* @__PURE__ */ jsx("div", {
-						className: "bg-white p-4 shadow sm:rounded-lg sm:p-8",
-						children: /* @__PURE__ */ jsx(UpdateProfileInformation, {
-							mustVerifyEmail,
-							status,
-							className: "max-w-xl"
-						})
-					}),
-					/* @__PURE__ */ jsx("div", {
-						className: "bg-white p-4 shadow sm:rounded-lg sm:p-8",
-						children: /* @__PURE__ */ jsx(UpdatePasswordForm, { className: "max-w-xl" })
-					}),
-					/* @__PURE__ */ jsx("div", {
-						className: "bg-white p-4 shadow sm:rounded-lg sm:p-8",
-						children: /* @__PURE__ */ jsx(DeleteUserForm, { className: "max-w-xl" })
-					})
-				]
-			})
-		})]
-	});
-}
-//#endregion
-export { Edit as default };
+export { AdminLayout as t };

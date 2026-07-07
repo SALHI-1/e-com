@@ -20,7 +20,7 @@ export default function Dashboard({
     return (
         <AdminLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                <h2 className="au-h3">
                     Tableau de bord Analytique
                 </h2>
             }

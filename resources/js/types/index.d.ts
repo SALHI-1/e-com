@@ -13,5 +13,6 @@ export type PageProps<
 > = T & {
     auth: {
         user: User;
+        admin?: User;
     };
 };

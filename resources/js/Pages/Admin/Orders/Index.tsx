@@ -60,7 +60,7 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
     };
 
     return (
-        <AdminLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Gestion des Commandes (Kanban)</h2>}>
+        <AdminLayout header={<h2 className="au-h3">Gestion des Commandes (Kanban)</h2>}>
             <Head title="Commandes" />
 
             <div className="py-8">
@@ -72,7 +72,7 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
                             id="dateFilter"
                             value={dateFilter}
                             onChange={handleFilterChange}
-                            className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            className="rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                         />
                         {dateFilter && (
                             <button 
@@ -145,7 +145,7 @@ export default function Index({ orders, filters }: { orders: any[], filters: any
                                                         Récupérer
                                                     </button>
                                                 ) : <div />}
-                                                <Link href={route('admin.orders.show', order.id)} className="text-xs text-indigo-600 hover:underline">
+                                                <Link href={route('admin.orders.show', order.id)} className="text-xs au-link-underline">
                                                     Détails &rarr;
                                                 </Link>
                                             </div>

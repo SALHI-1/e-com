@@ -1,11 +1,27 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
+import { useState, useEffect } from 'react';
 
-export default function Index({ products }: { products: any[] }) {
+export default function Index({ products, filters }: { products: any[], filters?: any }) {
+    const [search, setSearch] = useState(filters?.search || '');
+    const [lowStock, setLowStock] = useState(filters?.low_stock === 'true' || filters?.low_stock === true);
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            router.get(
+                route('admin.products.index'),
+                { search, low_stock: lowStock },
+                { preserveState: true, replace: true, preserveScroll: true }
+            );
+        }, 300);
+
+        return () => clearTimeout(timeoutId);
+    }, [search, lowStock]);
+
     return (
         <AdminLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                <h2 className="au-h3">
                     Gestion des Produits
                 </h2>
             }
@@ -14,10 +30,31 @@ export default function Index({ products }: { products: any[] }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="mb-4 flex justify-end">
+                    <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
+                            <input
+                                type="text"
+                                placeholder="Rechercher un produit..."
+                                className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                            
+                            <label className="flex items-center space-x-2 text-sm text-gray-600">
+                                <input
+                                    type="checkbox"
+                                    className="rounded border-gray-300 text-gray-800 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
+                                    checked={lowStock}
+                                    onChange={(e) => setLowStock(e.target.checked)}
+                                />
+                                <span>Stock {'<'} 5</span>
+                            </label>
+                        </div>
+                        
                         <Link
                             href={route('admin.products.create')}
-                            className="bg-indigo-600 px-4 py-2 text-white rounded hover:bg-indigo-700"
+                            className="au-btn whitespace-nowrap"
+                            style={{ margin: 0 }}
                         >
                             Ajouter un produit
                         </Link>
@@ -42,9 +79,15 @@ export default function Index({ products }: { products: any[] }) {
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} dh</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.stock}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {product.stock < 5 ? (
+                                                <span className="text-red-600 font-bold">{product.stock}</span>
+                                            ) : (
+                                                product.stock
+                                            )}
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link href={route('admin.products.edit', product.id)} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                                            <Link href={route('admin.products.edit', product.id)} className="au-link-underline">
                                                 Modifier
                                             </Link>
                                         </td>
@@ -53,7 +96,7 @@ export default function Index({ products }: { products: any[] }) {
                             </tbody>
                         </table>
                         {products.length === 0 && (
-                            <div className="p-6 text-center text-gray-500">Aucun produit trouvé.</div>
+                             <div className="p-6 text-center text-gray-500">Aucun produit trouvé.</div>
                         )}
                     </div>
                 </div>

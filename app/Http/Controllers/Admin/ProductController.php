@@ -11,11 +11,22 @@ use Inertia\Inertia;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('category')->latest()->get();
+        $query = Product::with('category')->latest();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->boolean('low_stock')) {
+            $query->where('stock', '<', 5);
+        }
+
+        $products = $query->get();
         return Inertia::render('Admin/Products/Index', [
-            'products' => $products
+            'products' => $products,
+            'filters' => $request->only(['search', 'low_stock'])
         ]);
     }
 

@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-DQBf1_fF.js";
+import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Bar, BarChart, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";

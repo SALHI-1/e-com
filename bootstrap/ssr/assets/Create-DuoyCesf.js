@@ -1,35 +1,34 @@
-import { t as AdminLayout } from "./AdminLayout-DQBf1_fF.js";
+import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
 import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
 import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
 import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
-//#region resources/js/Pages/Admin/Products/Edit.tsx
-function Edit({ product, categories }) {
+//#region resources/js/Pages/Admin/Products/Create.tsx
+function Create({ categories }) {
 	const { data, setData, post, processing, errors } = useForm({
-		name: product.name,
-		brand: product.brand || "",
-		category_id: product.category_id,
-		description: product.description,
-		price: product.price,
-		stock: product.stock,
-		volume: product.volume || "",
-		is_new: product.is_new,
-		is_bestseller: product.is_bestseller,
-		image: null,
-		_method: "PUT"
+		name: "",
+		brand: "",
+		category_id: categories.length > 0 ? categories[0].id : "",
+		description: "",
+		price: "",
+		stock: "",
+		volume: "",
+		is_new: false,
+		is_bestseller: false,
+		image: null
 	});
 	const submit = (e) => {
 		e.preventDefault();
-		post(route("admin.products.update", product.id), { forceFormData: true });
+		post(route("admin.products.store"));
 	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
-		header: /* @__PURE__ */ jsxs("h2", {
+		header: /* @__PURE__ */ jsx("h2", {
 			className: "text-xl font-semibold leading-tight text-gray-800",
-			children: ["Modifier le produit : ", product.name]
+			children: "Ajouter un produit"
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: "Modifier un produit" }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: "Ajouter un produit" }), /* @__PURE__ */ jsx("div", {
 			className: "py-12",
 			children: /* @__PURE__ */ jsx("div", {
 				className: "mx-auto max-w-2xl sm:px-6 lg:px-8",
@@ -79,16 +78,20 @@ function Edit({ product, categories }) {
 									htmlFor: "category_id",
 									value: "Catégorie"
 								}),
-								/* @__PURE__ */ jsx("select", {
+								/* @__PURE__ */ jsxs("select", {
 									id: "category_id",
 									className: "mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm",
 									value: data.category_id,
 									onChange: (e) => setData("category_id", e.target.value),
 									required: true,
-									children: categories.map((cat) => /* @__PURE__ */ jsx("option", {
+									children: [/* @__PURE__ */ jsx("option", {
+										value: "",
+										disabled: true,
+										children: "Sélectionner une catégorie"
+									}), categories.map((cat) => /* @__PURE__ */ jsx("option", {
 										value: cat.id,
 										children: cat.name
-									}, cat.id))
+									}, cat.id))]
 								}),
 								/* @__PURE__ */ jsx(InputError, {
 									message: errors.category_id,
@@ -181,7 +184,7 @@ function Edit({ product, categories }) {
 										children: [
 											/* @__PURE__ */ jsxs("p", {
 												className: "text-sm text-gray-600 mb-2",
-												children: ["Nouveau fichier : ", data.image.name]
+												children: ["Fichier sélectionné : ", data.image.name]
 											}),
 											/* @__PURE__ */ jsx("img", {
 												src: URL.createObjectURL(data.image),
@@ -192,35 +195,7 @@ function Edit({ product, categories }) {
 												type: "button",
 												onClick: () => setData("image", null),
 												className: "text-red-600 hover:text-red-800 text-sm",
-												children: "Retirer"
-											})
-										]
-									}) : product.image_url ? /* @__PURE__ */ jsxs("div", {
-										className: "text-center w-full",
-										children: [
-											/* @__PURE__ */ jsx("p", {
-												className: "text-sm text-gray-600 mb-2",
-												children: "Image actuelle"
-											}),
-											/* @__PURE__ */ jsx("img", {
-												src: product.image_url,
-												alt: "Current",
-												className: "mx-auto max-h-48 object-contain mb-4"
-											}),
-											/* @__PURE__ */ jsx("div", {
-												className: "flex text-sm text-gray-600 justify-center",
-												children: /* @__PURE__ */ jsxs("label", {
-													htmlFor: "file-upload",
-													className: "relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500",
-													children: [/* @__PURE__ */ jsx("span", { children: "Remplacer l'image" }), /* @__PURE__ */ jsx("input", {
-														id: "file-upload",
-														name: "image",
-														type: "file",
-														className: "sr-only",
-														accept: "image/*",
-														onChange: (e) => setData("image", e.target.files ? e.target.files[0] : null)
-													})]
-												})
+												children: "Retirer l'image"
 											})
 										]
 									}) : /* @__PURE__ */ jsxs("div", {
@@ -297,7 +272,7 @@ function Edit({ product, categories }) {
 								className: "flex justify-end",
 								children: /* @__PURE__ */ jsx(PrimaryButton, {
 									disabled: processing,
-									children: "Mettre à jour"
+									children: "Enregistrer"
 								})
 							})
 						]
@@ -308,4 +283,4 @@ function Edit({ product, categories }) {
 	});
 }
 //#endregion
-export { Edit as default };
+export { Create as default };

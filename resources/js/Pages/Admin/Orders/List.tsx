@@ -32,7 +32,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
     };
 
     return (
-        <AdminLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Toutes les Commandes</h2>}>
+        <AdminLayout header={<h2 className="au-h3">Toutes les Commandes</h2>}>
             <Head title="Liste des Commandes" />
 
             <div className="py-12">
@@ -44,7 +44,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 type="text"
                                 value={filterState.order_number}
                                 onChange={(e) => handleFilter('order_number', e.target.value)}
-                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                                 placeholder="Rechercher..."
                             />
                         </div>
@@ -54,7 +54,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 type="text"
                                 value={filterState.client_name}
                                 onChange={(e) => handleFilter('client_name', e.target.value)}
-                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                                 placeholder="Rechercher..."
                             />
                         </div>
@@ -64,7 +64,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 type="text"
                                 value={filterState.client_email}
                                 onChange={(e) => handleFilter('client_email', e.target.value)}
-                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                                 placeholder="Rechercher..."
                             />
                         </div>
@@ -73,7 +73,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                             <select
                                 value={filterState.status}
                                 onChange={(e) => handleFilter('status', e.target.value)}
-                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                             >
                                 <option value="">Tous les statuts</option>
                                 {STATUSES.map(s => (
@@ -131,7 +131,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <Link href={route('admin.orders.show', order.id)} className="text-indigo-600 hover:text-indigo-900">
+                                                <Link href={route('admin.orders.show', order.id)} className="au-link-underline">
                                                     Voir
                                                 </Link>
                                             </td>
