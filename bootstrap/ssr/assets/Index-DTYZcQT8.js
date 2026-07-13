@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
+import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
@@ -17,11 +17,11 @@ function Index({ orders, filters }) {
 	const handleFilterChange = (e) => {
 		const date = e.target.value;
 		setDateFilter(date);
-		router.get(route("admin.orders.index"), { date }, {
-			preserveState: true,
-			preserveScroll: true
-		});
 	};
+	const filteredOrders = orders.filter((order) => {
+		if (!dateFilter) return true;
+		return order.created_at.substring(0, 10) >= dateFilter;
+	});
 	const handleDragStart = (e, orderId) => {
 		setDraggingId(orderId);
 		e.dataTransfer.effectAllowed = "move";
@@ -49,7 +49,7 @@ function Index({ orders, filters }) {
 	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
+			className: "au-h3",
 			children: "Gestion des Commandes (Kanban)"
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: "Commandes" }), /* @__PURE__ */ jsx("div", {
@@ -69,16 +69,10 @@ function Index({ orders, filters }) {
 							id: "dateFilter",
 							value: dateFilter,
 							onChange: handleFilterChange,
-							className: "rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+							className: "rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
 						}),
 						dateFilter && /* @__PURE__ */ jsx("button", {
-							onClick: () => {
-								setDateFilter("");
-								router.get(route("admin.orders.index"), { date: "" }, {
-									preserveState: true,
-									preserveScroll: true
-								});
-							},
+							onClick: () => setDateFilter(""),
 							className: "text-sm text-gray-500 hover:text-gray-700 underline",
 							children: "Effacer"
 						})
@@ -95,13 +89,13 @@ function Index({ orders, filters }) {
 								className: "ml-2 text-xs font-normal text-gray-500",
 								children: [
 									"(",
-									orders.filter((o) => o.status === status).length,
+									filteredOrders.filter((o) => o.status === status).length,
 									")"
 								]
 							})]
 						}), /* @__PURE__ */ jsxs("div", {
 							className: "p-3 flex-1 overflow-y-auto space-y-3",
-							children: [orders.filter((o) => o.status === status).map((order) => {
+							children: [filteredOrders.filter((o) => o.status === status).map((order) => {
 								const isCancelled = status.includes("annulé");
 								return /* @__PURE__ */ jsxs("div", {
 									draggable: !isCancelled,
@@ -144,13 +138,13 @@ function Index({ orders, filters }) {
 												children: "Récupérer"
 											}) : /* @__PURE__ */ jsx("div", {}), /* @__PURE__ */ jsx(Link, {
 												href: route("admin.orders.show", order.id),
-												className: "text-xs text-indigo-600 hover:underline",
+												className: "text-xs au-link-underline",
 												children: "Détails →"
 											})]
 										})
 									]
 								}, order.id);
-							}), orders.filter((o) => o.status === status).length === 0 && /* @__PURE__ */ jsx("div", {
+							}), filteredOrders.filter((o) => o.status === status).length === 0 && /* @__PURE__ */ jsx("div", {
 								className: "text-center text-sm text-gray-400 italic py-4",
 								children: "Aucune commande"
 							})]

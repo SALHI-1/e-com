@@ -1,5 +1,5 @@
-import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
-import { Head, Link, router } from "@inertiajs/react";
+import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
 //#region resources/js/Pages/Admin/Orders/List.tsx
@@ -11,16 +11,18 @@ function List({ orders, filters }) {
 		status: filters?.status || ""
 	});
 	const handleFilter = (key, value) => {
-		const newFilters = {
+		setFilterState({
 			...filterState,
 			[key]: value
-		};
-		setFilterState(newFilters);
-		router.get(route("admin.orders.list"), newFilters, {
-			preserveState: true,
-			preserveScroll: true
 		});
 	};
+	const filteredOrders = orders.filter((order) => {
+		const matchNumber = order.order_number?.toLowerCase().includes(filterState.order_number.toLowerCase()) ?? true;
+		const matchName = !filterState.client_name || order.user?.name?.toLowerCase().includes(filterState.client_name.toLowerCase());
+		const matchEmail = !filterState.client_email || order.user?.email?.toLowerCase().includes(filterState.client_email.toLowerCase());
+		const matchStatus = !filterState.status || order.status === filterState.status;
+		return matchNumber && matchName && matchEmail && matchStatus;
+	});
 	const STATUSES = [
 		"en attente",
 		"annulé avant la confirmation",
@@ -37,7 +39,7 @@ function List({ orders, filters }) {
 	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
+			className: "au-h3",
 			children: "Toutes les Commandes"
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: "Liste des Commandes" }), /* @__PURE__ */ jsx("div", {
@@ -54,7 +56,7 @@ function List({ orders, filters }) {
 							type: "text",
 							value: filterState.order_number,
 							onChange: (e) => handleFilter("order_number", e.target.value),
-							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
 							placeholder: "Rechercher..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
@@ -64,7 +66,7 @@ function List({ orders, filters }) {
 							type: "text",
 							value: filterState.client_name,
 							onChange: (e) => handleFilter("client_name", e.target.value),
-							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
 							placeholder: "Rechercher..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
@@ -74,7 +76,7 @@ function List({ orders, filters }) {
 							type: "text",
 							value: filterState.client_email,
 							onChange: (e) => handleFilter("client_email", e.target.value),
-							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
 							placeholder: "Rechercher..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
@@ -83,7 +85,7 @@ function List({ orders, filters }) {
 						}), /* @__PURE__ */ jsxs("select", {
 							value: filterState.status,
 							onChange: (e) => handleFilter("status", e.target.value),
-							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm",
+							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
 							children: [/* @__PURE__ */ jsx("option", {
 								value: "",
 								children: "Tous les statuts"
@@ -135,7 +137,7 @@ function List({ orders, filters }) {
 								] })
 							}), /* @__PURE__ */ jsxs("tbody", {
 								className: "bg-white divide-y divide-gray-200",
-								children: [orders.map((order) => /* @__PURE__ */ jsxs("tr", {
+								children: [filteredOrders.map((order) => /* @__PURE__ */ jsxs("tr", {
 									className: "hover:bg-gray-50",
 									children: [
 										/* @__PURE__ */ jsx("td", {
@@ -168,12 +170,12 @@ function List({ orders, filters }) {
 											className: "px-6 py-4 whitespace-nowrap text-right text-sm font-medium",
 											children: /* @__PURE__ */ jsx(Link, {
 												href: route("admin.orders.show", order.id),
-												className: "text-indigo-600 hover:text-indigo-900",
+												className: "au-link-underline",
 												children: "Voir"
 											})
 										})
 									]
-								}, order.id)), orders.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
+								}, order.id)), filteredOrders.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
 									colSpan: 6,
 									className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center",
 									children: "Aucune commande trouvée."

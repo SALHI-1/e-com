@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
+import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Orders/Show.tsx
@@ -6,7 +6,7 @@ function Show({ order }) {
 	const { data, setData, put, processing } = useForm({ status: order.status });
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsxs("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
+			className: "au-h3",
 			children: ["Détails de la Commande ", order.order_number]
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: `Commande ${order.order_number}` }), /* @__PURE__ */ jsx("div", {

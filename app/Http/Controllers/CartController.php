@@ -112,7 +112,7 @@ class CartController extends Controller
                     ]);
                 }
 
-                // ── 2. Vérifier le stock sans décrémenter ────
+                // ── 2. Vérifier le stock et le décrémenter ────
                 $totalAmount = 0;
                 $productIds  = array_keys($cart);
 
@@ -132,7 +132,8 @@ class CartController extends Controller
                         );
                     }
 
-                    // Stock décrémenté uniquement lors de la confirmation manuelle
+                    $product->decrement('stock', $quantity);
+
                     $totalAmount += $product->price * $quantity;
                 }
 

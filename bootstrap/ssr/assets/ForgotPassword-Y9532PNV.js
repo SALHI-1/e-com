@@ -1,6 +1,6 @@
+import { n as TextInput_default, t as InputError } from "./InputError-Dt1CqBgh.js";
+import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { t as Guest } from "./GuestLayout-CCZbzRNY.js";
-import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
-import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Auth/ForgotPassword.tsx

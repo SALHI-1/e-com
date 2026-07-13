@@ -60,12 +60,13 @@ function getDeliveryFee(city: string, subtotal: number): number {
 }
 
 /* ── Toast Ourélia ─────────────────────────────────────────────────── */
-function Toast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error'; onClose: () => void }) {
+function Toast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error' | 'info'; onClose: () => void }) {
     useEffect(() => {
         const timer = setTimeout(onClose, 3000);
         return () => clearTimeout(timer);
     }, [onClose]);
 
+    const isError = type === 'error';
     const isSuccess = type === 'success';
 
     return (
@@ -79,13 +80,13 @@ function Toast({ message, type = 'success', onClose }: { message: string; type?:
             gap: '14px',
             padding: '18px 22px',
             borderRadius: '6px',
-            background: isSuccess ? 'var(--au-dark, #211A14)' : '#5c1f1f',
+            background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
             boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
             color: 'var(--au-bg, #F6F0E4)',
             minWidth: '290px',
             maxWidth: '400px',
             animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-            borderLeft: `4px solid ${isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070'}`,
+            borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
             fontFamily: 'var(--au-font-sans, sans-serif)',
         }}>
             {/* Icône */}
@@ -94,10 +95,10 @@ function Toast({ message, type = 'success', onClose }: { message: string; type?:
                 lineHeight: 1,
                 flexShrink: 0,
                 marginTop: '2px',
-                color: isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070',
+                color: isError ? '#e07070' : 'var(--au-gold, #C2A063)',
                 fontFamily: 'var(--au-font-serif)',
             }}>
-                {isSuccess ? '✓' : '✕'}
+                {isSuccess ? '✓' : isError ? '✕' : 'ℹ'}
             </span>
             <div style={{ flex: 1 }}>
                 {/* Titre de marque */}
@@ -111,7 +112,7 @@ function Toast({ message, type = 'success', onClose }: { message: string; type?:
                     lineHeight: 1,
                     marginBottom: '6px',
                 }}>
-                    {isSuccess ? 'Ourélia' : 'Erreur'}
+                    {isError ? 'Erreur' : 'Ourélia'}
                 </p>
                 {/* Message */}
                 <p style={{
@@ -159,7 +160,7 @@ export default function Index(props: Props) {
 function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
     const { t } = useAurelia();
     const [showCheckout, setShowCheckout] = useState(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
     const { data, setData, post, processing, errors: formErrors } = useForm<{
         shipping_address: string;
@@ -268,15 +269,28 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                                 min="1"
                                                 max={item.product.stock}
                                                 value={item.quantity}
-                                                onChange={(e) => updateQuantity(item.product.id, Math.min(item.product.stock, Math.max(1, parseInt(e.target.value) || 1)))}
+                                                onChange={(e) => {
+                                                    const val = parseInt(e.target.value) || 1;
+                                                    if (val > item.product.stock) {
+                                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                                        updateQuantity(item.product.id, item.product.stock);
+                                                    } else {
+                                                        updateQuantity(item.product.id, Math.max(1, val));
+                                                    }
+                                                }}
                                                 className="au-qty"
                                                 style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '100%', MozAppearance: 'textfield', padding: 0 }}
                                             />
                                             <button
                                                 type="button"
-                                                onClick={() => updateQuantity(item.product.id, Math.min(item.product.stock, item.quantity + 1))}
-                                                disabled={item.quantity >= item.product.stock}
-                                                style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: item.quantity >= item.product.stock ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+                                                onClick={() => {
+                                                    if (item.quantity >= item.product.stock) {
+                                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                                    } else {
+                                                        updateQuantity(item.product.id, item.quantity + 1);
+                                                    }
+                                                }}
+                                                style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--au-text)' }}
                                             >
                                                 +
                                             </button>

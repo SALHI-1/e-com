@@ -1,4 +1,5 @@
 import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
+import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -856,6 +857,10 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const [activeCategory, setActiveCategory] = useState(null);
 	const [activeBrand, setActiveBrand] = useState(null);
 	const [toast, setToast] = useState(null);
+	const [visibleCount, setVisibleCount] = useState(10);
+	useEffect(() => {
+		setVisibleCount(10);
+	}, [activeCategory, activeBrand]);
 	useEffect(() => {
 		if (flash?.success) setToast({
 			message: flash.success,
@@ -885,8 +890,9 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const categoriesList = Array.from(new Set(products.filter((p) => activeBrand ? p.brand === activeBrand : true).map((p) => p.category.name)));
 	const { lang, t, categoryLabel, categoryTint, tagLabel } = useAurelia();
 	const copy = HOME_COPY[lang];
-	const heroShape = heroProduct ? resolveShape(heroProduct) : "bottle";
-	const heroCat = heroProduct?.category?.name || "Hair Care";
+	heroProduct && resolveShape(heroProduct);
+	heroProduct?.category?.name;
+	const filteredProducts = products.filter((p) => activeCategory ? p.category.name === activeCategory : true).filter((p) => activeBrand ? p.brand === activeBrand : true);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsxs(Head, { children: [
 			/* @__PURE__ */ jsx("title", { children: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : "Ourélia" }),
@@ -953,36 +959,21 @@ function WelcomeContent({ products = [], flash, errors }) {
 							children: copy.heroLink
 						})]
 					})
-				] }), /* @__PURE__ */ jsxs("div", {
-					className: "au-hero-panel",
-					children: [
-						/* @__PURE__ */ jsx("div", {
-							className: "au-hero-panel-tag-left",
-							children: "N°01"
-						}),
-						/* @__PURE__ */ jsx("div", {
-							className: "au-hero-panel-tag-right",
-							children: copy.heroPanelTag
-						}),
-						heroProduct?.image_url ? /* @__PURE__ */ jsx("img", {
-							src: heroProduct.image_url,
-							alt: "Hero",
-							style: {
-								width: "60%",
-								height: "100%",
-								objectFit: "contain"
-							}
-						}) : /* @__PURE__ */ jsx(ProductIcon, {
-							shape: heroShape,
-							cat: heroCat,
-							catLabel: categoryLabel(heroCat),
-							scale: 2.4
-						}),
-						/* @__PURE__ */ jsx("div", {
-							className: "au-hero-panel-caption",
-							children: copy.heroPanelCap
-						})
-					]
+				] }), /* @__PURE__ */ jsx("div", {
+					style: {
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						width: "100%",
+						height: "100%",
+						minHeight: "400px"
+					},
+					children: /* @__PURE__ */ jsx(ApplicationLogo, { style: {
+						width: "80%",
+						maxWidth: "400px",
+						height: "auto",
+						objectFit: "contain"
+					} })
 				})]
 			})
 		}),
@@ -1133,54 +1124,70 @@ function WelcomeContent({ products = [], flash, errors }) {
 		/* @__PURE__ */ jsxs("div", {
 			className: "au-container au-bestsellers",
 			id: "collection",
-			children: [/* @__PURE__ */ jsxs("div", {
-				className: "au-section-head au-section-head--lg",
-				children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
-					className: "au-section-eyebrow",
-					children: copy.bestTitle
-				}), /* @__PURE__ */ jsx("h2", {
-					className: "au-section-title",
-					children: copy.bestSub
-				})] }), /* @__PURE__ */ jsxs("div", {
+			children: [
+				/* @__PURE__ */ jsxs("div", {
+					className: "au-section-head au-section-head--lg",
+					children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
+						className: "au-section-eyebrow",
+						children: copy.bestTitle
+					}), /* @__PURE__ */ jsx("h2", {
+						className: "au-section-title",
+						children: copy.bestSub
+					})] }), /* @__PURE__ */ jsxs("div", {
+						style: {
+							display: "flex",
+							gap: "16px",
+							alignItems: "center",
+							flexWrap: "wrap",
+							justifyContent: "flex-end"
+						},
+						children: [brandsList.length > 0 && /* @__PURE__ */ jsxs("select", {
+							value: activeBrand || "",
+							onChange: (e) => setActiveBrand(e.target.value || null),
+							style: {
+								padding: "6px 12px",
+								fontSize: "14px",
+								borderRadius: "4px",
+								border: "1px solid var(--au-border)",
+								background: "transparent",
+								fontFamily: "var(--au-font-sans)",
+								outline: "none"
+							},
+							children: [/* @__PURE__ */ jsx("option", {
+								value: "",
+								children: "Toutes les marques"
+							}), brandsList.map((b) => /* @__PURE__ */ jsx("option", {
+								value: b,
+								children: b
+							}, b))]
+						}), /* @__PURE__ */ jsx("span", {
+							className: "au-link-underline cursor-pointer",
+							onClick: () => {
+								setActiveCategory(null);
+								setActiveBrand(null);
+							},
+							children: activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`
+						})]
+					})]
+				}),
+				/* @__PURE__ */ jsx("div", {
+					className: "au-prod-grid",
+					children: filteredProducts.slice(0, visibleCount).map((product) => /* @__PURE__ */ jsx(ProductCard, { product }, product.id))
+				}),
+				filteredProducts.length > visibleCount && /* @__PURE__ */ jsx("div", {
 					style: {
 						display: "flex",
-						gap: "16px",
-						alignItems: "center",
-						flexWrap: "wrap",
-						justifyContent: "flex-end"
+						justifyContent: "center",
+						marginTop: "48px"
 					},
-					children: [brandsList.length > 0 && /* @__PURE__ */ jsxs("select", {
-						value: activeBrand || "",
-						onChange: (e) => setActiveBrand(e.target.value || null),
-						style: {
-							padding: "6px 12px",
-							fontSize: "14px",
-							borderRadius: "4px",
-							border: "1px solid var(--au-border)",
-							background: "transparent",
-							fontFamily: "var(--au-font-sans)",
-							outline: "none"
-						},
-						children: [/* @__PURE__ */ jsx("option", {
-							value: "",
-							children: "Toutes les marques"
-						}), brandsList.map((b) => /* @__PURE__ */ jsx("option", {
-							value: b,
-							children: b
-						}, b))]
-					}), /* @__PURE__ */ jsx("span", {
-						className: "au-link-underline cursor-pointer",
-						onClick: () => {
-							setActiveCategory(null);
-							setActiveBrand(null);
-						},
-						children: activeCategory || activeBrand ? `Tout voir (${products.length})` : `${products.length} ${copy.productsWord}`
-					})]
-				})]
-			}), /* @__PURE__ */ jsx("div", {
-				className: "au-prod-grid",
-				children: products.filter((p) => activeCategory ? p.category.name === activeCategory : true).filter((p) => activeBrand ? p.brand === activeBrand : true).map((product) => /* @__PURE__ */ jsx(ProductCard, { product }, product.id))
-			})]
+					children: /* @__PURE__ */ jsx("button", {
+						type: "button",
+						className: "au-btn-ghost",
+						onClick: () => setVisibleCount((v) => v + 10),
+						children: "Charger plus"
+					})
+				})
+			]
 		}),
 		/* @__PURE__ */ jsx("div", {
 			className: "au-dark-band",

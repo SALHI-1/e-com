@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
+import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Bar, BarChart, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -6,10 +6,15 @@ import { Bar, BarChart, ComposedChart, Legend, Line, ResponsiveContainer, Toolti
 var PRIMARY_COLOR = "#0F204B";
 var SECONDARY_COLOR = "#8B95A5";
 var GRID_COLOR = "#E5E7EB";
-function Dashboard({ metrics, salesData, orderStatusData, recentOrders }) {
+function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProducts }) {
+	const topProduct = topProducts && topProducts.length > 0 ? topProducts[0] : null;
+	const scrollToSection = (id) => {
+		const el = document.getElementById(id);
+		if (el) el.scrollIntoView({ behavior: "smooth" });
+	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
+			className: "au-h3",
 			children: "Tableau de bord Analytique"
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: "Admin Dashboard" }), /* @__PURE__ */ jsx("div", {
@@ -18,7 +23,19 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders }) {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8",
 				children: [
 					/* @__PURE__ */ jsxs("div", {
-						className: "grid grid-cols-1 md:grid-cols-3 gap-6",
+						className: "flex gap-4",
+						children: [/* @__PURE__ */ jsx("button", {
+							onClick: () => scrollToSection("transactions"),
+							className: "bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors",
+							children: "↓ Dernières transactions"
+						}), /* @__PURE__ */ jsx("button", {
+							onClick: () => scrollToSection("top-products"),
+							className: "bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors",
+							children: "↓ Produits les plus demandés"
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
 						children: [
 							/* @__PURE__ */ jsxs("div", {
 								className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center",
@@ -49,6 +66,23 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders }) {
 									className: "text-3xl font-extrabold text-[#0F204B]",
 									children: metrics?.stock || 0
 								})]
+							}),
+							/* @__PURE__ */ jsxs("div", {
+								className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center",
+								children: [
+									/* @__PURE__ */ jsx("div", {
+										className: "text-xs font-bold text-gray-400 uppercase tracking-widest mb-1",
+										children: "Le plus demandé"
+									}),
+									/* @__PURE__ */ jsx("div", {
+										className: "text-lg font-extrabold text-[#0F204B] leading-tight",
+										children: topProduct ? topProduct.name : "Aucun"
+									}),
+									topProduct && /* @__PURE__ */ jsxs("div", {
+										className: "text-xs font-medium text-gray-500 mt-1",
+										children: [topProduct.order_items_sum_quantity, " ventes"]
+									})
+								]
 							})
 						]
 					}),
@@ -232,6 +266,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders }) {
 						})]
 					}),
 					/* @__PURE__ */ jsxs("div", {
+						id: "transactions",
 						className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg",
 						children: [/* @__PURE__ */ jsxs("div", {
 							className: "p-6 border-b border-gray-100 flex justify-between items-center",
@@ -311,6 +346,62 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders }) {
 										colSpan: 5,
 										className: "px-6 py-8 text-center text-sm text-gray-400",
 										children: "Aucune transaction récente."
+									}) })]
+								})]
+							})
+						})]
+					}),
+					/* @__PURE__ */ jsxs("div", {
+						id: "top-products",
+						className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg",
+						children: [/* @__PURE__ */ jsx("div", {
+							className: "p-6 border-b border-gray-100 flex justify-between items-center",
+							children: /* @__PURE__ */ jsx("h3", {
+								className: "text-lg font-bold text-[#0F204B]",
+								children: "Produits les plus demandés"
+							})
+						}), /* @__PURE__ */ jsx("div", {
+							className: "overflow-x-auto",
+							children: /* @__PURE__ */ jsxs("table", {
+								className: "min-w-full divide-y divide-gray-100",
+								children: [/* @__PURE__ */ jsx("thead", {
+									className: "bg-gray-50/50",
+									children: /* @__PURE__ */ jsxs("tr", { children: [
+										/* @__PURE__ */ jsx("th", {
+											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
+											children: "Rang"
+										}),
+										/* @__PURE__ */ jsx("th", {
+											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
+											children: "Produit"
+										}),
+										/* @__PURE__ */ jsx("th", {
+											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
+											children: "Quantité Commandée"
+										})
+									] })
+								}), /* @__PURE__ */ jsxs("tbody", {
+									className: "bg-white divide-y divide-gray-50",
+									children: [topProducts && topProducts.map((product, index) => /* @__PURE__ */ jsxs("tr", {
+										className: "hover:bg-gray-50/50 transition-colors",
+										children: [
+											/* @__PURE__ */ jsxs("td", {
+												className: "px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-400",
+												children: ["#", index + 1]
+											}),
+											/* @__PURE__ */ jsx("td", {
+												className: "px-6 py-4 whitespace-nowrap text-sm font-bold text-[#0F204B]",
+												children: product.name
+											}),
+											/* @__PURE__ */ jsxs("td", {
+												className: "px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900",
+												children: [product.order_items_sum_quantity, " unités"]
+											})
+										]
+									}, product.id)), (!topProducts || topProducts.length === 0) && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
+										colSpan: 3,
+										className: "px-6 py-8 text-center text-sm text-gray-400",
+										children: "Aucun produit vendu."
 									}) })]
 								})]
 							})

@@ -1,24 +1,54 @@
-import { t as AdminLayout } from "./AdminLayout-B8-O_FZg.js";
+import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
+import { useState } from "react";
 //#region resources/js/Pages/Admin/Products/Index.tsx
-function Index({ products }) {
+function Index({ products, filters }) {
+	const [search, setSearch] = useState(filters?.search || "");
+	const [lowStock, setLowStock] = useState(filters?.low_stock === "true" || filters?.low_stock === true);
+	const filteredProducts = products.filter((product) => {
+		const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
+		const matchesStock = lowStock ? product.stock < 5 : true;
+		return matchesSearch && matchesStock;
+	});
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
-			className: "text-xl font-semibold leading-tight text-gray-800",
+			className: "au-h3",
 			children: "Gestion des Produits"
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: "Produits" }), /* @__PURE__ */ jsx("div", {
 			className: "py-12",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8",
-				children: [/* @__PURE__ */ jsx("div", {
-					className: "mb-4 flex justify-end",
-					children: /* @__PURE__ */ jsx(Link, {
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
+					children: [/* @__PURE__ */ jsxs("div", {
+						className: "flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto",
+						children: [/* @__PURE__ */ jsx("input", {
+							type: "text",
+							placeholder: "Rechercher un produit...",
+							className: "border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64",
+							value: search,
+							onChange: (e) => setSearch(e.target.value)
+						}), /* @__PURE__ */ jsxs("label", {
+							className: "flex items-center space-x-2 text-sm text-gray-600",
+							children: [/* @__PURE__ */ jsx("input", {
+								type: "checkbox",
+								className: "rounded border-gray-300 text-gray-800 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50",
+								checked: lowStock,
+								onChange: (e) => setLowStock(e.target.checked)
+							}), /* @__PURE__ */ jsxs("span", { children: [
+								"Stock ",
+								"<",
+								" 5"
+							] })]
+						})]
+					}), /* @__PURE__ */ jsx(Link, {
 						href: route("admin.products.create"),
-						className: "bg-indigo-600 px-4 py-2 text-white rounded hover:bg-indigo-700",
+						className: "au-btn whitespace-nowrap",
+						style: { margin: 0 },
 						children: "Ajouter un produit"
-					})
+					})]
 				}), /* @__PURE__ */ jsxs("div", {
 					className: "overflow-hidden bg-white shadow-sm sm:rounded-lg",
 					children: [/* @__PURE__ */ jsxs("table", {
@@ -53,7 +83,7 @@ function Index({ products }) {
 							] })
 						}), /* @__PURE__ */ jsx("tbody", {
 							className: "bg-white divide-y divide-gray-200",
-							children: products.map((product) => /* @__PURE__ */ jsxs("tr", { children: [
+							children: filteredProducts.map((product) => /* @__PURE__ */ jsxs("tr", { children: [
 								/* @__PURE__ */ jsx("td", {
 									className: "px-6 py-4 whitespace-nowrap text-sm text-gray-900",
 									children: product.id
@@ -72,19 +102,22 @@ function Index({ products }) {
 								}),
 								/* @__PURE__ */ jsx("td", {
 									className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-									children: product.stock
+									children: product.stock < 5 ? /* @__PURE__ */ jsx("span", {
+										className: "text-red-600 font-bold",
+										children: product.stock
+									}) : product.stock
 								}),
 								/* @__PURE__ */ jsx("td", {
 									className: "px-6 py-4 whitespace-nowrap text-right text-sm font-medium",
 									children: /* @__PURE__ */ jsx(Link, {
 										href: route("admin.products.edit", product.id),
-										className: "text-indigo-600 hover:text-indigo-900 mr-4",
+										className: "au-link-underline",
 										children: "Modifier"
 									})
 								})
 							] }, product.id))
 						})]
-					}), products.length === 0 && /* @__PURE__ */ jsx("div", {
+					}), filteredProducts.length === 0 && /* @__PURE__ */ jsx("div", {
 						className: "p-6 text-center text-gray-500",
 						children: "Aucun produit trouvé."
 					})]

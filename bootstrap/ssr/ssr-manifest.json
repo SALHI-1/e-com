@@ -1,48 +1,48 @@
 {
   "node_modules/@headlessui/react/dist/components/description/description.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/components/dialog/dialog.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/components/focus-trap/focus-trap.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/components/keyboard.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/components/portal/portal.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/components/transition/transition.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/document-overflow/adjust-scrollbar-padding.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/document-overflow/handle-ios-locking.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/document-overflow/overflow-store.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/document-overflow/prevent-scroll.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/document-overflow/use-document-overflow.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-disposables.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-document-event.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-escape.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-event-listener.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-event.js": [
     "/build/assets/transition-MXKqs4Qd.js"
@@ -51,19 +51,19 @@
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-id.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-inert-others.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-is-mounted.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-is-top-layer.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-is-touch-device.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-iso-morphic-effect.js": [
     "/build/assets/transition-MXKqs4Qd.js"
@@ -72,94 +72,94 @@
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-on-disappear.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-on-unmount.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-outside-click.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-owner.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-root-containers.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-scroll-lock.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-server-handoff-complete.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-slot.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-store.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-sync-refs.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-tab-direction.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-transition.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-watch.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/hooks/use-window-event.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/internal/close-provider.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/internal/disabled.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/internal/hidden.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/internal/open-closed.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/internal/portal-force-root.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/machine.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/machines/stack-machine.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/react-glue.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/active-element-history.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/class-names.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/utils/default-map.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/disposables.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/utils/document-ready.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/dom.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/env.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/utils/focus-management.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/match.js": [
     "/build/assets/transition-MXKqs4Qd.js"
@@ -168,59 +168,59 @@
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/utils/owner.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/platform.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/@headlessui/react/dist/utils/render.js": [
     "/build/assets/transition-MXKqs4Qd.js"
   ],
   "node_modules/@headlessui/react/dist/utils/store.js": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "node_modules/laravel-vite-plugin/inertia-helpers/index.js": [],
   "resources/js/Components/ApplicationLogo.tsx": [
-    "/build/assets/ResponsiveNavLink-B_OBySzW.js"
+    "/build/assets/ApplicationLogo-C6sWqI6d.js"
   ],
   "resources/js/Components/Checkbox.tsx": [
     "/build/assets/Checkbox-BUETY56Z.js"
   ],
   "resources/js/Components/DangerButton.tsx": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/DeleteUserForm-zcf-gg7H.js"
   ],
   "resources/js/Components/Dropdown.tsx": [
-    "/build/assets/ResponsiveNavLink-B_OBySzW.js"
+    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/InputError.tsx": [
-    "/build/assets/InputError-CvL50cpz.js"
+    "/build/assets/InputError-Dt1CqBgh.js"
   ],
   "resources/js/Components/InputLabel.tsx": [
     "/build/assets/InputLabel-4-xi2Z9Z.js"
   ],
   "resources/js/Components/Modal.tsx": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "resources/js/Components/NavLink.tsx": [
-    "/build/assets/ResponsiveNavLink-B_OBySzW.js"
+    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/PrimaryButton.tsx": [
-    "/build/assets/PrimaryButton-C1EagpHT.js"
+    "/build/assets/PrimaryButton-Dlx63LxW.js"
   ],
   "resources/js/Components/ResponsiveNavLink.tsx": [
-    "/build/assets/ResponsiveNavLink-B_OBySzW.js"
+    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/SecondaryButton.tsx": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/SecondaryButton-4U7GL1sF.js"
   ],
   "resources/js/Components/TextInput.tsx": [
-    "/build/assets/InputError-CvL50cpz.js"
+    "/build/assets/InputError-Dt1CqBgh.js"
   ],
   "resources/js/Layouts/AdminLayout.tsx": [
-    "/build/assets/AdminLayout-B8-O_FZg.js"
+    "/build/assets/AdminLayout-B-B3bn_G.js"
   ],
   "resources/js/Layouts/AuthenticatedLayout.tsx": [
-    "/build/assets/Edit-Dkoex6qk.js"
+    "/build/assets/Edit-N31SUBu6.js"
   ],
   "resources/js/Layouts/ClientLayout.tsx": [
     "/build/assets/ClientLayout-BEza7JXt.js"
@@ -231,35 +231,38 @@
   "resources/js/Pages/About.tsx": [
     "/build/assets/About-vusy57Or.js"
   ],
+  "resources/js/Pages/Admin/Admins/Index.tsx": [
+    "/build/assets/Index-DZy1EPBY.js"
+  ],
   "resources/js/Pages/Admin/Dashboard.tsx": [
-    "/build/assets/Dashboard-DiFf6K_o.js"
+    "/build/assets/Dashboard-CU4UcqgE.js"
   ],
   "resources/js/Pages/Admin/Login.tsx": [
     "/build/assets/Login-BpuVsKBF.js"
   ],
   "resources/js/Pages/Admin/Orders/Index.tsx": [
-    "/build/assets/Index-72dS4w02.js"
+    "/build/assets/Index-DTYZcQT8.js"
   ],
   "resources/js/Pages/Admin/Orders/List.tsx": [
-    "/build/assets/List-CQXOXQPC.js"
+    "/build/assets/List-Bd5b_Buk.js"
   ],
   "resources/js/Pages/Admin/Orders/Show.tsx": [
-    "/build/assets/Show-D8uDqMWa.js"
+    "/build/assets/Show-jyaMURZw.js"
   ],
   "resources/js/Pages/Admin/Products/Create.tsx": [
-    "/build/assets/Create-DuoyCesf.js"
+    "/build/assets/Create-DguAf6Yx.js"
   ],
   "resources/js/Pages/Admin/Products/Edit.tsx": [
-    "/build/assets/Edit-J8tBhK6R.js"
+    "/build/assets/Edit-LLEHGtOg.js"
   ],
   "resources/js/Pages/Admin/Products/Index.tsx": [
-    "/build/assets/Index-pvnMB8MK.js"
+    "/build/assets/Index-4yr4jCJo.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
-    "/build/assets/ConfirmPassword-BL17ZLhq.js"
+    "/build/assets/ConfirmPassword-U3DBrkJh.js"
   ],
   "resources/js/Pages/Auth/ForgotPassword.tsx": [
-    "/build/assets/ForgotPassword-CWtuH0ZQ.js"
+    "/build/assets/ForgotPassword-Y9532PNV.js"
   ],
   "resources/js/Pages/Auth/Login.tsx": [
     "/build/assets/Login-X2tOd8q0.js"
@@ -268,10 +271,10 @@
     "/build/assets/Register-B9Ct5TYz.js"
   ],
   "resources/js/Pages/Auth/ResetPassword.tsx": [
-    "/build/assets/ResetPassword-C5iTigEy.js"
+    "/build/assets/ResetPassword-DvIJTn3p.js"
   ],
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
-    "/build/assets/VerifyEmail-BoX6JN3j.js"
+    "/build/assets/VerifyEmail-D2FVrdfj.js"
   ],
   "resources/js/Pages/Cart/Index.tsx": [
     "/build/assets/Index-BZyJ5rPJ.js"
@@ -283,19 +286,19 @@
     "/build/assets/Show-CmyEkwxf.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-Dkoex6qk.js"
+    "/build/assets/Edit-N31SUBu6.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
-    "/build/assets/DeleteUserForm-BXewx4_g.js"
+    "/build/assets/DeleteUserForm-zcf-gg7H.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx": [
-    "/build/assets/UpdatePasswordForm-B4fQr3uE.js"
+    "/build/assets/UpdatePasswordForm-xUcC-4em.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx": [
-    "/build/assets/UpdateProfileInformationForm-f2GTeEXm.js"
+    "/build/assets/UpdateProfileInformationForm-BsS8GDOm.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-DWQpdOHl.js"
+    "/build/assets/Welcome-DWAULMz5.js"
   ],
   "resources/js/ssr.tsx": []
 }

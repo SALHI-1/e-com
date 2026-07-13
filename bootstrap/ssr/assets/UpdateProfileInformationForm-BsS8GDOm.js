@@ -1,7 +1,7 @@
 import { t as Ke } from "./transition-MXKqs4Qd.js";
 import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
-import { n as TextInput_default, t as InputError } from "./InputError-CvL50cpz.js";
-import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
+import { n as TextInput_default, t as InputError } from "./InputError-Dt1CqBgh.js";
+import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx

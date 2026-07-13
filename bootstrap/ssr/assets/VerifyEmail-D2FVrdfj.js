@@ -1,5 +1,5 @@
+import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { t as Guest } from "./GuestLayout-CCZbzRNY.js";
-import { t as PrimaryButton } from "./PrimaryButton-C1EagpHT.js";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Auth/VerifyEmail.tsx

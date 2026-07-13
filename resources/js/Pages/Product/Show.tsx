@@ -36,31 +36,32 @@ export default function Show(props: Props) {
 }
 
 /* ── Toast Ourélia ────────────────────────────────────────────────────── */
-function OureliaToast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error'; onClose: () => void }) {
+function OureliaToast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error' | 'info'; onClose: () => void }) {
     useEffect(() => {
         const timer = setTimeout(onClose, 3000);
         return () => clearTimeout(timer);
     }, [onClose]);
 
+    const isError = type === 'error';
     const isSuccess = type === 'success';
     return (
         <div style={{
             position: 'fixed', top: '88px', right: '24px', zIndex: 9999,
             display: 'flex', alignItems: 'flex-start', gap: '14px',
             padding: '18px 22px', borderRadius: '6px',
-            background: isSuccess ? 'var(--au-dark, #211A14)' : '#5c1f1f',
+            background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
             boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
             color: 'var(--au-bg, #F6F0E4)', minWidth: '290px', maxWidth: '400px',
             animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-            borderLeft: `4px solid ${isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070'}`,
+            borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
             fontFamily: 'var(--au-font-sans, sans-serif)',
         }}>
-            <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0, marginTop: '2px', color: isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070', fontFamily: 'var(--au-font-serif)' }}>
-                {isSuccess ? '✓' : '✕'}
+            <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0, marginTop: '2px', color: isError ? '#e07070' : 'var(--au-gold, #C2A063)', fontFamily: 'var(--au-font-serif)' }}>
+                {isSuccess ? '✓' : isError ? '✕' : 'ℹ'}
             </span>
             <div style={{ flex: 1 }}>
                 <p style={{ margin: 0, fontSize: '11px', fontWeight: 500, letterSpacing: '.2em', textTransform: 'uppercase', color: 'var(--au-gold, #C2A063)', lineHeight: 1, marginBottom: '6px' }}>
-                    {isSuccess ? 'Ourélia' : 'Erreur'}
+                    {isError ? 'Erreur' : 'Ourélia'}
                 </p>
                 <p style={{ margin: 0, fontSize: '13px', fontWeight: 300, color: 'var(--au-cream, #F0E6D4)', lineHeight: 1.5, letterSpacing: '.01em' }}>
                     {message}
@@ -77,7 +78,7 @@ function ProductDetail({ product, flash, errors }: Props) {
     const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+    const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
     // Afficher le toast dès qu'un flash/error arrive
     useEffect(() => {
@@ -175,15 +176,29 @@ function ProductDetail({ product, flash, errors }: Props) {
                                 min="1"
                                 max={product.stock}
                                 value={quantity}
-                                onChange={(e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1)))}
+                                onChange={(e) => {
+                                    const val = parseInt(e.target.value) || 1;
+                                    if (val > product.stock) {
+                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                        setQuantity(product.stock);
+                                    } else {
+                                        setQuantity(Math.max(1, val));
+                                    }
+                                }}
                                 disabled={isOut}
                                 style={{ width: '40px', height: '100%', border: 'none', borderRadius: 0, textAlign: 'center', MozAppearance: 'textfield', padding: 0 }}
                             />
                             <button
                                 type="button"
-                                onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                                disabled={isOut || quantity >= product.stock}
-                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut || quantity >= product.stock ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
+                                onClick={() => {
+                                    if (quantity >= product.stock) {
+                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                    } else {
+                                        setQuantity(quantity + 1);
+                                    }
+                                }}
+                                disabled={isOut}
+                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
                             >
                                 +
                             </button>

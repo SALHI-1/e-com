@@ -75,13 +75,6 @@ class OrderController extends Controller
 
         if ($oldStatus !== $newStatus) {
             \Illuminate\Support\Facades\DB::transaction(function () use ($order, $newStatus, $oldStatus) {
-                // Diminuer le stock si la commande est confirmée
-                if ($newStatus === Order::STATUS_CONFIRMED && $oldStatus === Order::STATUS_PENDING) {
-                    foreach ($order->items as $item) {
-                        $item->product->decrement('stock', $item->quantity);
-                    }
-                }
-
                 // Restaurer le stock si la commande est annulée après livraison
                 if ($newStatus === Order::STATUS_CANCELLED_AFTER_DELIVERY) {
                     foreach ($order->items as $item) {

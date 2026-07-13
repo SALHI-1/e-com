@@ -2,15 +2,6 @@ import { t as Ke } from "./transition-MXKqs4Qd.js";
 import { Link } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { createContext, useContext, useState } from "react";
-//#region resources/js/Components/ApplicationLogo.tsx
-function ApplicationLogo(props) {
-	return /* @__PURE__ */ jsx("img", {
-		...props,
-		src: "/favicon.png",
-		alt: "Logo"
-	});
-}
-//#endregion
 //#region resources/js/Components/Dropdown.tsx
 var DropDownContext = createContext({
 	open: false,
@@ -84,7 +75,7 @@ Dropdown.Link = DropdownLink;
 function NavLink({ active = false, className = "", children, ...props }) {
 	return /* @__PURE__ */ jsx(Link, {
 		...props,
-		className: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none " + (active ? "border-indigo-400 text-gray-900 focus:border-indigo-700" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700") + className,
+		className: "inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none " + (active ? "border-gray-800 text-gray-900 focus:border-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700") + className,
 		children
 	});
 }
@@ -93,9 +84,9 @@ function NavLink({ active = false, className = "", children, ...props }) {
 function ResponsiveNavLink({ active = false, className = "", children, ...props }) {
 	return /* @__PURE__ */ jsx(Link, {
 		...props,
-		className: `flex w-full items-start border-l-4 py-2 pe-4 ps-3 ${active ? "border-indigo-400 bg-indigo-50 text-indigo-700 focus:border-indigo-700 focus:bg-indigo-100 focus:text-indigo-800" : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800"} text-base font-medium transition duration-150 ease-in-out focus:outline-none ${className}`,
+		className: `flex w-full items-start border-l-4 py-2 pe-4 ps-3 ${active ? "border-gray-800 bg-gray-50 text-gray-800 focus:border-gray-900 focus:bg-gray-100 focus:text-gray-900" : "border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800"} text-base font-medium transition duration-150 ease-in-out focus:outline-none ${className}`,
 		children
 	});
 }
 //#endregion
-export { ApplicationLogo as i, NavLink as n, Dropdown as r, ResponsiveNavLink as t };
+export { NavLink as n, Dropdown as r, ResponsiveNavLink as t };

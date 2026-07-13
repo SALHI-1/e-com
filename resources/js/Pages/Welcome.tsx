@@ -79,12 +79,13 @@ const HOME_COPY: Record<Lang, HomeCopy> = {
 /* ============================================================================
  * Toast Ourélia — notification dans le thème de l'application
  * ========================================================================== */
-function OureliaToast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error'; onClose: () => void }) {
+function OureliaToast({ message, type = 'success', onClose }: { message: string; type?: 'success' | 'error' | 'info'; onClose: () => void }) {
   useEffect(() => {
     const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
 
+  const isError = type === 'error';
   const isSuccess = type === 'success';
 
   return (
@@ -98,13 +99,13 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
       gap: '14px',
       padding: '18px 22px',
       borderRadius: '6px',
-      background: isSuccess ? 'var(--au-dark, #211A14)' : '#5c1f1f',
+      background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
       boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
       color: 'var(--au-bg, #F6F0E4)',
       minWidth: '290px',
       maxWidth: '400px',
       animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-      borderLeft: `4px solid ${isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070'}`,
+      borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
       fontFamily: 'var(--au-font-sans, sans-serif)',
     }}>
       {/* Icône */}
@@ -113,10 +114,10 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
         lineHeight: 1,
         flexShrink: 0,
         marginTop: '2px',
-        color: isSuccess ? 'var(--au-gold, #C2A063)' : '#e07070',
+        color: isError ? '#e07070' : 'var(--au-gold, #C2A063)',
         fontFamily: 'var(--au-font-serif)',
       }}>
-        {isSuccess ? '✓' : '✕'}
+        {isSuccess ? '✓' : isError ? '✕' : 'ℹ'}
       </span>
       <div style={{ flex: 1 }}>
         {/* Titre */}
@@ -130,7 +131,7 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
           lineHeight: 1,
           marginBottom: '6px',
         }}>
-          {isSuccess ? 'Ourélia' : 'Erreur'}
+          {isError ? 'Erreur' : 'Ourélia'}
         </p>
         {/* Message */}
         <p style={{
@@ -353,7 +354,7 @@ function ProductIcon({ shape, cat, catLabel, scale = 1 }: { shape: string; cat: 
 /* ============================================================================
  * Product Card Component (Wired to Database and DB Cart)
  * ========================================================================== */
-function ProductCard({ product }: { product: any }) {
+function ProductCard({ product, onError }: { product: any; onError?: (msg: string) => void }) {
   const { t, lang, categoryLabel, tagLabel, categoryTint } = useAurelia();
   const copy = HOME_COPY[lang];
   const [quantity, setQuantity] = useState(1);
@@ -418,7 +419,15 @@ function ProductCard({ product }: { product: any }) {
               min="1"
               max={product.stock}
               value={quantity}
-              onChange={(e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1)))}
+              onChange={(e) => {
+                const val = parseInt(e.target.value) || 1;
+                if (val > product.stock) {
+                  if (onError) onError('Le stock est insuffisant pour le moment.');
+                  setQuantity(product.stock);
+                } else {
+                  setQuantity(Math.max(1, val));
+                }
+              }}
               className="au-qty-input"
               aria-label="Quantity"
               disabled={isOut}
@@ -426,9 +435,15 @@ function ProductCard({ product }: { product: any }) {
             />
             <button
               type="button"
-              onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-              disabled={isOut || quantity >= product.stock}
-              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: isOut || quantity >= product.stock ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+              onClick={() => {
+                if (quantity >= product.stock) {
+                  if (onError) onError('Le stock est insuffisant pour le moment.');
+                } else {
+                  setQuantity(quantity + 1);
+                }
+              }}
+              disabled={isOut}
+              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: isOut ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
             >
               +
             </button>
@@ -458,7 +473,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const { url } = usePage();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
-  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(10);
 
   // Reset pagination when filters change
@@ -688,7 +703,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         {filteredProducts
           .slice(0, visibleCount)
           .map((product: any) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product.id} product={product} onError={(msg) => setToast({ message: msg, type: 'info' })} />
           ))}
       </div>
       
