@@ -6,6 +6,7 @@ export interface User {
     phone?: string;
     is_admin?: boolean;
     is_guest?: boolean;
+    is_super_admin?: boolean;
 }
 
 export type PageProps<
