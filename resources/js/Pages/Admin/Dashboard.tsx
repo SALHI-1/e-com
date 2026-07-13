@@ -15,8 +15,16 @@ export default function Dashboard({
     metrics, 
     salesData, 
     orderStatusData, 
-    recentOrders 
+    recentOrders,
+    topProducts
 }: any) {
+    const topProduct = topProducts && topProducts.length > 0 ? topProducts[0] : null;
+
+    const scrollToSection = (id: string) => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+    };
+
     return (
         <AdminLayout
             header={
@@ -30,8 +38,24 @@ export default function Dashboard({
             <div className="py-12 bg-gray-50">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-8">
                     
+                    {/* Quick Navigation Buttons */}
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => scrollToSection('transactions')}
+                            className="bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
+                        >
+                            ↓ Dernières transactions
+                        </button>
+                        <button 
+                            onClick={() => scrollToSection('top-products')}
+                            className="bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
+                        >
+                            ↓ Produits les plus demandés
+                        </button>
+                    </div>
+
                     {/* Key Metrics Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
                             <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Revenus d'aujourd'hui</div>
                             <div className="text-3xl font-extrabold text-[#0F204B]">{Number(metrics?.revenue || 0).toFixed(2)} dh</div>
@@ -43,6 +67,17 @@ export default function Dashboard({
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
                             <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Produits en Stock</div>
                             <div className="text-3xl font-extrabold text-[#0F204B]">{metrics?.stock || 0}</div>
+                        </div>
+                        <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Le plus demandé</div>
+                            <div className="text-lg font-extrabold text-[#0F204B] leading-tight">
+                                {topProduct ? topProduct.name : 'Aucun'}
+                            </div>
+                            {topProduct && (
+                                <div className="text-xs font-medium text-gray-500 mt-1">
+                                    {topProduct.order_items_sum_quantity} ventes
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -139,7 +174,7 @@ export default function Dashboard({
                     </div>
 
                     {/* Recent Orders Table */}
-                    <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg">
+                    <div id="transactions" className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                             <h3 className="text-lg font-bold text-[#0F204B]">Dernières transactions</h3>
                             <Link href={route('admin.orders.index')} className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#0F204B] transition-colors">Voir tout &rarr;</Link>
@@ -185,6 +220,44 @@ export default function Dashboard({
                                     {(!recentOrders || recentOrders.length === 0) && (
                                         <tr>
                                             <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-400">Aucune transaction récente.</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    {/* Top Products Table */}
+                    <div id="top-products" className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg">
+                        <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-[#0F204B]">Produits les plus demandés</h3>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-100">
+                                <thead className="bg-gray-50/50">
+                                    <tr>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Rang</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Produit</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Quantité Commandée</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-50">
+                                    {topProducts && topProducts.map((product: any, index: number) => (
+                                        <tr key={product.id} className="hover:bg-gray-50/50 transition-colors">
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-400">
+                                                #{index + 1}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-[#0F204B]">
+                                                {product.name}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                                {product.order_items_sum_quantity} unités
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {(!topProducts || topProducts.length === 0) && (
+                                        <tr>
+                                            <td colSpan={3} className="px-6 py-8 text-center text-sm text-gray-400">Aucun produit vendu.</td>
                                         </tr>
                                     )}
                                 </tbody>

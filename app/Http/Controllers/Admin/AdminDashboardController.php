@@ -54,6 +54,12 @@ class AdminDashboardController extends Controller
         // Recent Orders
         $recentOrders = Order::with('user')->latest()->take(5)->get();
 
+        // Top Products List
+        $topProducts = Product::withSum('orderItems', 'quantity')
+            ->has('orderItems')
+            ->orderByDesc('order_items_sum_quantity')
+            ->get();
+
         return Inertia::render('Admin/Dashboard', [
             'metrics' => [
                 'revenue' => $totalRevenue,
@@ -63,6 +69,7 @@ class AdminDashboardController extends Controller
             'salesData' => $chartData,
             'orderStatusData' => $orderStatusData,
             'recentOrders' => $recentOrders,
+            'topProducts' => $topProducts,
         ]);
     }
 }

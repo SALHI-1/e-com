@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PageProps } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import ClientLayout, { useAurelia, Lang, ProductCategory, ProductTag } from '@/Layouts/ClientLayout';
+import ApplicationLogo from '@/Components/ApplicationLogo';
 
 /* ============================================================================
  * Home page copy (Shared from the static design)
@@ -458,6 +459,12 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(10);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [activeCategory, activeBrand]);
 
   // Déclencher le toast dès qu'un flash/error arrive
   useEffect(() => {
@@ -508,6 +515,10 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const heroShape = heroProduct ? resolveShape(heroProduct) : 'bottle';
   const heroCat = heroProduct?.category?.name || 'Hair Care';
 
+  const filteredProducts = products
+    .filter((p: any) => activeCategory ? p.category.name === activeCategory : true)
+    .filter((p: any) => activeBrand ? p.brand === activeBrand : true);
+
   return (
     <>
       <Head>
@@ -550,15 +561,8 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             </div>
           </div>
 
-          <div className="au-hero-panel">
-            <div className="au-hero-panel-tag-left">N°01</div>
-            <div className="au-hero-panel-tag-right">{copy.heroPanelTag}</div>
-            {heroProduct?.image_url ? (
-              <img src={heroProduct.image_url} alt="Hero" style={{ width: '60%', height: '100%', objectFit: 'contain' }} />
-            ) : (
-              <ProductIcon shape={heroShape} cat={heroCat} catLabel={categoryLabel(heroCat)} scale={2.4} />
-            )}
-            <div className="au-hero-panel-caption">{copy.heroPanelCap}</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', minHeight: '400px' }}>
+            <ApplicationLogo style={{ width: '80%', maxWidth: '400px', height: 'auto', objectFit: 'contain' }} />
           </div>
         </div>
       </div>
@@ -675,20 +679,31 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 {brandsList.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             )}
-            <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
-              {activeCategory || activeBrand ? `Tout voir (${products.length})` : `${products.length} ${copy.productsWord}`}
-            </span>
-          </div>
-        </div>
-        <div className="au-prod-grid">
-          {products
-            .filter((p: any) => activeCategory ? p.category.name === activeCategory : true)
-            .filter((p: any) => activeBrand ? p.brand === activeBrand : true)
-            .map((product: any) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
+            {activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`}
+          </span>
         </div>
       </div>
+      <div className="au-prod-grid">
+        {filteredProducts
+          .slice(0, visibleCount)
+          .map((product: any) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+      </div>
+      
+      {filteredProducts.length > visibleCount && (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
+          <button 
+            type="button" 
+            className="au-btn-ghost" 
+            onClick={() => setVisibleCount(v => v + 10)}
+          >
+            Charger plus
+          </button>
+        </div>
+      )}
+    </div>
 
       {/* ---------------- DARK PHILOSOPHY BAND ---------------- */}
       <div className="au-dark-band">

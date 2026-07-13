@@ -51,6 +51,14 @@ export default function AdminLayout({
                                 >
                                     Liste Commandes
                                 </NavLink>
+                                {user?.is_super_admin && (
+                                    <NavLink
+                                        href={route('admin.admins.index')}
+                                        active={route().current('admin.admins.*')}
+                                    >
+                                        Administrateurs
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -168,6 +176,14 @@ export default function AdminLayout({
                         >
                             Liste Commandes
                         </ResponsiveNavLink>
+                        {user?.is_super_admin && (
+                            <ResponsiveNavLink
+                                href={route('admin.admins.index')}
+                                active={route().current('admin.admins.*')}
+                            >
+                                Administrateurs
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="border-t border-gray-200 pb-1 pt-4">
