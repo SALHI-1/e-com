@@ -94,6 +94,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
         Route::get('orders/list', [\App\Http\Controllers\Admin\OrderController::class, 'list'])->name('orders.list');
+        Route::get('orders/{order}/ticket', [\App\Http\Controllers\Admin\OrderController::class, 'ticket'])->name('orders.ticket');
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
 
         Route::middleware(['superadmin'])->group(function () {

@@ -88,4 +88,11 @@ class OrderController extends Controller
 
         return back()->with('success', 'Statut de la commande mis à jour.');
     }
+
+    public function ticket(Order $order)
+    {
+        $order->load(['user', 'items.product']);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.orders.ticket', compact('order'));
+        return $pdf->download('ticket-' . $order->order_number . '.pdf');
+    }
 }
