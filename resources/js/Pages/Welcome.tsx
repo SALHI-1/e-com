@@ -3,6 +3,7 @@ import { PageProps } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import ClientLayout, { useAurelia, Lang, ProductCategory, ProductTag } from '@/Layouts/ClientLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
+import ImageWithLoader from '@/Components/ImageWithLoader';
 
 /* ============================================================================
  * Home page copy (Shared from the static design)
@@ -386,7 +387,11 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
           </div>
         )}
         {product.image_url ? (
-          <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <ImageWithLoader 
+            src={product.image_url} 
+            alt={product.name} 
+            fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />} 
+          />
         ) : (
           <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />
         )}
@@ -475,6 +480,15 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   const [activeBrand, setActiveBrand] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
   const [visibleCount, setVisibleCount] = useState<number>(10);
+  const [loadingMore, setLoadingMore] = useState<boolean>(false);
+
+  const handleLoadMore = () => {
+    setLoadingMore(true);
+    setTimeout(() => {
+      setVisibleCount(v => v + 10);
+      setLoadingMore(false);
+    }, 600); // Effet de chargement
+  };
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -611,7 +625,11 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 <div className="au-spread-media" style={{ background: categoryTint(product.category.name) }}>
                   {product.is_bestseller && <div className="au-tag-pill">{tagLabel('best')}</div>}
                   {product.image_url ? (
-                    <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <ImageWithLoader 
+                      src={product.image_url} 
+                      alt={product.name} 
+                      fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />} 
+                    />
                   ) : (
                     <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />
                   )}
@@ -708,14 +726,21 @@ function WelcomeContent({ products = [], flash, errors }: any) {
       </div>
       
       {filteredProducts.length > visibleCount && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
-          <button 
-            type="button" 
-            className="au-btn-ghost" 
-            onClick={() => setVisibleCount(v => v + 10)}
-          >
-            Charger plus
-          </button>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }}>
+          {loadingMore ? (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }}></div>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>Chargement</span>
+            </div>
+          ) : (
+            <button 
+              type="button" 
+              className="au-btn-ghost" 
+              onClick={handleLoadMore}
+            >
+              Charger plus
+            </button>
+          )}
         </div>
       )}
     </div>
