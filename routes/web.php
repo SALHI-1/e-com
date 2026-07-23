@@ -92,7 +92,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'destroy'])->name('logout');
 
-        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show', 'destroy']);
+        Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
         Route::get('orders/list', [\App\Http\Controllers\Admin\OrderController::class, 'list'])->name('orders.list');
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->only(['index', 'show', 'update']);
 

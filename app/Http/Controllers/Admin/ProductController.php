@@ -112,4 +112,15 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Produit modifié avec succès.');
     }
+    public function destroy(Product $product)
+    {
+        if ($product->image_url) {
+            $oldImagePath = 'products/' . basename($product->image_url);
+            Storage::delete($oldImagePath);
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès.');
+    }
 }

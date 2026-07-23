@@ -6,6 +6,12 @@ export default function Index({ products, filters }: { products: any[], filters?
     const [search, setSearch] = useState(filters?.search || '');
     const [lowStock, setLowStock] = useState(filters?.low_stock === 'true' || filters?.low_stock === true);
 
+    const handleDelete = (id: number) => {
+        if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+            router.delete(route('admin.products.destroy', id));
+        }
+    };
+
     const filteredProducts = products.filter(product => {
         const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
         const matchesStock = lowStock ? product.stock < 5 : true;
@@ -81,9 +87,15 @@ export default function Index({ products, filters }: { products: any[], filters?
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link href={route('admin.products.edit', product.id)} className="au-link-underline">
+                                            <Link href={route('admin.products.edit', product.id)} className="au-link-underline mr-4">
                                                 Modifier
                                             </Link>
+                                            <button 
+                                                onClick={() => handleDelete(product.id)} 
+                                                className="text-red-600 hover:text-red-900 underline underline-offset-4 decoration-[0.1em]"
+                                            >
+                                                Supprimer
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
