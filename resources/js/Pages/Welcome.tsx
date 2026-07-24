@@ -729,7 +729,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }}>
           {loadingMore ? (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-              <div style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }}></div>
+              <div className="animate-spin" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent' }}></div>
               <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>Chargement</span>
             </div>
           ) : (
