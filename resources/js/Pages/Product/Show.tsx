@@ -76,7 +76,7 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
 
 function ProductDetail({ product, flash, errors }: Props) {
     const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
-    const [quantity, setQuantity] = useState(1);
+    const [quantity, setQuantity] = useState<number | string>(1);
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
@@ -90,8 +90,18 @@ function ProductDetail({ product, flash, errors }: Props) {
     }, [flash?.success, errors?.quantity]);
 
     const addToCart = () => {
+        let finalQty = parseInt(quantity as string) || 1;
+        if (finalQty > product.stock) {
+            setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+            setQuantity(product.stock);
+            return;
+        }
+        if (finalQty < 1) {
+            finalQty = 1;
+            setQuantity(1);
+        }
         setLoading(true);
-        router.post(route('cart.add'), { product_id: product.id, quantity }, {
+        router.post(route('cart.add'), { product_id: product.id, quantity: finalQty }, {
             preserveScroll: true,
             onFinish: () => setLoading(false),
         });
@@ -108,6 +118,13 @@ function ProductDetail({ product, flash, errors }: Props) {
             <Head>
                 <title>{`${product.name} · Ourélia`}</title>
                 <meta head-key="description" name="description" content={product.description || `Découvrez ${product.name} chez Ourélia.`} />
+                <style>{`
+                    input[type="number"]::-webkit-inner-spin-button,
+                    input[type="number"]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                `}</style>
             </Head>
 
             {/* ── Toast Ourélia ── */}
@@ -165,9 +182,12 @@ function ProductDetail({ product, flash, errors }: Props) {
                         <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '120px', height: '48px' }}>
                             <button
                                 type="button"
-                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                disabled={isOut || quantity <= 1}
-                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut || quantity <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
+                                onClick={() => {
+                                    const curr = parseInt(quantity as string) || 1;
+                                    setQuantity(Math.max(1, curr - 1));
+                                }}
+                                disabled={isOut || (parseInt(quantity as string) || 1) <= 1}
+                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut || (parseInt(quantity as string) || 1) <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
                             >
                                 -
                             </button>
@@ -176,26 +196,15 @@ function ProductDetail({ product, flash, errors }: Props) {
                                 min="1"
                                 max={product.stock}
                                 value={quantity}
-                                onChange={(e) => {
-                                    const val = parseInt(e.target.value) || 1;
-                                    if (val > product.stock) {
-                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
-                                        setQuantity(product.stock);
-                                    } else {
-                                        setQuantity(Math.max(1, val));
-                                    }
-                                }}
+                                onChange={(e) => setQuantity(e.target.value)}
                                 disabled={isOut}
                                 style={{ width: '40px', height: '100%', border: 'none', borderRadius: 0, textAlign: 'center', MozAppearance: 'textfield', padding: 0 }}
                             />
                             <button
                                 type="button"
                                 onClick={() => {
-                                    if (quantity >= product.stock) {
-                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
-                                    } else {
-                                        setQuantity(quantity + 1);
-                                    }
+                                    const curr = parseInt(quantity as string) || 1;
+                                    setQuantity(curr + 1);
                                 }}
                                 disabled={isOut}
                                 style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
@@ -209,7 +218,7 @@ function ProductDetail({ product, flash, errors }: Props) {
                             className="au-btn" 
                             onClick={addToCart} 
                             disabled={loading || isOut}
-                            style={{ flex: 1 }}
+                            style={{ flex: 1, height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         >
                             {loading ? '…' : isOut ? 'Épuisé' : t.addCart}
                         </button>

@@ -205,7 +205,16 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
 
     return (
         <>
-            <Head title={`${t.cartTitle} — Aurélia`} />
+            <Head>
+                <title>{`${t.cartTitle} — Aurélia`}</title>
+                <style>{`
+                    input[type="number"]::-webkit-inner-spin-button,
+                    input[type="number"]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                `}</style>
+            </Head>
 
             {/* ── Toast notifications ── */}
             {toast && (
@@ -380,27 +389,30 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                         {/* Téléphone */}
                                         <div>
                                             <label className="au-label">
-                                                {t.waPhone} <span className="au-label-hint" style={{ textTransform: 'none', letterSpacing: 'normal' }}>(ex: +212612345678)</span>
+                                                {t.waPhone}
                                             </label>
-                                            <input
-                                                type="tel"
-                                                value={data.phone}
-                                                onChange={e => {
-                                                    let val = e.target.value;
-                                                    if (!val.startsWith('+212')) {
-                                                        val = '+212' + val.replace(/^\+?212/, '');
-                                                    }
-                                                    let rest = val.slice(4).replace(/[^0-9]/g, '');
-                                                    if (rest.startsWith('0')) {
-                                                        rest = rest.slice(0, 10);
-                                                    } else {
-                                                        rest = rest.slice(0, 9);
-                                                    }
-                                                    setData('phone', '+212' + rest);
-                                                }}
-                                                placeholder="+212 6 12 34 56 78"
-                                                className="au-input"
-                                            />
+                                            <div style={{ display: 'flex', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', background: 'var(--au-bg)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', background: 'var(--au-surface)', borderRight: '1px solid var(--au-border)', color: 'var(--au-text)', fontWeight: 500, fontSize: '1rem', letterSpacing: '0.05em' }}>
+                                                    +212
+                                                </div>
+                                                <input
+                                                    type="tel"
+                                                    value={data.phone.replace(/^\+212/, '')}
+                                                    onChange={e => {
+                                                        let rest = e.target.value.replace(/[^0-9]/g, '');
+                                                        if (rest.startsWith('0')) {
+                                                            rest = rest.slice(1);
+                                                        }
+                                                        if (rest.length > 9) {
+                                                            rest = rest.slice(0, 9);
+                                                        }
+                                                        setData('phone', '+212' + rest);
+                                                    }}
+                                                    placeholder="6 12 34 56 78"
+                                                    className="au-input"
+                                                    style={{ border: 'none', borderRadius: 0, flex: 1, boxShadow: 'none' }}
+                                                />
+                                            </div>
                                             {formErrors.phone && <p className="au-field-error">{formErrors.phone}</p>}
                                         </div>
 
