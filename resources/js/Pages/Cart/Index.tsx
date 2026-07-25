@@ -379,7 +379,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                                     type="text"
                                                     value={data.guest_name}
                                                     onChange={e => setData('guest_name', e.target.value)}
-                                                    placeholder="Jean Dupont"
+                                                    placeholder=""
                                                     className="au-input"
                                                 />
                                                 {formErrors.guest_name && <p className="au-field-error">{formErrors.guest_name}</p>}
@@ -447,7 +447,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             <textarea
                                                 value={data.shipping_address}
                                                 onChange={e => setData('shipping_address', e.target.value)}
-                                                placeholder="Rue, quartier, code postal…"
+                                                placeholder=""
                                                 rows={3}
                                                 className="au-textarea"
                                             />
