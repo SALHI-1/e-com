@@ -399,7 +399,16 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
       <div className="au-prod-info">
         <div className="au-prod-cat">{categoryLabel(product.category.name)}</div>
         <Link href={route('product.show', product.id)} className="au-prod-name" style={{ textDecoration: 'none', color: 'inherit' }}>{product.name}</Link>
-        <div className="au-prod-note">{product.description || copy.essentialCare}</div>
+        <div className="au-prod-note" style={{
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            height: '2.8em' /* Approx 2 lines (assuming line-height 1.4) to ensure uniform height even if description is short */
+        }}>
+            {product.description || copy.essentialCare}
+        </div>
       </div>
       <div className="au-prod-footer" style={{ pointerEvents: isOut ? 'none' : 'auto' }}>
         <div className="au-prod-price-group">
