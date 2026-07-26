@@ -1,7 +1,7 @@
 import '../css/app.css';
 // import './bootstrap';
 
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 
@@ -22,4 +22,13 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+});
+
+// Écouter les changements de route pour envoyer les vues de page à Google Analytics
+router.on('navigate', (event) => {
+    if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
+        (window as any).gtag('config', 'G-3DKLYM30N1', {
+            page_path: event.detail.page.url,
+        });
+    }
 });

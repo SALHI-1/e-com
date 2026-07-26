@@ -89,6 +89,19 @@
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
+
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3DKLYM30N1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // IMPORTANT POUR INERTIA : On désactive la vue de page automatique
+      gtag('config', 'G-3DKLYM30N1', { send_page_view: false });
+    </script>
+
+
     </head>
     <body class="font-sans antialiased">
         @inertia

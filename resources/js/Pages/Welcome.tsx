@@ -398,7 +398,7 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
       </Link>
       <div className="au-prod-info">
         <div className="au-prod-cat">{categoryLabel(product.category.name)}</div>
-        <Link href={route('product.show', product.id)} className="au-prod-name" style={{ textDecoration: 'none', color: 'inherit' }}>{product.name}</Link>
+        <Link href={route('product.show', product.id)} className="au-prod-name" style={{ textDecoration: 'none', color: 'inherit', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</Link>
         <div className="au-prod-note" style={{
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -631,7 +631,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 key={product.id}
                 style={{ flexDirection: i % 2 === 1 ? 'row-reverse' : 'row' }}
               >
-                <div className="au-spread-media" style={{ background: categoryTint(product.category.name) }}>
+                <Link href={route('product.show', product.id)} className="au-spread-media" style={{ background: categoryTint(product.category.name), display: 'flex', textDecoration: 'none', color: 'inherit' }}>
                   {product.is_bestseller && <div className="au-tag-pill">{tagLabel('best')}</div>}
                   {product.image_url ? (
                     <ImageWithLoader 
@@ -642,11 +642,13 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                   ) : (
                     <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />
                   )}
-                </div>
+                </Link>
                 <div className="au-spread-body">
                   <div className="au-spread-num">{spread.num}</div>
                   <div className="au-eyebrow-sm">{categoryLabel(product.category.name)}</div>
-                  <h3 className="au-h3">{product.name}</h3>
+                  <Link href={route('product.show', product.id)} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
+                    <h3 className="au-h3">{product.name}</h3>
+                  </Link>
                   <p className="au-body-text">{product.description || spread.story[lang]}</p>
                   <div className="au-tags">
                     {spread.tags[lang].map((tag: string) => (

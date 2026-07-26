@@ -9,9 +9,11 @@ RUN npm run build
 # --- Stage 2: Production PHP/Nginx ---
 FROM php:8.4-fpm-alpine 
 
-# Installer les extensions PHP nécessaires pour PostgreSQL et Laravel
+# Installer les extensions PHP nécessaires pour PostgreSQL, Laravel et DOMPDF (GD)
 RUN apk add --no-cache nginx supervisor curl libpq-dev nodejs npm \
-    && docker-php-ext-install pdo pdo_pgsql
+    libpng-dev libjpeg-turbo-dev freetype-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_pgsql gd
 
 # Configurer Nginx et Supervisor
 COPY docker/nginx.conf /etc/nginx/nginx.conf
