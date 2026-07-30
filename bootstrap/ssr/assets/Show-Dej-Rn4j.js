@@ -16,7 +16,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 		const timer = setTimeout(onClose, 3e3);
 		return () => clearTimeout(timer);
 	}, [onClose]);
-	const isSuccess = type === "success";
+	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
 		style: {
 			position: "fixed",
@@ -28,13 +28,13 @@ function OureliaToast({ message, type = "success", onClose }) {
 			gap: "14px",
 			padding: "18px 22px",
 			borderRadius: "6px",
-			background: isSuccess ? "var(--au-dark, #211A14)" : "#5c1f1f",
+			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
 			minWidth: "290px",
 			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
-			borderLeft: `4px solid ${isSuccess ? "var(--au-gold, #C2A063)" : "#e07070"}`,
+			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
 		},
 		children: [
@@ -44,10 +44,10 @@ function OureliaToast({ message, type = "success", onClose }) {
 					lineHeight: 1,
 					flexShrink: 0,
 					marginTop: "2px",
-					color: isSuccess ? "var(--au-gold, #C2A063)" : "#e07070",
+					color: isError ? "#e07070" : "var(--au-gold, #C2A063)",
 					fontFamily: "var(--au-font-serif)"
 				},
-				children: isSuccess ? "✓" : "✕"
+				children: type === "success" ? "✓" : isError ? "✕" : "ℹ"
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				style: { flex: 1 },
@@ -62,7 +62,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 						lineHeight: 1,
 						marginBottom: "6px"
 					},
-					children: isSuccess ? "Ourélia" : "Erreur"
+					children: isError ? "Erreur" : "Ourélia"
 				}), /* @__PURE__ */ jsx("p", {
 					style: {
 						margin: 0,
@@ -110,10 +110,23 @@ function ProductDetail({ product, flash, errors }) {
 		});
 	}, [flash?.success, errors?.quantity]);
 	const addToCart = () => {
+		let finalQty = parseInt(quantity) || 1;
+		if (finalQty > product.stock) {
+			setToast({
+				message: "Le stock est insuffisant pour le moment.",
+				type: "info"
+			});
+			setQuantity(product.stock);
+			return;
+		}
+		if (finalQty < 1) {
+			finalQty = 1;
+			setQuantity(1);
+		}
 		setLoading(true);
 		router.post(route("cart.add"), {
 			product_id: product.id,
-			quantity
+			quantity: finalQty
 		}, {
 			preserveScroll: true,
 			onFinish: () => setLoading(false)
@@ -132,11 +145,21 @@ function ProductDetail({ product, flash, errors }) {
 			minHeight: "60vh"
 		},
 		children: [
-			/* @__PURE__ */ jsxs(Head, { children: [/* @__PURE__ */ jsx("title", { children: `${product.name} · Ourélia` }), /* @__PURE__ */ jsx("meta", {
-				"head-key": "description",
-				name: "description",
-				content: product.description || `Découvrez ${product.name} chez Ourélia.`
-			})] }),
+			/* @__PURE__ */ jsxs(Head, { children: [
+				/* @__PURE__ */ jsx("title", { children: `${product.name} · Ourélia` }),
+				/* @__PURE__ */ jsx("meta", {
+					"head-key": "description",
+					name: "description",
+					content: product.description || `Découvrez ${product.name} chez Ourélia.`
+				}),
+				/* @__PURE__ */ jsx("style", { children: `
+                    input[type="number"]::-webkit-inner-spin-button,
+                    input[type="number"]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                ` })
+			] }),
 			toast && /* @__PURE__ */ jsx(OureliaToast, {
 				message: toast.message,
 				type: toast.type,
@@ -269,14 +292,16 @@ function ProductDetail({ product, flash, errors }) {
 								children: [
 									/* @__PURE__ */ jsx("button", {
 										type: "button",
-										onClick: () => setQuantity(Math.max(1, quantity - 1)),
-										disabled: isOut || quantity <= 1,
+										onClick: () => {
+											setQuantity(Math.max(1, (parseInt(quantity) || 1) - 1));
+										},
+										disabled: isOut || (parseInt(quantity) || 1) <= 1,
 										style: {
 											flex: 1,
 											height: "100%",
 											background: "transparent",
 											border: "none",
-											cursor: isOut || quantity <= 1 ? "not-allowed" : "pointer",
+											cursor: isOut || (parseInt(quantity) || 1) <= 1 ? "not-allowed" : "pointer",
 											color: "var(--au-text)",
 											fontSize: "1.2rem"
 										},
@@ -287,7 +312,7 @@ function ProductDetail({ product, flash, errors }) {
 										min: "1",
 										max: product.stock,
 										value: quantity,
-										onChange: (e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1))),
+										onChange: (e) => setQuantity(e.target.value),
 										disabled: isOut,
 										style: {
 											width: "40px",
@@ -301,14 +326,16 @@ function ProductDetail({ product, flash, errors }) {
 									}),
 									/* @__PURE__ */ jsx("button", {
 										type: "button",
-										onClick: () => setQuantity(Math.min(product.stock, quantity + 1)),
-										disabled: isOut || quantity >= product.stock,
+										onClick: () => {
+											setQuantity((parseInt(quantity) || 1) + 1);
+										},
+										disabled: isOut,
 										style: {
 											flex: 1,
 											height: "100%",
 											background: "transparent",
 											border: "none",
-											cursor: isOut || quantity >= product.stock ? "not-allowed" : "pointer",
+											cursor: isOut ? "not-allowed" : "pointer",
 											color: "var(--au-text)",
 											fontSize: "1.2rem"
 										},
@@ -320,7 +347,13 @@ function ProductDetail({ product, flash, errors }) {
 								className: "au-btn",
 								onClick: addToCart,
 								disabled: loading || isOut,
-								style: { flex: 1 },
+								style: {
+									flex: 1,
+									height: "48px",
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center"
+								},
 								children: loading ? "…" : isOut ? "Épuisé" : t.addCart
 							})]
 						}),

@@ -166,13 +166,34 @@ function List({ orders, filters }) {
 												children: order.status
 											})
 										}),
-										/* @__PURE__ */ jsx("td", {
-											className: "px-6 py-4 whitespace-nowrap text-right text-sm font-medium",
-											children: /* @__PURE__ */ jsx(Link, {
+										/* @__PURE__ */ jsxs("td", {
+											className: "px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end gap-4",
+											children: [/* @__PURE__ */ jsxs("a", {
+												href: route("admin.orders.ticket", order.id),
+												target: "_blank",
+												rel: "noopener noreferrer",
+												className: "text-gray-500 hover:text-gray-800 flex items-center gap-1",
+												title: "Télécharger le ticket de livraison",
+												children: [/* @__PURE__ */ jsx("svg", {
+													className: "w-4 h-4",
+													fill: "none",
+													stroke: "currentColor",
+													viewBox: "0 0 24 24",
+													children: /* @__PURE__ */ jsx("path", {
+														strokeLinecap: "round",
+														strokeLinejoin: "round",
+														strokeWidth: 2,
+														d: "M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+													})
+												}), /* @__PURE__ */ jsx("span", {
+													className: "text-xs uppercase tracking-wider font-semibold",
+													children: "Ticket"
+												})]
+											}), /* @__PURE__ */ jsx(Link, {
 												href: route("admin.orders.show", order.id),
 												className: "au-link-underline",
 												children: "Voir"
-											})
+											})]
 										})
 									]
 								}, order.id)), filteredOrders.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {

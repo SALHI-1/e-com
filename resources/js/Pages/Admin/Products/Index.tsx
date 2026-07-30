@@ -1,10 +1,19 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
+import ProductModal from './ProductModal';
 
 export default function Index({ products, filters }: { products: any[], filters?: any }) {
     const [search, setSearch] = useState(filters?.search || '');
     const [lowStock, setLowStock] = useState(filters?.low_stock === 'true' || filters?.low_stock === true);
+    
+    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openProductDetails = (product: any) => {
+        setSelectedProduct(product);
+        setIsModalOpen(true);
+    };
 
     const handleDelete = (id: number) => {
         if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
@@ -85,7 +94,14 @@ export default function Index({ products, filters }: { products: any[], filters?
                                 {filteredProducts.map((product) => (
                                     <tr key={product.id}>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.id}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                            <button 
+                                                onClick={() => openProductDetails(product)}
+                                                className="font-medium text-blue-600 hover:text-blue-800 hover:underline text-left focus:outline-none"
+                                            >
+                                                {product.name}
+                                            </button>
+                                        </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{product.category.name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{product.price} dh</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -116,6 +132,12 @@ export default function Index({ products, filters }: { products: any[], filters?
                     </div>
                 </div>
             </div>
+
+            <ProductModal 
+                show={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+                product={selectedProduct} 
+            />
         </AdminLayout>
     );
 }

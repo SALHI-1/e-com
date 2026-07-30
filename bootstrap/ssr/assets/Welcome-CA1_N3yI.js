@@ -3,6 +3,60 @@ import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
+//#region resources/js/Components/ImageWithLoader.tsx
+function ImageWithLoader({ src, alt, className, style, fallback, ...props }) {
+	const [isLoaded, setIsLoaded] = useState(false);
+	const [hasError, setHasError] = useState(false);
+	if (hasError && fallback) return /* @__PURE__ */ jsx(Fragment, { children: fallback });
+	return /* @__PURE__ */ jsxs("div", {
+		style: {
+			position: "relative",
+			width: "100%",
+			height: "100%",
+			overflow: "hidden"
+		},
+		className,
+		children: [!isLoaded && /* @__PURE__ */ jsx("div", {
+			style: {
+				position: "absolute",
+				inset: 0,
+				display: "flex",
+				alignItems: "center",
+				justifyContent: "center",
+				background: "rgba(246, 240, 228, 0.5)",
+				zIndex: 1
+			},
+			children: /* @__PURE__ */ jsx("div", {
+				className: "animate-spin",
+				style: {
+					width: "24px",
+					height: "24px",
+					borderRadius: "50%",
+					border: "1.5px solid rgba(194, 160, 99, 0.2)",
+					borderTopColor: "var(--au-gold, #C2A063)"
+				}
+			})
+		}), /* @__PURE__ */ jsx("img", {
+			src,
+			alt,
+			onLoad: () => setIsLoaded(true),
+			onError: () => {
+				setHasError(true);
+				setIsLoaded(true);
+			},
+			style: {
+				width: "100%",
+				height: "100%",
+				objectFit: "cover",
+				opacity: isLoaded ? 1 : 0,
+				transition: "opacity 0.5s ease-in-out",
+				...style
+			},
+			...props
+		})]
+	});
+}
+//#endregion
 //#region resources/js/Pages/Welcome.tsx
 var HOME_COPY = {
 	fr: {
@@ -110,7 +164,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 		const timer = setTimeout(onClose, 3e3);
 		return () => clearTimeout(timer);
 	}, [onClose]);
-	const isSuccess = type === "success";
+	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
 		style: {
 			position: "fixed",
@@ -122,13 +176,13 @@ function OureliaToast({ message, type = "success", onClose }) {
 			gap: "14px",
 			padding: "18px 22px",
 			borderRadius: "6px",
-			background: isSuccess ? "var(--au-dark, #211A14)" : "#5c1f1f",
+			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
 			minWidth: "290px",
 			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
-			borderLeft: `4px solid ${isSuccess ? "var(--au-gold, #C2A063)" : "#e07070"}`,
+			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
 		},
 		children: [
@@ -138,10 +192,10 @@ function OureliaToast({ message, type = "success", onClose }) {
 					lineHeight: 1,
 					flexShrink: 0,
 					marginTop: "2px",
-					color: isSuccess ? "var(--au-gold, #C2A063)" : "#e07070",
+					color: isError ? "#e07070" : "var(--au-gold, #C2A063)",
 					fontFamily: "var(--au-font-serif)"
 				},
-				children: isSuccess ? "✓" : "✕"
+				children: type === "success" ? "✓" : isError ? "✕" : "ℹ"
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				style: { flex: 1 },
@@ -156,7 +210,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 						lineHeight: 1,
 						marginBottom: "6px"
 					},
-					children: isSuccess ? "Ourélia" : "Erreur"
+					children: isError ? "Erreur" : "Ourélia"
 				}), /* @__PURE__ */ jsx("p", {
 					style: {
 						margin: 0,
@@ -684,7 +738,7 @@ function ProductIcon({ shape, cat, catLabel, scale = 1 }) {
 		]
 	});
 }
-function ProductCard({ product }) {
+function ProductCard({ product, onError }) {
 	const { t, lang, categoryLabel, tagLabel, categoryTint } = useAurelia();
 	const copy = HOME_COPY[lang];
 	const [quantity, setQuantity] = useState(1);
@@ -723,14 +777,14 @@ function ProductCard({ product }) {
 						color: "var(--au-bg)"
 					} : {},
 					children: tag === "out" ? copy.soldOut : tagLabel(tag)
-				}), product.image_url ? /* @__PURE__ */ jsx("img", {
+				}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 					src: product.image_url,
 					alt: product.name,
-					style: {
-						width: "100%",
-						height: "100%",
-						objectFit: "cover"
-					}
+					fallback: /* @__PURE__ */ jsx(ProductIcon, {
+						shape,
+						cat: product.category.name,
+						catLabel: categoryLabel(product.category.name)
+					})
 				}) : /* @__PURE__ */ jsx(ProductIcon, {
 					shape,
 					cat: product.category.name,
@@ -749,12 +803,24 @@ function ProductCard({ product }) {
 						className: "au-prod-name",
 						style: {
 							textDecoration: "none",
-							color: "inherit"
+							color: "inherit",
+							display: "block",
+							whiteSpace: "nowrap",
+							overflow: "hidden",
+							textOverflow: "ellipsis"
 						},
 						children: product.name
 					}),
 					/* @__PURE__ */ jsx("div", {
 						className: "au-prod-note",
+						style: {
+							display: "-webkit-box",
+							WebkitLineClamp: 2,
+							WebkitBoxOrient: "vertical",
+							overflow: "hidden",
+							textOverflow: "ellipsis",
+							height: "2.8em"
+						},
 						children: product.description || copy.essentialCare
 					})
 				]
@@ -804,7 +870,13 @@ function ProductCard({ product }) {
 								min: "1",
 								max: product.stock,
 								value: quantity,
-								onChange: (e) => setQuantity(Math.min(product.stock, Math.max(1, parseInt(e.target.value) || 1))),
+								onChange: (e) => {
+									const val = parseInt(e.target.value) || 1;
+									if (val > product.stock) {
+										if (onError) onError("Le stock est insuffisant pour le moment.");
+										setQuantity(product.stock);
+									} else setQuantity(Math.max(1, val));
+								},
 								className: "au-qty-input",
 								"aria-label": "Quantity",
 								disabled: isOut,
@@ -818,13 +890,17 @@ function ProductCard({ product }) {
 							}),
 							/* @__PURE__ */ jsx("button", {
 								type: "button",
-								onClick: () => setQuantity(Math.min(product.stock, quantity + 1)),
-								disabled: isOut || quantity >= product.stock,
+								onClick: () => {
+									if (quantity >= product.stock) {
+										if (onError) onError("Le stock est insuffisant pour le moment.");
+									} else setQuantity(quantity + 1);
+								},
+								disabled: isOut,
 								style: {
 									padding: "0 10px",
 									background: "transparent",
 									border: "none",
-									cursor: isOut || quantity >= product.stock ? "not-allowed" : "pointer",
+									cursor: isOut ? "not-allowed" : "pointer",
 									color: "var(--au-text)"
 								},
 								children: "+"
@@ -858,6 +934,14 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const [activeBrand, setActiveBrand] = useState(null);
 	const [toast, setToast] = useState(null);
 	const [visibleCount, setVisibleCount] = useState(10);
+	const [loadingMore, setLoadingMore] = useState(false);
+	const handleLoadMore = () => {
+		setLoadingMore(true);
+		setTimeout(() => {
+			setVisibleCount((v) => v + 10);
+			setLoadingMore(false);
+		}, 600);
+	};
 	useEffect(() => {
 		setVisibleCount(10);
 	}, [activeCategory, activeBrand]);
@@ -1014,20 +1098,27 @@ function WelcomeContent({ products = [], flash, errors }) {
 				return /* @__PURE__ */ jsxs("div", {
 					className: "au-spread-row",
 					style: { flexDirection: i % 2 === 1 ? "row-reverse" : "row" },
-					children: [/* @__PURE__ */ jsxs("div", {
+					children: [/* @__PURE__ */ jsxs(Link, {
+						href: route("product.show", product.id),
 						className: "au-spread-media",
-						style: { background: categoryTint(product.category.name) },
+						style: {
+							background: categoryTint(product.category.name),
+							display: "flex",
+							textDecoration: "none",
+							color: "inherit"
+						},
 						children: [product.is_bestseller && /* @__PURE__ */ jsx("div", {
 							className: "au-tag-pill",
 							children: tagLabel("best")
-						}), product.image_url ? /* @__PURE__ */ jsx("img", {
+						}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 							src: product.image_url,
 							alt: product.name,
-							style: {
-								width: "100%",
-								height: "100%",
-								objectFit: "cover"
-							}
+							fallback: /* @__PURE__ */ jsx(ProductIcon, {
+								shape,
+								cat: product.category.name,
+								catLabel: categoryLabel(product.category.name),
+								scale: 1.7
+							})
 						}) : /* @__PURE__ */ jsx(ProductIcon, {
 							shape,
 							cat: product.category.name,
@@ -1045,9 +1136,17 @@ function WelcomeContent({ products = [], flash, errors }) {
 								className: "au-eyebrow-sm",
 								children: categoryLabel(product.category.name)
 							}),
-							/* @__PURE__ */ jsx("h3", {
-								className: "au-h3",
-								children: product.name
+							/* @__PURE__ */ jsx(Link, {
+								href: route("product.show", product.id),
+								style: {
+									textDecoration: "none",
+									color: "inherit",
+									display: "inline-block"
+								},
+								children: /* @__PURE__ */ jsx("h3", {
+									className: "au-h3",
+									children: product.name
+								})
 							}),
 							/* @__PURE__ */ jsx("p", {
 								className: "au-body-text",
@@ -1172,18 +1271,50 @@ function WelcomeContent({ products = [], flash, errors }) {
 				}),
 				/* @__PURE__ */ jsx("div", {
 					className: "au-prod-grid",
-					children: filteredProducts.slice(0, visibleCount).map((product) => /* @__PURE__ */ jsx(ProductCard, { product }, product.id))
+					children: filteredProducts.slice(0, visibleCount).map((product) => /* @__PURE__ */ jsx(ProductCard, {
+						product,
+						onError: (msg) => setToast({
+							message: msg,
+							type: "info"
+						})
+					}, product.id))
 				}),
 				filteredProducts.length > visibleCount && /* @__PURE__ */ jsx("div", {
 					style: {
 						display: "flex",
 						justifyContent: "center",
-						marginTop: "48px"
+						marginTop: "48px",
+						minHeight: "40px"
 					},
-					children: /* @__PURE__ */ jsx("button", {
+					children: loadingMore ? /* @__PURE__ */ jsxs("div", {
+						style: {
+							display: "flex",
+							alignItems: "center",
+							justifyContent: "center",
+							gap: "12px"
+						},
+						children: [/* @__PURE__ */ jsx("div", {
+							className: "animate-spin",
+							style: {
+								width: "24px",
+								height: "24px",
+								borderRadius: "50%",
+								border: "2px dotted var(--au-gold)",
+								borderTopColor: "transparent"
+							}
+						}), /* @__PURE__ */ jsx("span", {
+							style: {
+								fontSize: "12px",
+								textTransform: "uppercase",
+								letterSpacing: "0.1em",
+								color: "var(--au-gold)"
+							},
+							children: "Chargement"
+						})]
+					}) : /* @__PURE__ */ jsx("button", {
 						type: "button",
 						className: "au-btn-ghost",
-						onClick: () => setVisibleCount((v) => v + 10),
+						onClick: handleLoadMore,
 						children: "Charger plus"
 					})
 				})

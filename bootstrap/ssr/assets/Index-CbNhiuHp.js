@@ -118,7 +118,7 @@ function Toast({ message, type = "success", onClose }) {
 		const timer = setTimeout(onClose, 3e3);
 		return () => clearTimeout(timer);
 	}, [onClose]);
-	const isSuccess = type === "success";
+	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
 		style: {
 			position: "fixed",
@@ -130,13 +130,13 @@ function Toast({ message, type = "success", onClose }) {
 			gap: "14px",
 			padding: "18px 22px",
 			borderRadius: "6px",
-			background: isSuccess ? "var(--au-dark, #211A14)" : "#5c1f1f",
+			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
 			minWidth: "290px",
 			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
-			borderLeft: `4px solid ${isSuccess ? "var(--au-gold, #C2A063)" : "#e07070"}`,
+			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
 		},
 		children: [
@@ -146,10 +146,10 @@ function Toast({ message, type = "success", onClose }) {
 					lineHeight: 1,
 					flexShrink: 0,
 					marginTop: "2px",
-					color: isSuccess ? "var(--au-gold, #C2A063)" : "#e07070",
+					color: isError ? "#e07070" : "var(--au-gold, #C2A063)",
 					fontFamily: "var(--au-font-serif)"
 				},
-				children: isSuccess ? "✓" : "✕"
+				children: type === "success" ? "✓" : isError ? "✕" : "ℹ"
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				style: { flex: 1 },
@@ -164,7 +164,7 @@ function Toast({ message, type = "success", onClose }) {
 						lineHeight: 1,
 						marginBottom: "6px"
 					},
-					children: isSuccess ? "Ourélia" : "Erreur"
+					children: isError ? "Erreur" : "Ourélia"
 				}), /* @__PURE__ */ jsx("p", {
 					style: {
 						margin: 0,
@@ -247,7 +247,13 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 		post(route("cart.checkout"));
 	};
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
-		/* @__PURE__ */ jsx(Head, { title: `${t.cartTitle} — Aurélia` }),
+		/* @__PURE__ */ jsxs(Head, { children: [/* @__PURE__ */ jsx("title", { children: `${t.cartTitle} — Aurélia` }), /* @__PURE__ */ jsx("style", { children: `
+                    input[type="number"]::-webkit-inner-spin-button,
+                    input[type="number"]::-webkit-outer-spin-button {
+                        -webkit-appearance: none;
+                        margin: 0;
+                    }
+                ` })] }),
 		toast && /* @__PURE__ */ jsx(Toast, {
 			message: toast.message,
 			type: toast.type,
@@ -352,7 +358,16 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 										min: "1",
 										max: item.product.stock,
 										value: item.quantity,
-										onChange: (e) => updateQuantity(item.product.id, Math.min(item.product.stock, Math.max(1, parseInt(e.target.value) || 1))),
+										onChange: (e) => {
+											const val = parseInt(e.target.value) || 1;
+											if (val > item.product.stock) {
+												setToast({
+													message: "Le stock est insuffisant pour le moment.",
+													type: "info"
+												});
+												updateQuantity(item.product.id, item.product.stock);
+											} else updateQuantity(item.product.id, Math.max(1, val));
+										},
 										className: "au-qty",
 										style: {
 											border: "none",
@@ -365,13 +380,18 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 									}),
 									/* @__PURE__ */ jsx("button", {
 										type: "button",
-										onClick: () => updateQuantity(item.product.id, Math.min(item.product.stock, item.quantity + 1)),
-										disabled: item.quantity >= item.product.stock,
+										onClick: () => {
+											if (item.quantity >= item.product.stock) setToast({
+												message: "Le stock est insuffisant pour le moment.",
+												type: "info"
+											});
+											else updateQuantity(item.product.id, item.quantity + 1);
+										},
 										style: {
 											padding: "0 10px",
 											background: "transparent",
 											border: "none",
-											cursor: item.quantity >= item.product.stock ? "not-allowed" : "pointer",
+											cursor: "pointer",
 											color: "var(--au-text)"
 										},
 										children: "+"
@@ -470,7 +490,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 										type: "text",
 										value: data.guest_name,
 										onChange: (e) => setData("guest_name", e.target.value),
-										placeholder: "Jean Dupont",
+										placeholder: "",
 										className: "au-input"
 									}),
 									formErrors.guest_name && /* @__PURE__ */ jsx("p", {
@@ -479,34 +499,50 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 									})
 								] }),
 								/* @__PURE__ */ jsxs("div", { children: [
-									/* @__PURE__ */ jsxs("label", {
+									/* @__PURE__ */ jsx("label", {
 										className: "au-label",
-										children: [
-											t.waPhone,
-											" ",
-											/* @__PURE__ */ jsx("span", {
-												className: "au-label-hint",
-												style: {
-													textTransform: "none",
-													letterSpacing: "normal"
-												},
-												children: "(ex: +212612345678)"
-											})
-										]
+										children: t.waPhone
 									}),
-									/* @__PURE__ */ jsx("input", {
-										type: "tel",
-										value: data.phone,
-										onChange: (e) => {
-											let val = e.target.value;
-											if (!val.startsWith("+212")) val = "+212" + val.replace(/^\+?212/, "");
-											let rest = val.slice(4).replace(/[^0-9]/g, "");
-											if (rest.startsWith("0")) rest = rest.slice(0, 10);
-											else rest = rest.slice(0, 9);
-											setData("phone", "+212" + rest);
+									/* @__PURE__ */ jsxs("div", {
+										style: {
+											display: "flex",
+											border: "1px solid var(--au-border)",
+											borderRadius: "4px",
+											overflow: "hidden",
+											background: "var(--au-bg)"
 										},
-										placeholder: "+212 6 12 34 56 78",
-										className: "au-input"
+										children: [/* @__PURE__ */ jsx("div", {
+											style: {
+												display: "flex",
+												alignItems: "center",
+												justifyContent: "center",
+												padding: "0 16px",
+												background: "var(--au-surface)",
+												borderRight: "1px solid var(--au-border)",
+												color: "var(--au-text)",
+												fontWeight: 500,
+												fontSize: "1rem",
+												letterSpacing: "0.05em"
+											},
+											children: "+212"
+										}), /* @__PURE__ */ jsx("input", {
+											type: "tel",
+											value: data.phone.replace(/^\+212/, ""),
+											onChange: (e) => {
+												let rest = e.target.value.replace(/[^0-9]/g, "");
+												if (rest.startsWith("0")) rest = rest.slice(1);
+												if (rest.length > 9) rest = rest.slice(0, 9);
+												setData("phone", "+212" + rest);
+											},
+											placeholder: "6 12 34 56 78",
+											className: "au-input",
+											style: {
+												border: "none",
+												borderRadius: 0,
+												flex: 1,
+												boxShadow: "none"
+											}
+										})]
 									}),
 									formErrors.phone && /* @__PURE__ */ jsx("p", {
 										className: "au-field-error",
@@ -552,7 +588,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 									/* @__PURE__ */ jsx("textarea", {
 										value: data.shipping_address,
 										onChange: (e) => setData("shipping_address", e.target.value),
-										placeholder: "Rue, quartier, code postal…",
+										placeholder: "",
 										rows: 3,
 										className: "au-textarea"
 									}),

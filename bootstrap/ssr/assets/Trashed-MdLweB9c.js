@@ -1,53 +1,41 @@
 import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
-//#region resources/js/Pages/Admin/Products/Index.tsx
-function Index({ products, filters }) {
+//#region resources/js/Pages/Admin/Products/Trashed.tsx
+function Trashed({ products, filters }) {
 	const [search, setSearch] = useState(filters?.search || "");
-	const [lowStock, setLowStock] = useState(filters?.low_stock === "true" || filters?.low_stock === true);
+	const handleRestore = (id) => {
+		if (confirm("Êtes-vous sûr de vouloir restaurer ce produit ?")) router.post(route("admin.products.restore", id));
+	};
 	const filteredProducts = products.filter((product) => {
-		const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
-		const matchesStock = lowStock ? product.stock < 5 : true;
-		return matchesSearch && matchesStock;
+		return product.name.toLowerCase().includes(search.toLowerCase());
 	});
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Gestion des Produits"
+			children: "Produits Supprimés (Corbeille)"
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: "Produits" }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: "Corbeille Produits" }), /* @__PURE__ */ jsx("div", {
 			className: "py-12",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8",
 				children: [/* @__PURE__ */ jsxs("div", {
 					className: "mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4",
-					children: [/* @__PURE__ */ jsxs("div", {
+					children: [/* @__PURE__ */ jsx("div", {
 						className: "flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto",
-						children: [/* @__PURE__ */ jsx("input", {
+						children: /* @__PURE__ */ jsx("input", {
 							type: "text",
-							placeholder: "Rechercher un produit...",
+							placeholder: "Rechercher un produit supprimé...",
 							className: "border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64",
 							value: search,
 							onChange: (e) => setSearch(e.target.value)
-						}), /* @__PURE__ */ jsxs("label", {
-							className: "flex items-center space-x-2 text-sm text-gray-600",
-							children: [/* @__PURE__ */ jsx("input", {
-								type: "checkbox",
-								className: "rounded border-gray-300 text-gray-800 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50",
-								checked: lowStock,
-								onChange: (e) => setLowStock(e.target.checked)
-							}), /* @__PURE__ */ jsxs("span", { children: [
-								"Stock ",
-								"<",
-								" 5"
-							] })]
-						})]
+						})
 					}), /* @__PURE__ */ jsx(Link, {
-						href: route("admin.products.create"),
-						className: "au-btn whitespace-nowrap",
+						href: route("admin.products.index"),
+						className: "au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600",
 						style: { margin: 0 },
-						children: "Ajouter un produit"
+						children: "Retour aux produits"
 					})]
 				}), /* @__PURE__ */ jsxs("div", {
 					className: "overflow-hidden bg-white shadow-sm sm:rounded-lg",
@@ -109,10 +97,10 @@ function Index({ products, filters }) {
 								}),
 								/* @__PURE__ */ jsx("td", {
 									className: "px-6 py-4 whitespace-nowrap text-right text-sm font-medium",
-									children: /* @__PURE__ */ jsx(Link, {
-										href: route("admin.products.edit", product.id),
-										className: "au-link-underline",
-										children: "Modifier"
+									children: /* @__PURE__ */ jsx("button", {
+										onClick: () => handleRestore(product.id),
+										className: "text-green-600 hover:text-green-900 underline underline-offset-4 decoration-[0.1em]",
+										children: "Restaurer"
 									})
 								})
 							] }, product.id))
@@ -127,4 +115,4 @@ function Index({ products, filters }) {
 	});
 }
 //#endregion
-export { Index as default };
+export { Trashed as default };

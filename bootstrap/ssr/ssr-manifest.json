@@ -192,6 +192,9 @@
   "resources/js/Components/Dropdown.tsx": [
     "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
+  "resources/js/Components/ImageWithLoader.tsx": [
+    "/build/assets/Welcome-CA1_N3yI.js"
+  ],
   "resources/js/Components/InputError.tsx": [
     "/build/assets/InputError-Dt1CqBgh.js"
   ],
@@ -244,7 +247,7 @@
     "/build/assets/Index-DTYZcQT8.js"
   ],
   "resources/js/Pages/Admin/Orders/List.tsx": [
-    "/build/assets/List-Bd5b_Buk.js"
+    "/build/assets/List-BygeRrOF.js"
   ],
   "resources/js/Pages/Admin/Orders/Show.tsx": [
     "/build/assets/Show-jyaMURZw.js"
@@ -256,7 +259,10 @@
     "/build/assets/Edit-LLEHGtOg.js"
   ],
   "resources/js/Pages/Admin/Products/Index.tsx": [
-    "/build/assets/Index-4yr4jCJo.js"
+    "/build/assets/Index-C9fujfY-.js"
+  ],
+  "resources/js/Pages/Admin/Products/Trashed.tsx": [
+    "/build/assets/Trashed-MdLweB9c.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
     "/build/assets/ConfirmPassword-U3DBrkJh.js"
@@ -277,13 +283,13 @@
     "/build/assets/VerifyEmail-D2FVrdfj.js"
   ],
   "resources/js/Pages/Cart/Index.tsx": [
-    "/build/assets/Index-BZyJ5rPJ.js"
+    "/build/assets/Index-CbNhiuHp.js"
   ],
   "resources/js/Pages/Cart/Success.tsx": [
     "/build/assets/Success-B-0Ee7Lt.js"
   ],
   "resources/js/Pages/Product/Show.tsx": [
-    "/build/assets/Show-CmyEkwxf.js"
+    "/build/assets/Show-Dej-Rn4j.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
     "/build/assets/Edit-N31SUBu6.js"
@@ -298,7 +304,7 @@
     "/build/assets/UpdateProfileInformationForm-BsS8GDOm.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-DWAULMz5.js"
+    "/build/assets/Welcome-CA1_N3yI.js"
   ],
   "resources/js/ssr.tsx": []
 }
