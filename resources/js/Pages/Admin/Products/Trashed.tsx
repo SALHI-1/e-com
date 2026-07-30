@@ -2,31 +2,28 @@ import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
 import { useState, useEffect } from 'react';
 
-export default function Index({ products, filters }: { products: any[], filters?: any }) {
+export default function Trashed({ products, filters }: { products: any[], filters?: any }) {
     const [search, setSearch] = useState(filters?.search || '');
-    const [lowStock, setLowStock] = useState(filters?.low_stock === 'true' || filters?.low_stock === true);
 
-    const handleDelete = (id: number) => {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
-            router.delete(route('admin.products.destroy', id));
+    const handleRestore = (id: number) => {
+        if (confirm('Êtes-vous sûr de vouloir restaurer ce produit ?')) {
+            router.post(route('admin.products.restore', id));
         }
     };
 
     const filteredProducts = products.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
-        const matchesStock = lowStock ? product.stock < 5 : true;
-        return matchesSearch && matchesStock;
+        return product.name.toLowerCase().includes(search.toLowerCase());
     });
 
     return (
         <AdminLayout
             header={
                 <h2 className="au-h3">
-                    Gestion des Produits
+                    Produits Supprimés (Corbeille)
                 </h2>
             }
         >
-            <Head title="Produits" />
+            <Head title="Corbeille Produits" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -34,39 +31,20 @@ export default function Index({ products, filters }: { products: any[], filters?
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                             <input
                                 type="text"
-                                placeholder="Rechercher un produit..."
+                                placeholder="Rechercher un produit supprimé..."
                                 className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
-                            
-                            <label className="flex items-center space-x-2 text-sm text-gray-600">
-                                <input
-                                    type="checkbox"
-                                    className="rounded border-gray-300 text-gray-800 shadow-sm focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50"
-                                    checked={lowStock}
-                                    onChange={(e) => setLowStock(e.target.checked)}
-                                />
-                                <span>Stock {'<'} 5</span>
-                            </label>
                         </div>
                         
-                        <div className="flex gap-2">
-                            <Link
-                                href={route('admin.products.trashed')}
-                                className="au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600"
-                                style={{ margin: 0 }}
-                            >
-                                Corbeille
-                            </Link>
-                            <Link
-                                href={route('admin.products.create')}
-                                className="au-btn whitespace-nowrap"
-                                style={{ margin: 0 }}
-                            >
-                                Ajouter un produit
-                            </Link>
-                        </div>
+                        <Link
+                            href={route('admin.products.index')}
+                            className="au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600"
+                            style={{ margin: 0 }}
+                        >
+                            Retour aux produits
+                        </Link>
                     </div>
 
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
@@ -96,14 +74,11 @@ export default function Index({ products, filters }: { products: any[], filters?
                                             )}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <Link href={route('admin.products.edit', product.id)} className="au-link-underline mr-4">
-                                                Modifier
-                                            </Link>
                                             <button 
-                                                onClick={() => handleDelete(product.id)} 
-                                                className="text-red-600 hover:text-red-900 underline underline-offset-4 decoration-[0.1em]"
+                                                onClick={() => handleRestore(product.id)} 
+                                                className="text-green-600 hover:text-green-900 underline underline-offset-4 decoration-[0.1em]"
                                             >
-                                                Supprimer
+                                                Restaurer
                                             </button>
                                         </td>
                                     </tr>

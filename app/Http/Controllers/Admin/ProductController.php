@@ -30,6 +30,21 @@ class ProductController extends Controller
         ]);
     }
 
+    public function trashed(Request $request)
+    {
+        $query = Product::onlyTrashed()->with('category')->latest();
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $products = $query->get();
+        return Inertia::render('Admin/Products/Trashed', [
+            'products' => $products,
+            'filters' => $request->only(['search'])
+        ]);
+    }
+
     public function create()
     {
         $categories = Category::all();
@@ -114,13 +129,17 @@ class ProductController extends Controller
     }
     public function destroy(Product $product)
     {
-        if ($product->image_url) {
-            $oldImagePath = 'products/' . basename($product->image_url);
-            Storage::delete($oldImagePath);
-        }
 
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès.');
+    }
+
+    public function restore($id)
+    {
+        $product = Product::onlyTrashed()->findOrFail($id);
+        $product->restore();
+
+        return redirect()->route('admin.products.trashed')->with('success', 'Produit restauré avec succès.');
     }
 }

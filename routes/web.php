@@ -92,6 +92,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\AdminDashboardController::class, 'index'])->name('dashboard');
         Route::post('logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'destroy'])->name('logout');
 
+        Route::get('products/trashed', [\App\Http\Controllers\Admin\ProductController::class, 'trashed'])->name('products.trashed');
+        Route::post('products/{id}/restore', [\App\Http\Controllers\Admin\ProductController::class, 'restore'])->name('products.restore');
         Route::resource('products', \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
         Route::get('orders/list', [\App\Http\Controllers\Admin\OrderController::class, 'list'])->name('orders.list');
         Route::get('orders/{order}/ticket', [\App\Http\Controllers\Admin\OrderController::class, 'ticket'])->name('orders.ticket');
