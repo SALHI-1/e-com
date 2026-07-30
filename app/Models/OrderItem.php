@@ -7,8 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class OrderItem extends Model
 {
     protected $fillable = [
-        'order_id', 'product_id', 'quantity', 'unit_price'
+        'order_id', 'product_id', 'quantity', 'unit_price', 'is_preorder'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_preorder' => 'boolean',
+        ];
+    }
 
     public function order()
     {

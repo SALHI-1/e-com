@@ -17,8 +17,9 @@ export default function Create({ categories }: { categories: any[] }) {
         stock: '',
         volume: '',
         is_new: false,
-        // is_new: false,
+        is_new: false,
         is_bestseller: false,
+        allow_preorder: false,
         image: null as File | null,
     });
 
@@ -119,6 +120,10 @@ export default function Create({ categories }: { categories: any[] }) {
                                 <label className="flex items-center">
                                     <Checkbox name="is_bestseller" checked={data.is_bestseller} onChange={(e) => setData('is_bestseller', e.target.checked)} />
                                     <span className="ms-2 text-sm text-gray-600">Bestseller</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <Checkbox name="allow_preorder" checked={data.allow_preorder} onChange={(e) => setData('allow_preorder', e.target.checked)} />
+                                    <span className="ms-2 text-sm text-gray-600">Autoriser précommande</span>
                                 </label>
                             </div>
 

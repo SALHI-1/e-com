@@ -4,6 +4,7 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import ClientLayout, { useAurelia, Lang, ProductCategory, ProductTag } from '@/Layouts/ClientLayout';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ImageWithLoader from '@/Components/ImageWithLoader';
+import PreorderModal from '@/Components/PreorderModal';
 
 /* ============================================================================
  * Home page copy (Shared from the static design)
@@ -360,6 +361,7 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
   const copy = HOME_COPY[lang];
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [showPreorder, setShowPreorder] = useState(false);
 
   const addToCart = () => {
     setLoading(true);
@@ -370,44 +372,59 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
   };
 
   const isOut = product.stock === 0;
+  const isPreorderable = isOut && product.allow_preorder;
   const isNew = product.is_new && !product.is_bestseller;
   const isBest = product.is_bestseller;
   const isSale = !!product.price_old || !!product.is_sale;
-  
-  // 'out' tag takes precedence
-  const tag = isOut ? 'out' : isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
+    
+  // 'out' tag takes precedence (unless preorderable)
+  const tag = isOut && !isPreorderable ? 'out' : isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
   const shape = resolveShape(product);
 
   return (
-    <div className={`au-prod-card ${isOut ? 'is-out-of-stock' : ''}`} style={isOut ? { opacity: 0.6 } : {}}>
-      <Link href={route('product.show', product.id)} className="au-prod-media" style={{ background: categoryTint(product.category.name), filter: isOut ? 'grayscale(100%)' : 'none' }}>
+    <div className={`au-prod-card ${isOut ? 'is-out-of-stock' : ''}`} style={isOut ? { opacity: 0.8 } : {}}>
+      <div className="au-prod-media" style={{ background: '#FFFFFF', position: 'relative' }}>
         {tag && (
-          <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)' } : {}}>
+          <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)', zIndex: 20 } : { zIndex: 20 }}>
             {tag === 'out' ? copy.soldOut : tagLabel(tag)}
           </div>
         )}
-        {product.image_url ? (
-          <ImageWithLoader 
-            src={product.image_url} 
-            alt={product.name} 
-            fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />} 
-          />
-        ) : (
-          <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />
+        <Link href={route('product.show', product.id)} style={{ display: 'block', height: '100%', filter: isOut ? 'grayscale(100%)' : 'none', opacity: isOut ? 0.6 : 1 }}>
+          {product.image_url ? (
+            <ImageWithLoader  
+              src={product.image_url}  
+              alt={product.name}  
+              fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />}  
+            />
+          ) : (
+            <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />
+          )}
+        </Link>
+        {isOut && (
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px', zIndex: 10 }}>
+            {isPreorderable && (
+              <button type="button" className="au-btn" onClick={() => setShowPreorder(true)} style={{ padding: '8px 16px', minHeight: '40px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)', fontSize: '13px' }}>
+                Précommander
+              </button>
+            )}
+            <Link href={route('product.show', product.id)} className="au-btn-outline-dark" style={{ padding: '8px 16px', minHeight: '40px', background: 'rgba(255,255,255,0.9)', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', fontSize: '13px' }}>
+              Détails du produit
+            </Link>
+          </div>
         )}
-      </Link>
+      </div>
       <div className="au-prod-info">
         <div className="au-prod-cat">{categoryLabel(product.category.name)}</div>
         <Link href={route('product.show', product.id)} className="au-prod-name" style={{ textDecoration: 'none', color: 'inherit', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name}</Link>
         <div className="au-prod-note" style={{
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            height: '2.8em' /* Approx 2 lines (assuming line-height 1.4) to ensure uniform height even if description is short */
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              height: '2.8em' /* Approx 2 lines (assuming line-height 1.4) to ensure uniform height even if description is short */
         }}>
-            {product.description || copy.essentialCare}
+              {product.description || copy.essentialCare}
         </div>
       </div>
       <div className="au-prod-footer" style={{ pointerEvents: isOut ? 'none' : 'auto' }}>
@@ -463,10 +480,16 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
             </button>
           </div>
           <button type="button" className="au-add-btn" onClick={addToCart} disabled={loading || isOut}>
-            {loading ? '…' : isOut ? copy.soldOut : t.add}
+            {loading ? '…' : isPreorderable ? 'Précommande' : isOut ? copy.soldOut : t.add}
           </button>
         </div>
       </div>
+      <PreorderModal  
+        show={showPreorder}  
+        onClose={() => setShowPreorder(false)}  
+        product={product}  
+        quantity={quantity}  
+      />
     </div>
   );
 }
@@ -517,7 +540,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
     if (typeof window !== 'undefined') {
       const parsedUrl = new URL(url, window.location.origin);
       const cat = parsedUrl.searchParams.get('category');
-      
+            
       if (cat) {
         setActiveCategory(cat);
         setTimeout(() => {
@@ -631,13 +654,13 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 key={product.id}
                 style={{ flexDirection: i % 2 === 1 ? 'row-reverse' : 'row' }}
               >
-                <Link href={route('product.show', product.id)} className="au-spread-media" style={{ background: categoryTint(product.category.name), display: 'flex', textDecoration: 'none', color: 'inherit' }}>
+                <Link href={route('product.show', product.id)} className="au-spread-media" style={{ background: '#FFFFFF', display: 'flex', textDecoration: 'none', color: 'inherit' }}>
                   {product.is_bestseller && <div className="au-tag-pill">{tagLabel('best')}</div>}
                   {product.image_url ? (
-                    <ImageWithLoader 
-                      src={product.image_url} 
-                      alt={product.name} 
-                      fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />} 
+                    <ImageWithLoader  
+                      src={product.image_url}  
+                      alt={product.name}  
+                      fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />}  
                     />
                   ) : (
                     <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />
@@ -714,8 +737,8 @@ function WelcomeContent({ products = [], flash, errors }: any) {
           </div>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             {brandsList.length > 0 && (
-              <select 
-                value={activeBrand || ''} 
+              <select  
+                value={activeBrand || ''}  
                 onChange={(e) => setActiveBrand(e.target.value || null)}
                 style={{ padding: '6px 12px', fontSize: '14px', borderRadius: '4px', border: '1px solid var(--au-border)', background: 'transparent', fontFamily: 'var(--au-font-sans)', outline: 'none' }}
               >
@@ -723,38 +746,38 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 {brandsList.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             )}
-          <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
-            {activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`}
-          </span>
+            <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
+              {activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`}
+            </span>
+          </div>
         </div>
-      </div>
-      <div className="au-prod-grid">
-        {filteredProducts
-          .slice(0, visibleCount)
-          .map((product: any) => (
-            <ProductCard key={product.id} product={product} onError={(msg) => setToast({ message: msg, type: 'info' })} />
-          ))}
-      </div>
-      
-      {filteredProducts.length > visibleCount && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }}>
-          {loadingMore ? (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
-              <div className="animate-spin" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent' }}></div>
-              <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>Chargement</span>
-            </div>
-          ) : (
-            <button 
-              type="button" 
-              className="au-btn-ghost" 
-              onClick={handleLoadMore}
-            >
-              Charger plus
-            </button>
-          )}
+        <div className="au-prod-grid">
+          {filteredProducts
+            .slice(0, visibleCount)
+            .map((product: any) => (
+              <ProductCard key={product.id} product={product} onError={(msg) => setToast({ message: msg, type: 'info' })} />
+            ))}
         </div>
-      )}
-    </div>
+              
+        {filteredProducts.length > visibleCount && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }}>
+            {loadingMore ? (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+                <div className="animate-spin" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent' }}></div>
+                <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>Chargement</span>
+              </div>
+            ) : (
+              <button  
+                type="button"  
+                className="au-btn-ghost"  
+                onClick={handleLoadMore}
+              >
+                Charger plus
+              </button>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* ---------------- DARK PHILOSOPHY BAND ---------------- */}
       <div className="au-dark-band">

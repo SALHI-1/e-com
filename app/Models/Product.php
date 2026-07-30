@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $fillable = [
         'category_id', 'name', 'brand', 'description', 'price', 'stock', 
-        'volume', 'is_new', 'is_bestseller', 'image_url'
+        'volume', 'is_new', 'is_bestseller', 'image_url', 'allow_preorder'
     ];
 
     protected function casts(): array
@@ -19,6 +19,7 @@ class Product extends Model
         return [
             'is_new' => 'boolean',
             'is_bestseller' => 'boolean',
+            'allow_preorder' => 'boolean',
             'price' => 'decimal:2',
         ];
     }

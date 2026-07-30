@@ -65,6 +65,9 @@ Route::delete('/panier/supprimer', [\App\Http\Controllers\CartController::class,
 // Checkout — accessible aux clients connectés ET aux invités (sans auth middleware)
 Route::post('/panier/commander', [\App\Http\Controllers\CartController::class, 'checkout'])->name('cart.checkout');
 
+// Précommande
+Route::post('/precommande', [\App\Http\Controllers\PreorderController::class, 'store'])->name('preorder.store');
+
 // ─── WhatsApp Webhook ─────────────────────────────────────────────────────────
 // Ces routes sont exclues du CSRF dans bootstrap/app.php
 Route::get('/webhook/whatsapp', [\App\Http\Controllers\WhatsApp\WebhookController::class, 'verify'])

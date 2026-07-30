@@ -26,7 +26,19 @@ class OrderController extends Controller
     
     public function list(Request $request)
     {
-        $query = Order::with('user')->latest();
+        $query = Order::with(['user', 'items'])->latest();
+
+        if ($request->filled('type')) {
+            if ($request->type === 'preorder') {
+                $query->whereHas('items', function($q) {
+                    $q->where('is_preorder', true);
+                });
+            } elseif ($request->type === 'normal') {
+                $query->whereDoesntHave('items', function($q) {
+                    $q->where('is_preorder', true);
+                });
+            }
+        }
 
         if ($request->filled('order_number')) {
             $query->where('order_number', 'like', '%' . $request->order_number . '%');
@@ -51,7 +63,7 @@ class OrderController extends Controller
         $orders = $query->get();
         return Inertia::render('Admin/Orders/List', [
             'orders' => $orders,
-            'filters' => $request->only('order_number', 'status', 'client_name', 'client_email'),
+            'filters' => $request->only('order_number', 'status', 'client_name', 'client_email', 'type'),
         ]);
     }
 

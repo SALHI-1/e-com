@@ -8,6 +8,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
         client_name: filters?.client_name || '',
         client_email: filters?.client_email || '',
         status: filters?.status || '',
+        type: filters?.type || '',
     });
 
     const handleFilter = (key: string, value: string) => {
@@ -20,7 +21,9 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
         const matchName = !filterState.client_name || (order.user?.name?.toLowerCase().includes(filterState.client_name.toLowerCase()));
         const matchEmail = !filterState.client_email || (order.user?.email?.toLowerCase().includes(filterState.client_email.toLowerCase()));
         const matchStatus = !filterState.status || order.status === filterState.status;
-        return matchNumber && matchName && matchEmail && matchStatus;
+        const matchType = !filterState.type || 
+            (filterState.type === 'preorder' ? order.items?.some((i: any) => i.is_preorder) : !order.items?.some((i: any) => i.is_preorder));
+        return matchNumber && matchName && matchEmail && matchStatus && matchType;
     });
 
     const STATUSES = [
@@ -44,7 +47,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="mb-6 bg-white p-4 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="mb-6 bg-white p-4 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">N° Commande</label>
                             <input
@@ -88,6 +91,18 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 ))}
                             </select>
                         </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                            <select
+                                value={filterState.type}
+                                onChange={(e) => handleFilter('type', e.target.value)}
+                                className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
+                            >
+                                <option value="">Tous</option>
+                                <option value="normal">Normale</option>
+                                <option value="preorder">Précommande</option>
+                            </select>
+                        </div>
                     </div>
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 overflow-x-auto">
@@ -99,6 +114,9 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Date
+                                        </th>
+                                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Type
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Client
@@ -124,6 +142,15 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                                 <div>Création: {new Date(order.created_at).toLocaleDateString()}</div>
                                                 {order.status === 'reçu' && (
                                                     <div className="text-green-700 font-semibold mt-1">Reçue: {new Date(order.updated_at).toLocaleDateString()}</div>
+                                                )}
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm">
+                                                {order.items?.some((i: any) => i.is_preorder) ? (
+                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                                        Précommande
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-gray-500">Normale</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

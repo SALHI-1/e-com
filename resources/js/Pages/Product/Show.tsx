@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PageProps } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
+import PreorderModal from '@/Components/PreorderModal';
 
 interface Product {
     id: number;
@@ -13,6 +14,7 @@ interface Product {
     is_new: boolean;
     is_sale: boolean;
     is_bestseller: boolean;
+    allow_preorder: boolean;
     image_url?: string;
     category: {
         id: number;
@@ -79,6 +81,7 @@ function ProductDetail({ product, flash, errors }: Props) {
     const [quantity, setQuantity] = useState<number | string>(1);
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
+    const [showPreorder, setShowPreorder] = useState(false);
 
     // Afficher le toast dès qu'un flash/error arrive
     useEffect(() => {
@@ -108,10 +111,11 @@ function ProductDetail({ product, flash, errors }: Props) {
     };
 
     const isOut = product.stock === 0;
+    const isPreorderable = isOut && product.allow_preorder;
     const isNew = product.is_new && !product.is_bestseller;
     const isBest = product.is_bestseller;
     const isSale = !!product.price_old || !!product.is_sale;
-    const tag = isOut ? 'out' : isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
+    const tag = isOut && !isPreorderable ? 'out' : isBest ? 'best' : isNew ? 'new' : isSale ? 'sale' : undefined;
 
     return (
         <div className="au-container" style={{ paddingTop: '40px', paddingBottom: '40px', minHeight: '60vh' }}>
@@ -139,7 +143,7 @@ function ProductDetail({ product, flash, errors }: Props) {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px', alignItems: 'start' }}>
                 
                 {/* Product Image */}
-                <div style={{ background: categoryTint(product.category.name), borderRadius: '8px', overflow: 'hidden', position: 'relative', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '400px', width: '100%', margin: '0 auto' }}>
+                <div style={{ background: '#FFFFFF', borderRadius: '8px', overflow: 'hidden', position: 'relative', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '400px', width: '100%', margin: '0 auto' }}>
                     {tag && (
                         <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)', position: 'absolute', top: '16px', left: '16px' } : { position: 'absolute', top: '16px', left: '16px' }}>
                             {tag === 'out' ? 'Épuisé' : tagLabel(tag)}
@@ -186,8 +190,8 @@ function ProductDetail({ product, flash, errors }: Props) {
                                     const curr = parseInt(quantity as string) || 1;
                                     setQuantity(Math.max(1, curr - 1));
                                 }}
-                                disabled={isOut || (parseInt(quantity as string) || 1) <= 1}
-                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut || (parseInt(quantity as string) || 1) <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
+                                disabled={(isOut && !isPreorderable) || (parseInt(quantity as string) || 1) <= 1}
+                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: (isOut && !isPreorderable) || (parseInt(quantity as string) || 1) <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
                             >
                                 -
                             </button>
@@ -197,17 +201,21 @@ function ProductDetail({ product, flash, errors }: Props) {
                                 max={product.stock}
                                 value={quantity}
                                 onChange={(e) => setQuantity(e.target.value)}
-                                disabled={isOut}
+                                disabled={isOut && !isPreorderable}
                                 style={{ width: '40px', height: '100%', border: 'none', borderRadius: 0, textAlign: 'center', MozAppearance: 'textfield', padding: 0 }}
                             />
                             <button
                                 type="button"
                                 onClick={() => {
                                     const curr = parseInt(quantity as string) || 1;
-                                    setQuantity(curr + 1);
+                                    if (!isPreorderable && curr >= product.stock) {
+                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                    } else {
+                                        setQuantity(curr + 1);
+                                    }
                                 }}
-                                disabled={isOut}
-                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
+                                disabled={isOut && !isPreorderable}
+                                style={{ flex: 1, height: '100%', background: 'transparent', border: 'none', cursor: isOut && !isPreorderable ? 'not-allowed' : 'pointer', color: 'var(--au-text)', fontSize: '1.2rem' }}
                             >
                                 +
                             </button>
@@ -216,11 +224,11 @@ function ProductDetail({ product, flash, errors }: Props) {
                         <button 
                             type="button" 
                             className="au-btn" 
-                            onClick={addToCart} 
-                            disabled={loading || isOut}
+                            onClick={isPreorderable ? () => setShowPreorder(true) : addToCart} 
+                            disabled={loading || (isOut && !isPreorderable)}
                             style={{ flex: 1, height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         >
-                            {loading ? '…' : isOut ? 'Épuisé' : t.addCart}
+                            {loading ? '…' : isPreorderable ? 'Précommander' : isOut ? 'Épuisé' : t.addCart}
                         </button>
                     </div>
 
@@ -231,6 +239,12 @@ function ProductDetail({ product, flash, errors }: Props) {
                     )}
                 </div>
             </div>
+            <PreorderModal 
+                show={showPreorder} 
+                onClose={() => setShowPreorder(false)} 
+                product={product} 
+                quantity={parseInt(quantity as string) || 1} 
+            />
         </div>
     );
 }

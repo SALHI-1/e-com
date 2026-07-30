@@ -17,8 +17,8 @@ export default function Edit({ product, categories }: { product: any, categories
         stock: product.stock,
         volume: product.volume || '',
         is_new: product.is_new,
-        // is_new: product.is_new,
         is_bestseller: product.is_bestseller,
+        allow_preorder: product.allow_preorder,
         image: null as File | null,
         _method: 'PUT',
     });
@@ -132,6 +132,10 @@ export default function Edit({ product, categories }: { product: any, categories
                                 <label className="flex items-center">
                                     <Checkbox name="is_bestseller" checked={data.is_bestseller} onChange={(e) => setData('is_bestseller', e.target.checked)} />
                                     <span className="ms-2 text-sm text-gray-600">Bestseller</span>
+                                </label>
+                                <label className="flex items-center">
+                                    <Checkbox name="allow_preorder" checked={data.allow_preorder} onChange={(e) => setData('allow_preorder', e.target.checked)} />
+                                    <span className="ms-2 text-sm text-gray-600">Autoriser précommande</span>
                                 </label>
                             </div>
 

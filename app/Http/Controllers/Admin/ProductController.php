@@ -65,6 +65,7 @@ class ProductController extends Controller
             'volume' => 'nullable|integer|min:0',
             'is_new' => 'boolean',
             'is_bestseller' => 'boolean',
+            'allow_preorder' => 'boolean',
             'image' => 'nullable|image|max:10240',
         ]);
 
@@ -104,6 +105,7 @@ class ProductController extends Controller
             'volume' => 'nullable|integer|min:0',
             'is_new' => 'boolean',
             'is_bestseller' => 'boolean',
+            'allow_preorder' => 'boolean',
             'image' => 'nullable|image|max:10240',
         ]);
 
