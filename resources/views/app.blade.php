@@ -11,6 +11,7 @@
         <meta name="keywords" content="e-commerce, boutique, achat en ligne">
         <meta name="robots" content="index, follow">
         <meta name="author" content="{{ config('app.name', 'Ourélia') }}">
+        <link rel="canonical" href="{{ url()->current() }}">
 
         {{-- Open Graph / Facebook --}}
         <meta property="og:type" content="website">

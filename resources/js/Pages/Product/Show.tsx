@@ -122,6 +122,7 @@ function ProductDetail({ product, flash, errors }: Props) {
             <Head>
                 <title>{`${product.name} · Ourélia`}</title>
                 <meta head-key="description" name="description" content={product.description || `Découvrez ${product.name} chez Ourélia.`} />
+                <link head-key="canonical" rel="canonical" href={route('product.show', product.id)} />
                 <style>{`
                     input[type="number"]::-webkit-inner-spin-button,
                     input[type="number"]::-webkit-outer-spin-button {
@@ -150,7 +151,7 @@ function ProductDetail({ product, flash, errors }: Props) {
                         </div>
                     )}
                     {product.image_url ? (
-                        <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                        <img src={product.image_url} alt={`Soin Ourélia - ${product.name}`} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
                     ) : (
                         <div style={{ padding: '40px', textAlign: 'center', color: 'var(--au-text)' }}>
                             <div style={{ fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '8px' }}>Ourélia</div>
