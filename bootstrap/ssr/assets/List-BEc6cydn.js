@@ -8,7 +8,8 @@ function List({ orders, filters }) {
 		order_number: filters?.order_number || "",
 		client_name: filters?.client_name || "",
 		client_email: filters?.client_email || "",
-		status: filters?.status || ""
+		status: filters?.status || "",
+		type: filters?.type || ""
 	});
 	const handleFilter = (key, value) => {
 		setFilterState({
@@ -21,7 +22,8 @@ function List({ orders, filters }) {
 		const matchName = !filterState.client_name || order.user?.name?.toLowerCase().includes(filterState.client_name.toLowerCase());
 		const matchEmail = !filterState.client_email || order.user?.email?.toLowerCase().includes(filterState.client_email.toLowerCase());
 		const matchStatus = !filterState.status || order.status === filterState.status;
-		return matchNumber && matchName && matchEmail && matchStatus;
+		const matchType = !filterState.type || (filterState.type === "preorder" ? order.items?.some((i) => i.is_preorder) : !order.items?.some((i) => i.is_preorder));
+		return matchNumber && matchName && matchEmail && matchStatus && matchType;
 	});
 	const STATUSES = [
 		"en attente",
@@ -47,7 +49,7 @@ function List({ orders, filters }) {
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8",
 				children: [/* @__PURE__ */ jsxs("div", {
-					className: "mb-6 bg-white p-4 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4",
+					className: "mb-6 bg-white p-4 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4",
 					children: [
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
 							className: "block text-sm font-medium text-gray-700 mb-1",
@@ -93,6 +95,28 @@ function List({ orders, filters }) {
 								value: s,
 								children: s
 							}, s))]
+						})] }),
+						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
+							className: "block text-sm font-medium text-gray-700 mb-1",
+							children: "Type"
+						}), /* @__PURE__ */ jsxs("select", {
+							value: filterState.type,
+							onChange: (e) => handleFilter("type", e.target.value),
+							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
+							children: [
+								/* @__PURE__ */ jsx("option", {
+									value: "",
+									children: "Tous"
+								}),
+								/* @__PURE__ */ jsx("option", {
+									value: "normal",
+									children: "Normale"
+								}),
+								/* @__PURE__ */ jsx("option", {
+									value: "preorder",
+									children: "Précommande"
+								})
+							]
 						})] })
 					]
 				}), /* @__PURE__ */ jsx("div", {
@@ -113,6 +137,11 @@ function List({ orders, filters }) {
 										scope: "col",
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
 										children: "Date"
+									}),
+									/* @__PURE__ */ jsx("th", {
+										scope: "col",
+										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
+										children: "Type"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
@@ -150,6 +179,16 @@ function List({ orders, filters }) {
 												className: "text-green-700 font-semibold mt-1",
 												children: ["Reçue: ", new Date(order.updated_at).toLocaleDateString()]
 											})]
+										}),
+										/* @__PURE__ */ jsx("td", {
+											className: "px-6 py-4 whitespace-nowrap text-sm",
+											children: order.items?.some((i) => i.is_preorder) ? /* @__PURE__ */ jsx("span", {
+												className: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800",
+												children: "Précommande"
+											}) : /* @__PURE__ */ jsx("span", {
+												className: "text-gray-500",
+												children: "Normale"
+											})
 										}),
 										/* @__PURE__ */ jsx("td", {
 											className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",

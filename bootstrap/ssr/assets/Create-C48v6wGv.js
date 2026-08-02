@@ -1,6 +1,7 @@
 import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
 import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
-import { n as TextInput_default, t as InputError } from "./InputError-Dt1CqBgh.js";
+import { t as TextInput_default } from "./TextInput-CDaF8ym8.js";
+import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";
 import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { Head, useForm } from "@inertiajs/react";
@@ -17,6 +18,7 @@ function Create({ categories }) {
 		volume: "",
 		is_new: false,
 		is_bestseller: false,
+		allow_preorder: false,
 		image: null
 	});
 	const submit = (e) => {
@@ -246,27 +248,41 @@ function Create({ categories }) {
 							] }),
 							/* @__PURE__ */ jsxs("div", {
 								className: "flex space-x-6",
-								children: [/* @__PURE__ */ jsxs("label", {
-									className: "flex items-center",
-									children: [/* @__PURE__ */ jsx(Checkbox, {
-										name: "is_new",
-										checked: data.is_new,
-										onChange: (e) => setData("is_new", e.target.checked)
-									}), /* @__PURE__ */ jsx("span", {
-										className: "ms-2 text-sm text-gray-600",
-										children: "Nouveau produit"
-									})]
-								}), /* @__PURE__ */ jsxs("label", {
-									className: "flex items-center",
-									children: [/* @__PURE__ */ jsx(Checkbox, {
-										name: "is_bestseller",
-										checked: data.is_bestseller,
-										onChange: (e) => setData("is_bestseller", e.target.checked)
-									}), /* @__PURE__ */ jsx("span", {
-										className: "ms-2 text-sm text-gray-600",
-										children: "Bestseller"
-									})]
-								})]
+								children: [
+									/* @__PURE__ */ jsxs("label", {
+										className: "flex items-center",
+										children: [/* @__PURE__ */ jsx(Checkbox, {
+											name: "is_new",
+											checked: data.is_new,
+											onChange: (e) => setData("is_new", e.target.checked)
+										}), /* @__PURE__ */ jsx("span", {
+											className: "ms-2 text-sm text-gray-600",
+											children: "Nouveau produit"
+										})]
+									}),
+									/* @__PURE__ */ jsxs("label", {
+										className: "flex items-center",
+										children: [/* @__PURE__ */ jsx(Checkbox, {
+											name: "is_bestseller",
+											checked: data.is_bestseller,
+											onChange: (e) => setData("is_bestseller", e.target.checked)
+										}), /* @__PURE__ */ jsx("span", {
+											className: "ms-2 text-sm text-gray-600",
+											children: "Bestseller"
+										})]
+									}),
+									/* @__PURE__ */ jsxs("label", {
+										className: "flex items-center",
+										children: [/* @__PURE__ */ jsx(Checkbox, {
+											name: "allow_preorder",
+											checked: data.allow_preorder,
+											onChange: (e) => setData("allow_preorder", e.target.checked)
+										}), /* @__PURE__ */ jsx("span", {
+											className: "ms-2 text-sm text-gray-600",
+											children: "Autoriser précommande"
+										})]
+									})
+								]
 							}),
 							/* @__PURE__ */ jsx("div", {
 								className: "flex justify-end",

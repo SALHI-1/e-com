@@ -1,4 +1,5 @@
 import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
+import { t as PreorderModal } from "./PreorderModal-BUnAXYOF.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -99,6 +100,7 @@ function ProductDetail({ product, flash, errors }) {
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [toast, setToast] = useState(null);
+	const [showPreorder, setShowPreorder] = useState(false);
 	useEffect(() => {
 		if (flash?.success) setToast({
 			message: flash.success,
@@ -133,10 +135,11 @@ function ProductDetail({ product, flash, errors }) {
 		});
 	};
 	const isOut = product.stock === 0;
+	const isPreorderable = isOut && product.allow_preorder;
 	const isNew = product.is_new && !product.is_bestseller;
 	const isBest = product.is_bestseller;
 	const isSale = !!product.price_old || !!product.is_sale;
-	const tag = isOut ? "out" : isBest ? "best" : isNew ? "new" : isSale ? "sale" : void 0;
+	const tag = isOut && !isPreorderable ? "out" : isBest ? "best" : isNew ? "new" : isSale ? "sale" : void 0;
 	return /* @__PURE__ */ jsxs("div", {
 		className: "au-container",
 		style: {
@@ -206,7 +209,8 @@ function ProductDetail({ product, flash, errors }) {
 						style: {
 							width: "100%",
 							height: "100%",
-							objectFit: "cover"
+							objectFit: "cover",
+							mixBlendMode: "multiply"
 						}
 					}) : /* @__PURE__ */ jsxs("div", {
 						style: {
@@ -295,13 +299,13 @@ function ProductDetail({ product, flash, errors }) {
 										onClick: () => {
 											setQuantity(Math.max(1, (parseInt(quantity) || 1) - 1));
 										},
-										disabled: isOut || (parseInt(quantity) || 1) <= 1,
+										disabled: isOut && !isPreorderable || (parseInt(quantity) || 1) <= 1,
 										style: {
 											flex: 1,
 											height: "100%",
 											background: "transparent",
 											border: "none",
-											cursor: isOut || (parseInt(quantity) || 1) <= 1 ? "not-allowed" : "pointer",
+											cursor: isOut && !isPreorderable || (parseInt(quantity) || 1) <= 1 ? "not-allowed" : "pointer",
 											color: "var(--au-text)",
 											fontSize: "1.2rem"
 										},
@@ -313,7 +317,7 @@ function ProductDetail({ product, flash, errors }) {
 										max: product.stock,
 										value: quantity,
 										onChange: (e) => setQuantity(e.target.value),
-										disabled: isOut,
+										disabled: isOut && !isPreorderable,
 										style: {
 											width: "40px",
 											height: "100%",
@@ -327,15 +331,20 @@ function ProductDetail({ product, flash, errors }) {
 									/* @__PURE__ */ jsx("button", {
 										type: "button",
 										onClick: () => {
-											setQuantity((parseInt(quantity) || 1) + 1);
+											const curr = parseInt(quantity) || 1;
+											if (!isPreorderable && curr >= product.stock) setToast({
+												message: "Le stock est insuffisant pour le moment.",
+												type: "info"
+											});
+											else setQuantity(curr + 1);
 										},
-										disabled: isOut,
+										disabled: isOut && !isPreorderable,
 										style: {
 											flex: 1,
 											height: "100%",
 											background: "transparent",
 											border: "none",
-											cursor: isOut ? "not-allowed" : "pointer",
+											cursor: isOut && !isPreorderable ? "not-allowed" : "pointer",
 											color: "var(--au-text)",
 											fontSize: "1.2rem"
 										},
@@ -345,8 +354,8 @@ function ProductDetail({ product, flash, errors }) {
 							}), /* @__PURE__ */ jsx("button", {
 								type: "button",
 								className: "au-btn",
-								onClick: addToCart,
-								disabled: loading || isOut,
+								onClick: isPreorderable ? () => setShowPreorder(true) : addToCart,
+								disabled: loading || isOut && !isPreorderable,
 								style: {
 									flex: 1,
 									height: "48px",
@@ -354,7 +363,7 @@ function ProductDetail({ product, flash, errors }) {
 									alignItems: "center",
 									justifyContent: "center"
 								},
-								children: loading ? "…" : isOut ? "Épuisé" : t.addCart
+								children: loading ? "…" : isPreorderable ? "Précommander" : isOut ? "Épuisé" : t.addCart
 							})]
 						}),
 						isOut && /* @__PURE__ */ jsx("p", {
@@ -367,6 +376,12 @@ function ProductDetail({ product, flash, errors }) {
 						})
 					]
 				})]
+			}),
+			/* @__PURE__ */ jsx(PreorderModal, {
+				show: showPreorder,
+				onClose: () => setShowPreorder(false),
+				product,
+				quantity: parseInt(quantity) || 1
 			})
 		]
 	});

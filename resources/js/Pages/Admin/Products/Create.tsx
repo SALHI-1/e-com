@@ -17,7 +17,6 @@ export default function Create({ categories }: { categories: any[] }) {
         stock: '',
         volume: '',
         is_new: false,
-        is_new: false,
         is_bestseller: false,
         allow_preorder: false,
         image: null as File | null,

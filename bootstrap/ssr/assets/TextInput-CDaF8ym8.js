@@ -15,13 +15,4 @@ var TextInput_default = forwardRef(function TextInput({ type = "text", className
 	});
 });
 //#endregion
-//#region resources/js/Components/InputError.tsx
-function InputError({ message, className = "", ...props }) {
-	return message ? /* @__PURE__ */ jsx("p", {
-		...props,
-		className: "text-sm text-red-600 " + className,
-		children: message
-	}) : null;
-}
-//#endregion
-export { TextInput_default as n, InputError as t };
+export { TextInput_default as t };

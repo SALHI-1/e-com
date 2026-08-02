@@ -141,16 +141,16 @@ function ProductDetail({ product, flash, errors }: Props) {
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px', alignItems: 'start' }}>
-                
+
                 {/* Product Image */}
-                <div style={{ background: '#FFFFFF', borderRadius: '8px', overflow: 'hidden', position: 'relative', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '400px', width: '100%', margin: '0 auto' }}>
+                <div style={{ background: categoryTint(product.category.name), borderRadius: '8px', overflow: 'hidden', position: 'relative', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '400px', width: '100%', margin: '0 auto' }}>
                     {tag && (
                         <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)', position: 'absolute', top: '16px', left: '16px' } : { position: 'absolute', top: '16px', left: '16px' }}>
                             {tag === 'out' ? 'Épuisé' : tagLabel(tag)}
                         </div>
                     )}
                     {product.image_url ? (
-                        <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
                     ) : (
                         <div style={{ padding: '40px', textAlign: 'center', color: 'var(--au-text)' }}>
                             <div style={{ fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '8px' }}>Ourélia</div>
@@ -166,9 +166,9 @@ function ProductDetail({ product, flash, errors }: Props) {
                             {categoryLabel(product.category.name)}
                         </Link>
                     </div>
-                    
+
                     <h1 className="au-h3" style={{ marginBottom: '16px' }}>{product.name}</h1>
-                    
+
                     <div className="au-price-lg" style={{ marginBottom: '24px' }}>
                         {product.price_old && (
                             <span style={{ textDecoration: 'line-through', color: 'var(--au-text-muted)', fontSize: '0.8em', marginRight: '10px' }}>
@@ -221,10 +221,10 @@ function ProductDetail({ product, flash, errors }: Props) {
                             </button>
                         </div>
 
-                        <button 
-                            type="button" 
-                            className="au-btn" 
-                            onClick={isPreorderable ? () => setShowPreorder(true) : addToCart} 
+                        <button
+                            type="button"
+                            className="au-btn"
+                            onClick={isPreorderable ? () => setShowPreorder(true) : addToCart}
                             disabled={loading || (isOut && !isPreorderable)}
                             style={{ flex: 1, height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         >
@@ -239,11 +239,11 @@ function ProductDetail({ product, flash, errors }: Props) {
                     )}
                 </div>
             </div>
-            <PreorderModal 
-                show={showPreorder} 
-                onClose={() => setShowPreorder(false)} 
-                product={product} 
-                quantity={parseInt(quantity as string) || 1} 
+            <PreorderModal
+                show={showPreorder}
+                onClose={() => setShowPreorder(false)}
+                product={product}
+                quantity={parseInt(quantity as string) || 1}
             />
         </div>
     );

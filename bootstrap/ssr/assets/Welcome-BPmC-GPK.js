@@ -1,5 +1,6 @@
 import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
 import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
+import { t as PreorderModal } from "./PreorderModal-BUnAXYOF.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -743,6 +744,7 @@ function ProductCard({ product, onError }) {
 	const copy = HOME_COPY[lang];
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
+	const [showPreorder, setShowPreorder] = useState(false);
 	const addToCart = () => {
 		setLoading(true);
 		router.post(route("cart.add"), {
@@ -754,41 +756,52 @@ function ProductCard({ product, onError }) {
 		});
 	};
 	const isOut = product.stock === 0;
+	const isPreorderable = isOut && product.allow_preorder;
 	const isNew = product.is_new && !product.is_bestseller;
 	const isBest = product.is_bestseller;
 	const isSale = !!product.price_old || !!product.is_sale;
-	const tag = isOut ? "out" : isBest ? "best" : isNew ? "new" : isSale ? "sale" : void 0;
+	const tag = isOut && !isPreorderable ? "out" : isBest ? "best" : isNew ? "new" : isSale ? "sale" : void 0;
 	const shape = resolveShape(product);
 	return /* @__PURE__ */ jsxs("div", {
 		className: `au-prod-card ${isOut ? "is-out-of-stock" : ""}`,
-		style: isOut ? { opacity: .6 } : {},
+		style: isOut ? { opacity: .8 } : {},
 		children: [
-			/* @__PURE__ */ jsxs(Link, {
-				href: route("product.show", product.id),
+			/* @__PURE__ */ jsxs("div", {
 				className: "au-prod-media",
 				style: {
 					background: categoryTint(product.category.name),
-					filter: isOut ? "grayscale(100%)" : "none"
+					position: "relative"
 				},
 				children: [tag && /* @__PURE__ */ jsx("div", {
 					className: "au-prod-tag",
 					style: tag === "out" ? {
 						background: "var(--au-dark)",
-						color: "var(--au-bg)"
-					} : {},
+						color: "var(--au-bg)",
+						zIndex: 20
+					} : { zIndex: 20 },
 					children: tag === "out" ? copy.soldOut : tagLabel(tag)
-				}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
-					src: product.image_url,
-					alt: product.name,
-					fallback: /* @__PURE__ */ jsx(ProductIcon, {
+				}), /* @__PURE__ */ jsx(Link, {
+					href: route("product.show", product.id),
+					style: {
+						display: "block",
+						height: "100%",
+						filter: isOut ? "grayscale(100%)" : "none",
+						opacity: isOut ? .6 : 1
+					},
+					children: product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
+						src: product.image_url,
+						alt: product.name,
+						style: { mixBlendMode: "multiply" },
+						fallback: /* @__PURE__ */ jsx(ProductIcon, {
+							shape,
+							cat: product.category.name,
+							catLabel: categoryLabel(product.category.name)
+						})
+					}) : /* @__PURE__ */ jsx(ProductIcon, {
 						shape,
 						cat: product.category.name,
 						catLabel: categoryLabel(product.category.name)
 					})
-				}) : /* @__PURE__ */ jsx(ProductIcon, {
-					shape,
-					cat: product.category.name,
-					catLabel: categoryLabel(product.category.name)
 				})]
 			}),
 			/* @__PURE__ */ jsxs("div", {
@@ -827,7 +840,7 @@ function ProductCard({ product, onError }) {
 			}),
 			/* @__PURE__ */ jsxs("div", {
 				className: "au-prod-footer",
-				style: { pointerEvents: isOut ? "none" : "auto" },
+				style: { pointerEvents: isOut && !isPreorderable ? "none" : "auto" },
 				children: [/* @__PURE__ */ jsxs("div", {
 					className: "au-prod-price-group",
 					children: [product.price_old && /* @__PURE__ */ jsxs("span", {
@@ -840,7 +853,7 @@ function ProductCard({ product, onError }) {
 				}), /* @__PURE__ */ jsxs("div", {
 					className: "au-qty-add",
 					onClick: (e) => {
-						if (isOut) e.preventDefault();
+						if (isOut && !isPreorderable) e.preventDefault();
 					},
 					children: [/* @__PURE__ */ jsxs("div", {
 						style: {
@@ -855,12 +868,12 @@ function ProductCard({ product, onError }) {
 							/* @__PURE__ */ jsx("button", {
 								type: "button",
 								onClick: () => setQuantity(Math.max(1, quantity - 1)),
-								disabled: isOut || quantity <= 1,
+								disabled: isOut && !isPreorderable || quantity <= 1,
 								style: {
 									padding: "0 10px",
 									background: "transparent",
 									border: "none",
-									cursor: isOut || quantity <= 1 ? "not-allowed" : "pointer",
+									cursor: isOut && !isPreorderable || quantity <= 1 ? "not-allowed" : "pointer",
 									color: "var(--au-text)"
 								},
 								children: "-"
@@ -868,18 +881,18 @@ function ProductCard({ product, onError }) {
 							/* @__PURE__ */ jsx("input", {
 								type: "number",
 								min: "1",
-								max: product.stock,
+								max: isPreorderable ? void 0 : product.stock,
 								value: quantity,
 								onChange: (e) => {
 									const val = parseInt(e.target.value) || 1;
-									if (val > product.stock) {
+									if (!isPreorderable && val > product.stock) {
 										if (onError) onError("Le stock est insuffisant pour le moment.");
 										setQuantity(product.stock);
 									} else setQuantity(Math.max(1, val));
 								},
 								className: "au-qty-input",
 								"aria-label": "Quantity",
-								disabled: isOut,
+								disabled: isOut && !isPreorderable,
 								style: {
 									border: "none",
 									borderRadius: 0,
@@ -891,16 +904,16 @@ function ProductCard({ product, onError }) {
 							/* @__PURE__ */ jsx("button", {
 								type: "button",
 								onClick: () => {
-									if (quantity >= product.stock) {
+									if (!isPreorderable && quantity >= product.stock) {
 										if (onError) onError("Le stock est insuffisant pour le moment.");
 									} else setQuantity(quantity + 1);
 								},
-								disabled: isOut,
+								disabled: isOut && !isPreorderable,
 								style: {
 									padding: "0 10px",
 									background: "transparent",
 									border: "none",
-									cursor: isOut ? "not-allowed" : "pointer",
+									cursor: isOut && !isPreorderable ? "not-allowed" : "pointer",
 									color: "var(--au-text)"
 								},
 								children: "+"
@@ -909,11 +922,17 @@ function ProductCard({ product, onError }) {
 					}), /* @__PURE__ */ jsx("button", {
 						type: "button",
 						className: "au-add-btn",
-						onClick: addToCart,
-						disabled: loading || isOut,
-						children: loading ? "…" : isOut ? copy.soldOut : t.add
+						onClick: isPreorderable ? () => setShowPreorder(true) : addToCart,
+						disabled: loading || isOut && !isPreorderable,
+						children: loading ? "…" : isPreorderable ? "Précommande" : isOut ? copy.soldOut : t.add
 					})]
 				})]
+			}),
+			/* @__PURE__ */ jsx(PreorderModal, {
+				show: showPreorder,
+				onClose: () => setShowPreorder(false),
+				product,
+				quantity
 			})
 		]
 	});
@@ -1113,6 +1132,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 						}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 							src: product.image_url,
 							alt: product.name,
+							style: { mixBlendMode: "multiply" },
 							fallback: /* @__PURE__ */ jsx(ProductIcon, {
 								shape,
 								cat: product.category.name,

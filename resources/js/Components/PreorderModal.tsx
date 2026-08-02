@@ -10,6 +10,26 @@ interface PreorderModalProps {
     quantity: number;
 }
 
+const MOROCCO_CITIES = [
+    'Casablanca', 'Rabat', 'Marrakech', 'Fès', 'Tanger', 'Agadir', 'Meknès',
+    'Oujda', 'Kénitra', 'Tétouan', 'Safi', 'Mohammedia', 'El Jadida', 'Khouribga',
+    'Béni Mellal', 'Nador', 'Taza', 'Settat', 'Berrechid', 'Khémisset',
+    'Inezgane', 'Laâyoune', 'Ksar El Kébir', 'Larache', 'Guelmim', 'Berkane',
+    'Al Hoceïma', 'Taourirt', 'Dakhla', 'Errachidia', 'Ouarzazate', 'Tiznit',
+    'Ifrane', 'Azrou', 'Midelt', 'Sefrou', 'Boujdour', 'Smara', 'Tan-Tan',
+    'Taroudant', 'Essaouira', 'Sidi Ifni', 'Zagora', 'Tinghir', 'Boulemane',
+    'Figuig', 'Chefchaouen', 'Fnideq', 'Martil', 'M\'diq', 'Ait Melloul',
+    'Deroua', 'Bouskoura', 'Médiouna', 'Nouaceur', 'Salé', 'Skhirate',
+    'Témara', 'Harhoura', 'Ain Aouda', 'Sidi Yahia', 'Benslimane', 'Azemmour',
+    'Bir Jdid', 'Oualidia', 'Youssoufia', 'Ben Guerir', 'Fquih Ben Salah',
+    'Azilal', 'Souk Sebt', 'Oulad Teima', 'Ait Baha', 'Biougra', 'Chtouka',
+    'Drarga', 'Lqliaa', 'Reggada', 'Imzouren', 'Beni Ansar', 'Selouane',
+    'Zaio', 'Ahfir', 'Oujda Angad', 'Ain Beni Mathar', 'Jerada',
+    'Taourirt Autre', 'Tafraout', 'Assa', 'Foum Zguid', 'Tata',
+    'Goulmima', 'Erfoud', 'Rissani', 'Arfoud', 'Khénifra', 'Mrirt',
+    'El Hajeb', 'Beni Mellal-Khenifra', 'Sidi Bennour', 'Oulad Frej',
+];
+
 export default function PreorderModal({ show, onClose, product, quantity }: PreorderModalProps) {
     const { auth } = usePage<any>().props;
     const user = auth?.user;
@@ -46,10 +66,7 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
 
     if (!product) return null;
 
-    const CITIES = [
-        'Agadir', 'Casablanca', 'El Jadida', 'Fès', 'Kénitra', 'Marrakech', 
-        'Meknès', 'Oujda', 'Rabat', 'Safi', 'Tanger', 'Tétouan'
-    ];
+
 
     return (
         <Modal show={show} onClose={onClose} maxWidth="md">
@@ -75,13 +92,13 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                     </div>
                 </div>
 
-                <form onSubmit={submit} className="space-y-4">
+                <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {(!user || user.is_admin) && (
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom Complet</label>
+                            <label className="au-label">Nom Complet</label>
                             <input
                                 type="text"
-                                className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#C2A063] focus:ring-[#C2A063]"
+                                className="au-input"
                                 value={data.guest_name}
                                 onChange={e => setData('guest_name', e.target.value)}
                                 required
@@ -91,36 +108,52 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                     )}
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone (WhatsApp)</label>
-                        <input
-                            type="text"
-                            placeholder="+212..."
-                            className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#C2A063] focus:ring-[#C2A063]"
-                            value={data.phone}
-                            onChange={e => setData('phone', e.target.value)}
-                            required
-                        />
+                        <label className="au-label">Téléphone (WhatsApp)</label>
+                        <div style={{ display: 'flex', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', background: 'var(--au-bg)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', background: 'var(--au-surface)', borderRight: '1px solid var(--au-border)', color: 'var(--au-text)', fontWeight: 500, fontSize: '1rem', letterSpacing: '0.05em' }}>
+                                +212
+                            </div>
+                            <input
+                                type="tel"
+                                value={data.phone.replace(/^\+212/, '')}
+                                onChange={e => {
+                                    let rest = e.target.value.replace(/[^0-9]/g, '');
+                                    if (rest.startsWith('0')) {
+                                        rest = rest.slice(1);
+                                    }
+                                    if (rest.length > 9) {
+                                        rest = rest.slice(0, 9);
+                                    }
+                                    setData('phone', '+212' + rest);
+                                }}
+                                placeholder="6 12 34 56 78"
+                                className="au-input"
+                                style={{ border: 'none', borderRadius: 0, flex: 1, boxShadow: 'none' }}
+                                required
+                            />
+                        </div>
                         <InputError message={errors.phone} className="mt-1" />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Ville de livraison</label>
+                        <label className="au-label">Ville de livraison</label>
                         <select
-                            className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#C2A063] focus:ring-[#C2A063]"
+                            className="au-input"
+                            style={{ cursor: 'pointer' }}
                             value={data.delivery_city}
                             onChange={e => setData('delivery_city', e.target.value)}
                             required
                         >
-                            <option value="" disabled>Choisir une ville</option>
-                            {CITIES.map(c => <option key={c} value={c}>{c}</option>)}
+                            <option value="" disabled>— Choisir une ville —</option>
+                            {MOROCCO_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                         <InputError message={errors.delivery_city} className="mt-1" />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Adresse complète</label>
+                        <label className="au-label">Adresse complète</label>
                         <textarea
-                            className="w-full border-gray-300 rounded-md shadow-sm focus:border-[#C2A063] focus:ring-[#C2A063]"
+                            className="au-textarea"
                             rows={3}
                             value={data.shipping_address}
                             onChange={e => setData('shipping_address', e.target.value)}
@@ -129,9 +162,9 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                         <InputError message={errors.shipping_address} className="mt-1" />
                     </div>
 
-                    {errors.preorder && (
+                    {(errors as any).preorder && (
                         <div className="p-3 bg-red-50 text-red-800 text-sm rounded border border-red-200">
-                            {errors.preorder}
+                            {(errors as any).preorder}
                         </div>
                     )}
 
@@ -139,7 +172,8 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                         <button
                             type="submit"
                             disabled={processing}
-                            className="au-btn w-full flex justify-center"
+                            className="au-btn-gold"
+                            style={{ width: '100%', textAlign: 'center' }}
                         >
                             {processing ? 'En cours...' : 'Confirmer la précommande'}
                         </button>
