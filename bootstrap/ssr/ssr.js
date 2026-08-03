@@ -39,12 +39,12 @@ createServer((page) => createInertiaApp({
 		"./Pages/Auth/VerifyEmail.tsx": () => import("./assets/VerifyEmail-D2FVrdfj.js"),
 		"./Pages/Cart/Index.tsx": () => import("./assets/Index-CbNhiuHp.js"),
 		"./Pages/Cart/Success.tsx": () => import("./assets/Success-B-0Ee7Lt.js"),
-		"./Pages/Product/Show.tsx": () => import("./assets/Show-DM4eLDF1.js"),
+		"./Pages/Product/Show.tsx": () => import("./assets/Show-mWVC2DaW.js"),
 		"./Pages/Profile/Edit.tsx": () => import("./assets/Edit-2-Q-2kRB.js"),
 		"./Pages/Profile/Partials/DeleteUserForm.tsx": () => import("./assets/DeleteUserForm-Cq0r606J.js"),
 		"./Pages/Profile/Partials/UpdatePasswordForm.tsx": () => import("./assets/UpdatePasswordForm-pi-h2dom.js"),
 		"./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": () => import("./assets/UpdateProfileInformationForm-BBmKlf_W.js"),
-		"./Pages/Welcome.tsx": () => import("./assets/Welcome-BPmC-GPK.js")
+		"./Pages/Welcome.tsx": () => import("./assets/Welcome-T5LnUu_F.js")
 	})),
 	setup: ({ App, props }) => {
 		global.route = (name, params, absolute) => route(name, params, absolute, {

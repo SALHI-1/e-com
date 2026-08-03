@@ -20,6 +20,15 @@ interface Product {
         id: number;
         name: string;
     };
+    reviews_avg_rating?: number;
+    reviews_count?: number;
+    reviews?: {
+        id: number;
+        rating: number;
+        comment: string | null;
+        created_at: string;
+        user: { name: string };
+    }[];
 }
 
 interface Props extends PageProps {
@@ -34,6 +43,18 @@ export default function Show(props: Props) {
         <ClientLayout auth={props.auth} cartCount={props.cartCount} title={props.product.name}>
             <ProductDetail {...props} />
         </ClientLayout>
+    );
+}
+
+function StarRating({ rating, size = 16, color = 'var(--au-gold, #C2A063)' }: { rating: number, size?: number, color?: string }) {
+    return (
+        <div style={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
+            {[1, 2, 3, 4, 5].map(star => (
+                <svg key={star} width={size} height={size} viewBox="0 0 24 24" fill={star <= rating ? color : 'none'} stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ cursor: 'inherit' }}>
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+            ))}
+        </div>
     );
 }
 
@@ -76,7 +97,7 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
     );
 }
 
-function ProductDetail({ product, flash, errors }: Props) {
+function ProductDetail({ product, flash, errors, auth }: Props) {
     const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
     const [quantity, setQuantity] = useState<number | string>(1);
     const [loading, setLoading] = useState(false);
@@ -168,7 +189,14 @@ function ProductDetail({ product, flash, errors }: Props) {
                         </Link>
                     </div>
 
-                    <h1 className="au-h3" style={{ marginBottom: '16px' }}>{product.name}</h1>
+                    <h1 className="au-h3" style={{ marginBottom: '8px' }}>{product.name}</h1>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+                        <StarRating rating={Math.round(product.reviews_avg_rating || 0)} />
+                        <span style={{ fontSize: '13px', color: 'var(--au-text-muted)' }}>
+                            {product.reviews_count || 0} avis
+                        </span>
+                    </div>
 
                     <div className="au-price-lg" style={{ marginBottom: '24px' }}>
                         {product.price_old && (
@@ -238,6 +266,92 @@ function ProductDetail({ product, flash, errors }: Props) {
                             Ce produit est actuellement en rupture de stock.
                         </p>
                     )}
+                </div>
+            </div>
+
+            {/* Section Avis */}
+            <div style={{ marginTop: '80px', borderTop: '1px solid var(--au-border)', paddingTop: '40px' }}>
+                <h2 className="au-h4" style={{ marginBottom: '24px' }}>Avis clients</h2>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+                    {/* Formulaire d'avis */}
+                    <div>
+                        <h3 style={{ fontSize: '16px', marginBottom: '16px', fontFamily: 'var(--au-font-serif)' }}>Laisser un avis</h3>
+                        {auth.user ? (
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                const form = e.target as HTMLFormElement;
+                                const data = new FormData(form);
+                                router.post(route('reviews.store', product.id), Object.fromEntries(data.entries()), {
+                                    preserveScroll: true,
+                                    onSuccess: () => {
+                                        setToast({ message: 'Votre avis a été publié avec succès.', type: 'success' });
+                                        form.reset();
+                                    },
+                                    onError: (err) => {
+                                        setToast({ message: Object.values(err)[0] as string, type: 'error' });
+                                    }
+                                });
+                            }}>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Note</label>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        {[1, 2, 3, 4, 5].map(star => (
+                                            <label key={star} style={{ cursor: 'pointer' }}>
+                                                <input type="radio" name="rating" value={star} required style={{ display: 'none' }} 
+                                                    onChange={(e) => {
+                                                        const svg = e.target.parentElement?.parentElement?.querySelectorAll('svg');
+                                                        svg?.forEach((s, i) => {
+                                                            s.style.fill = i < star ? 'var(--au-gold, #C2A063)' : 'none';
+                                                        });
+                                                    }}
+                                                />
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--au-gold, #C2A063)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                </svg>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div style={{ marginBottom: '16px' }}>
+                                    <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Commentaire (optionnel)</label>
+                                    <textarea name="comment" className="au-input" rows={4} style={{ width: '100%', resize: 'vertical' }}></textarea>
+                                </div>
+                                <button type="submit" className="au-btn" style={{ padding: '12px 24px' }}>Publier mon avis</button>
+                            </form>
+                        ) : (
+                            <div style={{ padding: '24px', background: 'var(--au-bg-alt, #efe9db)', borderRadius: '8px', textAlign: 'center' }}>
+                                <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '16px' }}>Vous devez être connecté pour laisser un avis.</p>
+                                <Link href={route('login')} className="au-btn-outline" style={{ display: 'inline-block', padding: '10px 20px' }}>Se connecter</Link>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Liste des avis */}
+                    <div>
+                        {product.reviews && product.reviews.length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                                {product.reviews.map(review => (
+                                    <div key={review.id} style={{ borderBottom: '1px solid var(--au-border)', paddingBottom: '24px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                                            <span style={{ fontWeight: 500, fontSize: '14px' }}>{review.user.name}</span>
+                                            <span style={{ fontSize: '12px', color: 'var(--au-text-muted)' }}>
+                                                {new Date(review.created_at).toLocaleDateString('fr-FR')}
+                                            </span>
+                                        </div>
+                                        <div style={{ marginBottom: '12px' }}>
+                                            <StarRating rating={review.rating} size={14} />
+                                        </div>
+                                        {review.comment && (
+                                            <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--au-text-muted)' }}>{review.comment}</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', fontStyle: 'italic' }}>Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>
+                        )}
+                    </div>
                 </div>
             </div>
             <PreorderModal

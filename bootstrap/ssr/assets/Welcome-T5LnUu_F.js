@@ -790,7 +790,7 @@ function ProductCard({ product, onError }) {
 					},
 					children: product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 						src: product.image_url,
-						alt: product.name,
+						alt: `Soin Ourélia - ${product.name}`,
 						style: { mixBlendMode: "multiply" },
 						fallback: /* @__PURE__ */ jsx(ProductIcon, {
 							shape,
@@ -1018,6 +1018,11 @@ function WelcomeContent({ products = [], flash, errors }) {
 				"head-key": "og:description",
 				property: "og:description",
 				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub
+			}),
+			/* @__PURE__ */ jsx("link", {
+				"head-key": "canonical",
+				rel: "canonical",
+				href: route("home")
 			})
 		] }),
 		toast && /* @__PURE__ */ jsx(OureliaToast, {
@@ -1131,7 +1136,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 							children: tagLabel("best")
 						}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 							src: product.image_url,
-							alt: product.name,
+							alt: `Soin Ourélia - ${product.name}`,
 							style: { mixBlendMode: "multiply" },
 							fallback: /* @__PURE__ */ jsx(ProductIcon, {
 								shape,

@@ -12,6 +12,33 @@ function Show(props) {
 		children: /* @__PURE__ */ jsx(ProductDetail, { ...props })
 	});
 }
+function StarRating({ rating, size = 16, color = "var(--au-gold, #C2A063)" }) {
+	return /* @__PURE__ */ jsx("div", {
+		style: {
+			display: "flex",
+			gap: "2px",
+			alignItems: "center"
+		},
+		children: [
+			1,
+			2,
+			3,
+			4,
+			5
+		].map((star) => /* @__PURE__ */ jsx("svg", {
+			width: size,
+			height: size,
+			viewBox: "0 0 24 24",
+			fill: star <= rating ? color : "none",
+			stroke: color,
+			strokeWidth: "2",
+			strokeLinecap: "round",
+			strokeLinejoin: "round",
+			style: { cursor: "inherit" },
+			children: /* @__PURE__ */ jsx("polygon", { points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" })
+		}, star))
+	});
+}
 function OureliaToast({ message, type = "success", onClose }) {
 	useEffect(() => {
 		const timer = setTimeout(onClose, 3e3);
@@ -95,7 +122,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 		]
 	});
 }
-function ProductDetail({ product, flash, errors }) {
+function ProductDetail({ product, flash, errors, auth }) {
 	const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
@@ -155,6 +182,11 @@ function ProductDetail({ product, flash, errors }) {
 					name: "description",
 					content: product.description || `Découvrez ${product.name} chez Ourélia.`
 				}),
+				/* @__PURE__ */ jsx("link", {
+					"head-key": "canonical",
+					rel: "canonical",
+					href: route("product.show", product.id)
+				}),
 				/* @__PURE__ */ jsx("style", { children: `
                     input[type="number"]::-webkit-inner-spin-button,
                     input[type="number"]::-webkit-outer-spin-button {
@@ -205,7 +237,7 @@ function ProductDetail({ product, flash, errors }) {
 						children: tag === "out" ? "Épuisé" : tagLabel(tag)
 					}), product.image_url ? /* @__PURE__ */ jsx("img", {
 						src: product.image_url,
-						alt: product.name,
+						alt: `Soin Ourélia - ${product.name}`,
 						style: {
 							width: "100%",
 							height: "100%",
@@ -248,8 +280,23 @@ function ProductDetail({ product, flash, errors }) {
 						}),
 						/* @__PURE__ */ jsx("h1", {
 							className: "au-h3",
-							style: { marginBottom: "16px" },
+							style: { marginBottom: "8px" },
 							children: product.name
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							style: {
+								display: "flex",
+								alignItems: "center",
+								gap: "8px",
+								marginBottom: "16px"
+							},
+							children: [/* @__PURE__ */ jsx(StarRating, { rating: Math.round(product.reviews_avg_rating || 0) }), /* @__PURE__ */ jsxs("span", {
+								style: {
+									fontSize: "13px",
+									color: "var(--au-text-muted)"
+								},
+								children: [product.reviews_count || 0, " avis"]
+							})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-price-lg",
@@ -375,6 +422,210 @@ function ProductDetail({ product, flash, errors }) {
 							children: "Ce produit est actuellement en rupture de stock."
 						})
 					]
+				})]
+			}),
+			/* @__PURE__ */ jsxs("div", {
+				style: {
+					marginTop: "80px",
+					borderTop: "1px solid var(--au-border)",
+					paddingTop: "40px"
+				},
+				children: [/* @__PURE__ */ jsx("h2", {
+					className: "au-h4",
+					style: { marginBottom: "24px" },
+					children: "Avis clients"
+				}), /* @__PURE__ */ jsxs("div", {
+					style: {
+						display: "grid",
+						gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+						gap: "40px"
+					},
+					children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("h3", {
+						style: {
+							fontSize: "16px",
+							marginBottom: "16px",
+							fontFamily: "var(--au-font-serif)"
+						},
+						children: "Laisser un avis"
+					}), auth.user ? /* @__PURE__ */ jsxs("form", {
+						onSubmit: (e) => {
+							e.preventDefault();
+							const form = e.target;
+							const data = new FormData(form);
+							router.post(route("reviews.store", product.id), Object.fromEntries(data.entries()), {
+								preserveScroll: true,
+								onSuccess: () => {
+									setToast({
+										message: "Votre avis a été publié avec succès.",
+										type: "success"
+									});
+									form.reset();
+								},
+								onError: (err) => {
+									setToast({
+										message: Object.values(err)[0],
+										type: "error"
+									});
+								}
+							});
+						},
+						children: [
+							/* @__PURE__ */ jsxs("div", {
+								style: { marginBottom: "16px" },
+								children: [/* @__PURE__ */ jsx("label", {
+									style: {
+										display: "block",
+										fontSize: "13px",
+										marginBottom: "8px",
+										color: "var(--au-text-muted)"
+									},
+									children: "Note"
+								}), /* @__PURE__ */ jsx("div", {
+									style: {
+										display: "flex",
+										gap: "4px"
+									},
+									children: [
+										1,
+										2,
+										3,
+										4,
+										5
+									].map((star) => /* @__PURE__ */ jsxs("label", {
+										style: { cursor: "pointer" },
+										children: [/* @__PURE__ */ jsx("input", {
+											type: "radio",
+											name: "rating",
+											value: star,
+											required: true,
+											style: { display: "none" },
+											onChange: (e) => {
+												(e.target.parentElement?.parentElement?.querySelectorAll("svg"))?.forEach((s, i) => {
+													s.style.fill = i < star ? "var(--au-gold, #C2A063)" : "none";
+												});
+											}
+										}), /* @__PURE__ */ jsx("svg", {
+											width: "24",
+											height: "24",
+											viewBox: "0 0 24 24",
+											fill: "none",
+											stroke: "var(--au-gold, #C2A063)",
+											strokeWidth: "2",
+											strokeLinecap: "round",
+											strokeLinejoin: "round",
+											children: /* @__PURE__ */ jsx("polygon", { points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" })
+										})]
+									}, star))
+								})]
+							}),
+							/* @__PURE__ */ jsxs("div", {
+								style: { marginBottom: "16px" },
+								children: [/* @__PURE__ */ jsx("label", {
+									style: {
+										display: "block",
+										fontSize: "13px",
+										marginBottom: "8px",
+										color: "var(--au-text-muted)"
+									},
+									children: "Commentaire (optionnel)"
+								}), /* @__PURE__ */ jsx("textarea", {
+									name: "comment",
+									className: "au-input",
+									rows: 4,
+									style: {
+										width: "100%",
+										resize: "vertical"
+									}
+								})]
+							}),
+							/* @__PURE__ */ jsx("button", {
+								type: "submit",
+								className: "au-btn",
+								style: { padding: "12px 24px" },
+								children: "Publier mon avis"
+							})
+						]
+					}) : /* @__PURE__ */ jsxs("div", {
+						style: {
+							padding: "24px",
+							background: "var(--au-bg-alt, #efe9db)",
+							borderRadius: "8px",
+							textAlign: "center"
+						},
+						children: [/* @__PURE__ */ jsx("p", {
+							style: {
+								fontSize: "14px",
+								color: "var(--au-text-muted)",
+								marginBottom: "16px"
+							},
+							children: "Vous devez être connecté pour laisser un avis."
+						}), /* @__PURE__ */ jsx(Link, {
+							href: route("login"),
+							className: "au-btn-outline",
+							style: {
+								display: "inline-block",
+								padding: "10px 20px"
+							},
+							children: "Se connecter"
+						})]
+					})] }), /* @__PURE__ */ jsx("div", { children: product.reviews && product.reviews.length > 0 ? /* @__PURE__ */ jsx("div", {
+						style: {
+							display: "flex",
+							flexDirection: "column",
+							gap: "24px"
+						},
+						children: product.reviews.map((review) => /* @__PURE__ */ jsxs("div", {
+							style: {
+								borderBottom: "1px solid var(--au-border)",
+								paddingBottom: "24px"
+							},
+							children: [
+								/* @__PURE__ */ jsxs("div", {
+									style: {
+										display: "flex",
+										alignItems: "center",
+										justifyContent: "space-between",
+										marginBottom: "8px"
+									},
+									children: [/* @__PURE__ */ jsx("span", {
+										style: {
+											fontWeight: 500,
+											fontSize: "14px"
+										},
+										children: review.user.name
+									}), /* @__PURE__ */ jsx("span", {
+										style: {
+											fontSize: "12px",
+											color: "var(--au-text-muted)"
+										},
+										children: new Date(review.created_at).toLocaleDateString("fr-FR")
+									})]
+								}),
+								/* @__PURE__ */ jsx("div", {
+									style: { marginBottom: "12px" },
+									children: /* @__PURE__ */ jsx(StarRating, {
+										rating: review.rating,
+										size: 14
+									})
+								}),
+								review.comment && /* @__PURE__ */ jsx("p", {
+									style: {
+										fontSize: "14px",
+										lineHeight: 1.6,
+										color: "var(--au-text-muted)"
+									},
+									children: review.comment
+								})
+							]
+						}, review.id))
+					}) : /* @__PURE__ */ jsx("p", {
+						style: {
+							fontSize: "14px",
+							color: "var(--au-text-muted)",
+							fontStyle: "italic"
+						},
+						children: "Aucun avis pour le moment. Soyez le premier à donner votre avis !"
+					}) })]
 				})]
 			}),
 			/* @__PURE__ */ jsx(PreorderModal, {

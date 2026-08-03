@@ -193,7 +193,7 @@
     "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/ImageWithLoader.tsx": [
-    "/build/assets/Welcome-BPmC-GPK.js"
+    "/build/assets/Welcome-T5LnUu_F.js"
   ],
   "resources/js/Components/InputError.tsx": [
     "/build/assets/InputError-CCQKfEE5.js"
@@ -295,7 +295,7 @@
     "/build/assets/Success-B-0Ee7Lt.js"
   ],
   "resources/js/Pages/Product/Show.tsx": [
-    "/build/assets/Show-DM4eLDF1.js"
+    "/build/assets/Show-mWVC2DaW.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
     "/build/assets/Edit-2-Q-2kRB.js"
@@ -310,7 +310,7 @@
     "/build/assets/UpdateProfileInformationForm-BBmKlf_W.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-BPmC-GPK.js"
+    "/build/assets/Welcome-T5LnUu_F.js"
   ],
   "resources/js/ssr.tsx": []
 }

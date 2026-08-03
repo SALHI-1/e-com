@@ -10,7 +10,10 @@ class ProductController extends Controller
 {
     public function show($id)
     {
-        $product = Product::with('category')->findOrFail($id);
+        $product = Product::with(['category', 'reviews.user'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->findOrFail($id);
         
         return Inertia::render('Product/Show', [
             'product'   => $product,

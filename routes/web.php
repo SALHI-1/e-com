@@ -20,6 +20,7 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/produit/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+Route::post('/produit/{product}/avis', [\App\Http\Controllers\ReviewController::class, 'store'])->middleware('auth')->name('reviews.store');
 
 Route::get('/sitemap.xml', function () {
     $products = \App\Models\Product::all();
