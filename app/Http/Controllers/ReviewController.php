@@ -11,15 +11,13 @@ class ReviewController extends Controller
     {
         $validated = $request->validate([
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
-            'comment' => ['nullable', 'string', 'max:1000'],
         ]);
 
-        $product->reviews()->create([
-            'user_id' => auth()->id(),
-            'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
-        ]);
+        $product->reviews()->updateOrCreate(
+            ['user_id' => auth()->id()],
+            ['rating' => $validated['rating']]
+        );
 
-        return back()->with('success', 'Votre avis a été publié avec succès.');
+        return back()->with('success', 'Votre avis a été enregistré avec succès.');
     }
 }

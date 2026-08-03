@@ -128,6 +128,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 	const [loading, setLoading] = useState(false);
 	const [toast, setToast] = useState(null);
 	const [showPreorder, setShowPreorder] = useState(false);
+	const userReview = product.reviews?.find((r) => r.user_id === auth.user?.id);
 	useEffect(() => {
 		if (flash?.success) setToast({
 			message: flash.success,
@@ -447,7 +448,31 @@ function ProductDetail({ product, flash, errors, auth }) {
 							fontFamily: "var(--au-font-serif)"
 						},
 						children: "Laisser un avis"
-					}), auth.user ? /* @__PURE__ */ jsxs("form", {
+					}), auth.user ? userReview ? /* @__PURE__ */ jsxs("div", {
+						style: {
+							padding: "24px",
+							background: "var(--au-bg-alt, #efe9db)",
+							borderRadius: "8px",
+							textAlign: "center"
+						},
+						children: [/* @__PURE__ */ jsx("p", {
+							style: {
+								fontSize: "14px",
+								color: "var(--au-text-muted)",
+								marginBottom: "12px"
+							},
+							children: "Vous avez déjà évalué ce produit :"
+						}), /* @__PURE__ */ jsx("div", {
+							style: {
+								display: "flex",
+								justifyContent: "center"
+							},
+							children: /* @__PURE__ */ jsx(StarRating, {
+								rating: userReview.rating,
+								size: 20
+							})
+						})]
+					}) : /* @__PURE__ */ jsxs("form", {
 						onSubmit: (e) => {
 							e.preventDefault();
 							const form = e.target;
@@ -456,7 +481,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								preserveScroll: true,
 								onSuccess: () => {
 									setToast({
-										message: "Votre avis a été publié avec succès.",
+										message: "Votre avis a été enregistré avec succès.",
 										type: "success"
 									});
 									form.reset();
@@ -469,82 +494,59 @@ function ProductDetail({ product, flash, errors, auth }) {
 								}
 							});
 						},
-						children: [
-							/* @__PURE__ */ jsxs("div", {
-								style: { marginBottom: "16px" },
-								children: [/* @__PURE__ */ jsx("label", {
-									style: {
-										display: "block",
-										fontSize: "13px",
-										marginBottom: "8px",
-										color: "var(--au-text-muted)"
-									},
-									children: "Note"
-								}), /* @__PURE__ */ jsx("div", {
-									style: {
-										display: "flex",
-										gap: "4px"
-									},
-									children: [
-										1,
-										2,
-										3,
-										4,
-										5
-									].map((star) => /* @__PURE__ */ jsxs("label", {
-										style: { cursor: "pointer" },
-										children: [/* @__PURE__ */ jsx("input", {
-											type: "radio",
-											name: "rating",
-											value: star,
-											required: true,
-											style: { display: "none" },
-											onChange: (e) => {
-												(e.target.parentElement?.parentElement?.querySelectorAll("svg"))?.forEach((s, i) => {
-													s.style.fill = i < star ? "var(--au-gold, #C2A063)" : "none";
-												});
-											}
-										}), /* @__PURE__ */ jsx("svg", {
-											width: "24",
-											height: "24",
-											viewBox: "0 0 24 24",
-											fill: "none",
-											stroke: "var(--au-gold, #C2A063)",
-											strokeWidth: "2",
-											strokeLinecap: "round",
-											strokeLinejoin: "round",
-											children: /* @__PURE__ */ jsx("polygon", { points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" })
-										})]
-									}, star))
-								})]
-							}),
-							/* @__PURE__ */ jsxs("div", {
-								style: { marginBottom: "16px" },
-								children: [/* @__PURE__ */ jsx("label", {
-									style: {
-										display: "block",
-										fontSize: "13px",
-										marginBottom: "8px",
-										color: "var(--au-text-muted)"
-									},
-									children: "Commentaire (optionnel)"
-								}), /* @__PURE__ */ jsx("textarea", {
-									name: "comment",
-									className: "au-input",
-									rows: 4,
-									style: {
-										width: "100%",
-										resize: "vertical"
-									}
-								})]
-							}),
-							/* @__PURE__ */ jsx("button", {
-								type: "submit",
-								className: "au-btn",
-								style: { padding: "12px 24px" },
-								children: "Publier mon avis"
-							})
-						]
+						children: [/* @__PURE__ */ jsxs("div", {
+							style: { marginBottom: "16px" },
+							children: [/* @__PURE__ */ jsx("label", {
+								style: {
+									display: "block",
+									fontSize: "13px",
+									marginBottom: "8px",
+									color: "var(--au-text-muted)"
+								},
+								children: "Note"
+							}), /* @__PURE__ */ jsx("div", {
+								style: {
+									display: "flex",
+									gap: "4px"
+								},
+								children: [
+									1,
+									2,
+									3,
+									4,
+									5
+								].map((star) => /* @__PURE__ */ jsxs("label", {
+									style: { cursor: "pointer" },
+									children: [/* @__PURE__ */ jsx("input", {
+										type: "radio",
+										name: "rating",
+										value: star,
+										required: true,
+										style: { display: "none" },
+										onChange: (e) => {
+											(e.target.parentElement?.parentElement?.querySelectorAll("svg"))?.forEach((s, i) => {
+												s.style.fill = i < star ? "var(--au-gold, #C2A063)" : "none";
+											});
+										}
+									}), /* @__PURE__ */ jsx("svg", {
+										width: "24",
+										height: "24",
+										viewBox: "0 0 24 24",
+										fill: "none",
+										stroke: "var(--au-gold, #C2A063)",
+										strokeWidth: "2",
+										strokeLinecap: "round",
+										strokeLinejoin: "round",
+										children: /* @__PURE__ */ jsx("polygon", { points: "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" })
+									})]
+								}, star))
+							})]
+						}), /* @__PURE__ */ jsx("button", {
+							type: "submit",
+							className: "au-btn",
+							style: { padding: "12px 24px" },
+							children: "Publier mon avis"
+						})]
 					}) : /* @__PURE__ */ jsxs("div", {
 						style: {
 							padding: "24px",
@@ -579,44 +581,30 @@ function ProductDetail({ product, flash, errors, auth }) {
 								borderBottom: "1px solid var(--au-border)",
 								paddingBottom: "24px"
 							},
-							children: [
-								/* @__PURE__ */ jsxs("div", {
+							children: [/* @__PURE__ */ jsxs("div", {
+								style: {
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "space-between",
+									marginBottom: "8px"
+								},
+								children: [/* @__PURE__ */ jsx("span", {
 									style: {
-										display: "flex",
-										alignItems: "center",
-										justifyContent: "space-between",
-										marginBottom: "8px"
+										fontWeight: 500,
+										fontSize: "14px"
 									},
-									children: [/* @__PURE__ */ jsx("span", {
-										style: {
-											fontWeight: 500,
-											fontSize: "14px"
-										},
-										children: review.user.name
-									}), /* @__PURE__ */ jsx("span", {
-										style: {
-											fontSize: "12px",
-											color: "var(--au-text-muted)"
-										},
-										children: new Date(review.created_at).toLocaleDateString("fr-FR")
-									})]
-								}),
-								/* @__PURE__ */ jsx("div", {
-									style: { marginBottom: "12px" },
-									children: /* @__PURE__ */ jsx(StarRating, {
-										rating: review.rating,
-										size: 14
-									})
-								}),
-								review.comment && /* @__PURE__ */ jsx("p", {
+									children: review.user.name
+								}), /* @__PURE__ */ jsx("span", {
 									style: {
-										fontSize: "14px",
-										lineHeight: 1.6,
+										fontSize: "12px",
 										color: "var(--au-text-muted)"
 									},
-									children: review.comment
-								})
-							]
+									children: new Date(review.created_at).toLocaleDateString("fr-FR")
+								})]
+							}), /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(StarRating, {
+								rating: review.rating,
+								size: 14
+							}) })]
 						}, review.id))
 					}) : /* @__PURE__ */ jsx("p", {
 						style: {

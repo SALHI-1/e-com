@@ -24,8 +24,8 @@ interface Product {
     reviews_count?: number;
     reviews?: {
         id: number;
+        user_id: number;
         rating: number;
-        comment: string | null;
         created_at: string;
         user: { name: string };
     }[];
@@ -103,6 +103,8 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
     const [showPreorder, setShowPreorder] = useState(false);
+    
+    const userReview = product.reviews?.find(r => r.user_id === auth.user?.id);
 
     // Afficher le toast dès qu'un flash/error arrive
     useEffect(() => {
@@ -278,47 +280,52 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                     <div>
                         <h3 style={{ fontSize: '16px', marginBottom: '16px', fontFamily: 'var(--au-font-serif)' }}>Laisser un avis</h3>
                         {auth.user ? (
-                            <form onSubmit={(e) => {
-                                e.preventDefault();
-                                const form = e.target as HTMLFormElement;
-                                const data = new FormData(form);
-                                router.post(route('reviews.store', product.id), Object.fromEntries(data.entries()), {
-                                    preserveScroll: true,
-                                    onSuccess: () => {
-                                        setToast({ message: 'Votre avis a été publié avec succès.', type: 'success' });
-                                        form.reset();
-                                    },
-                                    onError: (err) => {
-                                        setToast({ message: Object.values(err)[0] as string, type: 'error' });
-                                    }
-                                });
-                            }}>
-                                <div style={{ marginBottom: '16px' }}>
-                                    <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Note</label>
-                                    <div style={{ display: 'flex', gap: '4px' }}>
-                                        {[1, 2, 3, 4, 5].map(star => (
-                                            <label key={star} style={{ cursor: 'pointer' }}>
-                                                <input type="radio" name="rating" value={star} required style={{ display: 'none' }} 
-                                                    onChange={(e) => {
-                                                        const svg = e.target.parentElement?.parentElement?.querySelectorAll('svg');
-                                                        svg?.forEach((s, i) => {
-                                                            s.style.fill = i < star ? 'var(--au-gold, #C2A063)' : 'none';
-                                                        });
-                                                    }}
-                                                />
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--au-gold, #C2A063)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                                </svg>
-                                            </label>
-                                        ))}
+                            userReview ? (
+                                <div style={{ padding: '24px', background: 'var(--au-bg-alt, #efe9db)', borderRadius: '8px', textAlign: 'center' }}>
+                                    <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '12px' }}>Vous avez déjà évalué ce produit :</p>
+                                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                        <StarRating rating={userReview.rating} size={20} />
                                     </div>
                                 </div>
-                                <div style={{ marginBottom: '16px' }}>
-                                    <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Commentaire (optionnel)</label>
-                                    <textarea name="comment" className="au-input" rows={4} style={{ width: '100%', resize: 'vertical' }}></textarea>
-                                </div>
-                                <button type="submit" className="au-btn" style={{ padding: '12px 24px' }}>Publier mon avis</button>
-                            </form>
+                            ) : (
+                                <form onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const form = e.target as HTMLFormElement;
+                                    const data = new FormData(form);
+                                    router.post(route('reviews.store', product.id), Object.fromEntries(data.entries()), {
+                                        preserveScroll: true,
+                                        onSuccess: () => {
+                                            setToast({ message: 'Votre avis a été enregistré avec succès.', type: 'success' });
+                                            form.reset();
+                                        },
+                                        onError: (err) => {
+                                            setToast({ message: Object.values(err)[0] as string, type: 'error' });
+                                        }
+                                    });
+                                }}>
+                                    <div style={{ marginBottom: '16px' }}>
+                                        <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Note</label>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
+                                            {[1, 2, 3, 4, 5].map(star => (
+                                                <label key={star} style={{ cursor: 'pointer' }}>
+                                                    <input type="radio" name="rating" value={star} required style={{ display: 'none' }} 
+                                                        onChange={(e) => {
+                                                            const svg = e.target.parentElement?.parentElement?.querySelectorAll('svg');
+                                                            svg?.forEach((s, i) => {
+                                                                s.style.fill = i < star ? 'var(--au-gold, #C2A063)' : 'none';
+                                                            });
+                                                        }}
+                                                    />
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--au-gold, #C2A063)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                    </svg>
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <button type="submit" className="au-btn" style={{ padding: '12px 24px' }}>Publier mon avis</button>
+                                </form>
+                            )
                         ) : (
                             <div style={{ padding: '24px', background: 'var(--au-bg-alt, #efe9db)', borderRadius: '8px', textAlign: 'center' }}>
                                 <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '16px' }}>Vous devez être connecté pour laisser un avis.</p>
@@ -339,12 +346,9 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                                 {new Date(review.created_at).toLocaleDateString('fr-FR')}
                                             </span>
                                         </div>
-                                        <div style={{ marginBottom: '12px' }}>
+                                        <div>
                                             <StarRating rating={review.rating} size={14} />
                                         </div>
-                                        {review.comment && (
-                                            <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'var(--au-text-muted)' }}>{review.comment}</p>
-                                        )}
                                     </div>
                                 ))}
                             </div>
