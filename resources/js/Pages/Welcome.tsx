@@ -572,11 +572,11 @@ function WelcomeContent({ products = [], flash, errors }: any) {
   return (
     <>
       <Head>
-        <title>{activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : 'Ourélia'}</title>
-        <meta head-key="description" name="description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub} />
-        <meta head-key="keywords" name="keywords" content={activeCategory ? `${categoryLabel(activeCategory).toLowerCase()}, soins, beauté, Ourélia, cosmétiques` : "soins, beauté, cosmétiques, parfums, Ourélia, argan, bien-être"} />
-        <meta head-key="og:title" property="og:title" content={activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : 'Ourélia'} />
-        <meta head-key="og:description" property="og:description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub} />
+        <title>{activeCategory ? `${categoryLabel(activeCategory)} · Ourélia (Ourelia)` : 'Ourélia | Ourelia Beauty'}</title>
+        <meta head-key="description" name="description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia (Ourelia).` : `Ourélia (Ourelia Beauty) : ${copy.heroSub}`} />
+        <meta head-key="keywords" name="keywords" content={activeCategory ? `${categoryLabel(activeCategory).toLowerCase()}, soins, beauté, Ourélia, Ourelia, cosmétiques` : "Ourelia, Ourélia, Ourelia Beauty, Ourélia Beauty, Ourelia maquillage, Ourélia maquillage, soins, beauté, cosmétiques, parfums, argan"} />
+        <meta head-key="og:title" property="og:title" content={activeCategory ? `${categoryLabel(activeCategory)} · Ourélia (Ourelia)` : 'Ourélia | Ourelia Beauty'} />
+        <meta head-key="og:description" property="og:description" content={activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia (Ourelia).` : `Ourélia (Ourelia Beauty) : ${copy.heroSub}`} />
         <link head-key="canonical" rel="canonical" href={route('home')} />
       </Head>
 

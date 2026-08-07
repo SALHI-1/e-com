@@ -4,26 +4,26 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Ourélia') }}</title>
+        <title inertia>{{ config('app.name', 'Ourélia') }} | Ourelia</title>
         
         {{-- Default SEO Meta Tags --}}
-        <meta name="description" content="Découvrez notre boutique en ligne avec les meilleurs produits au meilleur prix.">
-        <meta name="keywords" content="e-commerce, boutique, achat en ligne">
+        <meta name="description" content="Découvrez Ourélia (Ourelia Beauty), votre boutique en ligne de maquillage, parfums et soins.">
+        <meta name="keywords" content="Ourélia, Ourelia, Ourelia Beauty, Ourélia Beauty, Ourelia maquillage, Ourélia maquillage, e-commerce, boutique beauté">
         <meta name="robots" content="index, follow">
         <meta name="author" content="{{ config('app.name', 'Ourélia') }}">
         <link rel="canonical" href="{{ url()->current() }}">
 
         {{-- Open Graph / Facebook --}}
         <meta property="og:type" content="website">
-        <meta property="og:title" content="{{ config('app.name', 'Ourélia') }}">
-        <meta property="og:description" content="Découvrez notre boutique en ligne avec les meilleurs produits au meilleur prix.">
+        <meta property="og:title" content="{{ config('app.name', 'Ourélia') }} | Ourelia">
+        <meta property="og:description" content="Découvrez Ourélia (Ourelia Beauty), votre boutique en ligne de maquillage, parfums et soins.">
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:site_name" content="{{ config('app.name', 'Ourélia') }}">
         
         {{-- Twitter --}}
         <meta name="twitter:card" content="summary_large_image">
-        <meta name="twitter:title" content="{{ config('app.name', 'Ourélia') }}">
-        <meta name="twitter:description" content="Découvrez notre boutique en ligne avec les meilleurs produits au meilleur prix.">
+        <meta name="twitter:title" content="{{ config('app.name', 'Ourélia') }} | Ourelia">
+        <meta name="twitter:description" content="Découvrez Ourélia (Ourelia Beauty), votre boutique en ligne de maquillage, parfums et soins.">
 
         {{-- Schema.org JSON-LD — Données structurées pour Google --}}
         <script type="application/ld+json">
@@ -34,7 +34,7 @@
                     "@@type": ["Organization", "Store", "HealthAndBeautyBusiness"],
                     "@@id": "{{ url('/') }}/#organization",
                     "name": "Ourélia",
-                    "alternateName": "Ourelia Beauty",
+                    "alternateName": ["Ourelia", "Ourelia Beauty", "Ourélia Beauty", "Ourelia maquillage"],
                     "url": "{{ url('/') }}",
                     "logo": {
                         "@@type": "ImageObject",
