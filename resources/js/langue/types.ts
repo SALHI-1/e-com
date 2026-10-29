@@ -289,4 +289,48 @@ export interface Dictionary {
     loggingIn: string;
     registering: string;
   };
+
+  profilePage: {
+    title: string;
+    subtitle: string;
+    welcomeBack: (name: string) => string;
+    memberSince: string;
+    tabOrders: string;
+    tabInfo: string;
+    tabSecurity: string;
+    tabDanger: string;
+    orderNumber: string;
+    orderDate: string;
+    orderTotal: string;
+    orderAddress: string;
+    downloadTicket: string;
+    articlesCount: (count: number) => string;
+    noOrders: string;
+    shopNow: string;
+    statusLabels: Record<string, string>;
+    infoTitle: string;
+    infoSubtitle: string;
+    fullName: string;
+    emailAddress: string;
+    phoneLabel: string;
+    phoneHelp: string;
+    saveChanges: string;
+    savedSuccess: string;
+    emailUnverified: string;
+    resendVerification: string;
+    verificationSent: string;
+    securityTitle: string;
+    securitySubtitle: string;
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+    updatePassword: string;
+    passwordUpdated: string;
+    dangerTitle: string;
+    dangerSubtitle: string;
+    deleteAccountBtn: string;
+    confirmModalTitle: string;
+    confirmModalText: string;
+    cancelBtn: string;
+  };
 }

@@ -18,10 +18,32 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
+        $user = $request->user();
+        $orders = $user->orders()
+            ->with(['items.product'])
+            ->latest()
+            ->get();
+
         return Inertia::render('Profile/Edit', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
+            'mustVerifyEmail' => $user instanceof MustVerifyEmail,
             'status' => session('status'),
+            'orders' => $orders,
+            'cartCount' => array_sum(session()->get('cart', [])),
         ]);
+    }
+
+    /**
+     * Download the delivery slip for a customer's order.
+     */
+    public function orderTicket(Request $request, \App\Models\Order $order)
+    {
+        if ($order->user_id !== $request->user()->id && !$request->user()->is_admin) {
+            abort(403);
+        }
+
+        $order->load(['user', 'items.product']);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.orders.ticket', compact('order'));
+        return $pdf->download('ticket-' . $order->order_number . '.pdf');
     }
 
     /**
