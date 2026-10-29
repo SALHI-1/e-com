@@ -1,4 +1,4 @@
-import { n as useGuestLang, t as Guest } from "./GuestLayout-Bq3z4XbT.js";
+import { n as useGuestLang, t as Guest } from "./GuestLayout-AszfP-wk.js";
 import { Head, useForm } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Auth/ConfirmPassword.tsx

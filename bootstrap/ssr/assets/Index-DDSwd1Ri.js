@@ -1,5 +1,6 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BxqbMFN4.js";
-import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-C7YwqqfL.js";
+import { t as ImageWithLoader } from "./ImageWithLoader-C9lsqNz9.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cn-w4Vxs.js";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useMemo, useState } from "react";

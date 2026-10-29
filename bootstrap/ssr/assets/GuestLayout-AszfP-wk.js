@@ -1,4 +1,4 @@
-import { a as normalizeLang, i as getStoredLang, o as setStoredLang, r as dictionaries } from "./langue-CbfI8lEO.js";
+import { a as normalizeLang, i as getStoredLang, o as setStoredLang, r as dictionaries } from "./langue-BtFliKHl.js";
 import { Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { createContext, useContext, useState } from "react";

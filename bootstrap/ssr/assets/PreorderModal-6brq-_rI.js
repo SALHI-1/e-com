@@ -1,7 +1,8 @@
-import { n as useAurelia } from "./ClientLayout-BxqbMFN4.js";
+import { n as useAurelia } from "./ClientLayout-C7YwqqfL.js";
 import { t as Modal } from "./Modal-D5A3RQdx.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
-import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
+import { t as ImageWithLoader } from "./ImageWithLoader-C9lsqNz9.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cn-w4Vxs.js";
 import { useForm, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import React from "react";

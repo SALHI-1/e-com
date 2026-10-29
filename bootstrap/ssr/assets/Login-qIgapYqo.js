@@ -1,10 +1,8 @@
-import { n as useGuestLang, t as Guest } from "./GuestLayout-Bq3z4XbT.js";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { Fragment, jsx, jsxs } from "react/jsx-runtime";
-//#region resources/js/Pages/Auth/Login.tsx
-function LoginForm({ status, canResetPassword }) {
-	const { t } = useGuestLang();
-	const a = t.auth;
+import { t as Guest } from "./GuestLayout-AszfP-wk.js";
+import { Head, useForm } from "@inertiajs/react";
+import { jsx, jsxs } from "react/jsx-runtime";
+//#region resources/js/Pages/Admin/Login.tsx
+function Login({ status }) {
 	const { data, setData, post, processing, errors, reset } = useForm({
 		email: "",
 		password: "",
@@ -12,13 +10,13 @@ function LoginForm({ status, canResetPassword }) {
 	});
 	const submit = (e) => {
 		e.preventDefault();
-		post(route("login"), { onFinish: () => reset("password") });
+		post(route("admin.login"), { onFinish: () => reset("password") });
 	};
-	return /* @__PURE__ */ jsxs(Fragment, { children: [
-		/* @__PURE__ */ jsx(Head, { title: `${a.loginTitle} — Aurélia` }),
+	return /* @__PURE__ */ jsxs(Guest, { children: [
+		/* @__PURE__ */ jsx(Head, { title: "Administration — Ourélia" }),
 		/* @__PURE__ */ jsx("h2", {
 			className: "au-auth-title",
-			children: a.loginTitle
+			children: "Administration"
 		}),
 		status && /* @__PURE__ */ jsx("div", {
 			className: "au-flash au-flash-success",
@@ -37,7 +35,7 @@ function LoginForm({ status, canResetPassword }) {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "email",
-						children: a.emailLabel
+						children: "Admin Email"
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "email",
@@ -57,7 +55,7 @@ function LoginForm({ status, canResetPassword }) {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "password",
-						children: a.passwordLabel
+						children: "Password"
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "password",
@@ -88,55 +86,30 @@ function LoginForm({ status, canResetPassword }) {
 						htmlFor: "remember",
 						style: {
 							fontSize: "0.8rem",
-							color: "var(--au-text-muted)",
+							color: "var(--cream-dim)",
 							cursor: "pointer"
 						},
-						children: a.rememberMe
+						children: "Remember me"
 					})]
 				}),
-				/* @__PURE__ */ jsxs("div", {
-					className: "au-auth-action-row",
+				/* @__PURE__ */ jsx("div", {
 					style: {
 						display: "flex",
 						alignItems: "center",
-						justifyContent: "space-between",
+						justifyContent: "flex-end",
 						marginTop: "0.5rem"
 					},
-					children: [canResetPassword && /* @__PURE__ */ jsx(Link, {
-						href: route("password.request"),
-						className: "au-auth-link",
-						children: a.forgotPasswordLink
-					}), /* @__PURE__ */ jsx("button", {
+					children: /* @__PURE__ */ jsx("button", {
 						type: "submit",
 						disabled: processing,
 						className: "au-btn-gold",
 						style: { padding: "0.7rem 2rem" },
-						children: processing ? a.loggingIn : a.loginBtn
-					})]
-				}),
-				/* @__PURE__ */ jsxs("p", {
-					style: {
-						textAlign: "center",
-						fontSize: "0.8rem",
-						color: "var(--au-text-dim)",
-						marginTop: "0.5rem"
-					},
-					children: [
-						a.dontHaveAccount,
-						" ",
-						/* @__PURE__ */ jsx(Link, {
-							href: route("register"),
-							className: "au-auth-link",
-							children: a.createAccountLink
-						})
-					]
+						children: processing ? "Signing in…" : "Sign In to Admin"
+					})
 				})
 			]
 		})
 	] });
-}
-function Login(props) {
-	return /* @__PURE__ */ jsx(Guest, { children: /* @__PURE__ */ jsx(LoginForm, { ...props }) });
 }
 //#endregion
 export { Login as default };

@@ -190,10 +190,10 @@
     "/build/assets/DeleteUserForm-DNhaPZp9.js"
   ],
   "resources/js/Components/Dropdown.tsx": [
-    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
+    "/build/assets/AdminLayout-DaxNUwdP.js"
   ],
   "resources/js/Components/ImageWithLoader.tsx": [
-    "/build/assets/ProductImagePlaceholder-Cg-ADBC2.js"
+    "/build/assets/ImageWithLoader-C9lsqNz9.js"
   ],
   "resources/js/Components/InputError.tsx": [
     "/build/assets/InputError-CCQKfEE5.js"
@@ -205,19 +205,19 @@
     "/build/assets/Modal-D5A3RQdx.js"
   ],
   "resources/js/Components/NavLink.tsx": [
-    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
+    "/build/assets/AdminLayout-DaxNUwdP.js"
   ],
   "resources/js/Components/PreorderModal.tsx": [
-    "/build/assets/PreorderModal-COYnguxr.js"
+    "/build/assets/PreorderModal-6brq-_rI.js"
   ],
   "resources/js/Components/PrimaryButton.tsx": [
     "/build/assets/PrimaryButton-Dlx63LxW.js"
   ],
   "resources/js/Components/ProductImagePlaceholder.tsx": [
-    "/build/assets/ProductImagePlaceholder-Cg-ADBC2.js"
+    "/build/assets/ProductImagePlaceholder-Cn-w4Vxs.js"
   ],
   "resources/js/Components/ResponsiveNavLink.tsx": [
-    "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
+    "/build/assets/AdminLayout-DaxNUwdP.js"
   ],
   "resources/js/Components/SecondaryButton.tsx": [
     "/build/assets/SecondaryButton-CLBMPam0.js"
@@ -226,82 +226,79 @@
     "/build/assets/TextInput-CDhi48PK.js"
   ],
   "resources/js/Layouts/AdminLayout.tsx": [
-    "/build/assets/AdminLayout-CjENzdXY.js"
-  ],
-  "resources/js/Layouts/AuthenticatedLayout.tsx": [
-    "/build/assets/Edit-DQfIZNB9.js"
+    "/build/assets/AdminLayout-DaxNUwdP.js"
   ],
   "resources/js/Layouts/ClientLayout.tsx": [
-    "/build/assets/ClientLayout-BxqbMFN4.js"
+    "/build/assets/ClientLayout-C7YwqqfL.js"
   ],
   "resources/js/Layouts/GuestLayout.tsx": [
-    "/build/assets/GuestLayout-Bq3z4XbT.js"
+    "/build/assets/GuestLayout-AszfP-wk.js"
   ],
   "resources/js/Pages/About.tsx": [
-    "/build/assets/About-CLby1LAD.js"
+    "/build/assets/About-DiuOnjZ2.js"
   ],
   "resources/js/Pages/Admin/Admins/Index.tsx": [
-    "/build/assets/Index-lcR0Itjn.js"
+    "/build/assets/Index-C-_h4LhZ.js"
   ],
   "resources/js/Pages/Admin/Dashboard.tsx": [
-    "/build/assets/Dashboard-DgW_kZNE.js"
+    "/build/assets/Dashboard-Dz_sSDE_.js"
   ],
   "resources/js/Pages/Admin/Login.tsx": [
-    "/build/assets/Login-wzwBD2sg.js"
+    "/build/assets/Login-qIgapYqo.js"
   ],
   "resources/js/Pages/Admin/Orders/Index.tsx": [
-    "/build/assets/Index-D5k1Imbh.js"
+    "/build/assets/Index-fdMWl5al.js"
   ],
   "resources/js/Pages/Admin/Orders/List.tsx": [
-    "/build/assets/List-d2cnaop2.js"
+    "/build/assets/List-KREsYZZP.js"
   ],
   "resources/js/Pages/Admin/Orders/Show.tsx": [
-    "/build/assets/Show-C6KbPlLJ.js"
+    "/build/assets/Show-7hoQSXSM.js"
   ],
   "resources/js/Pages/Admin/Products/Create.tsx": [
-    "/build/assets/Create-BCabx1Mu.js"
+    "/build/assets/Create-QKbQ8oyY.js"
   ],
   "resources/js/Pages/Admin/Products/Edit.tsx": [
-    "/build/assets/Edit-CUvGnW54.js"
+    "/build/assets/Edit-Bw2taFJH.js"
   ],
   "resources/js/Pages/Admin/Products/Index.tsx": [
-    "/build/assets/Index-ucEFgo0E.js"
+    "/build/assets/Index-CS2F11pI.js"
   ],
   "resources/js/Pages/Admin/Products/ProductModal.tsx": [
     "/build/assets/ProductModal-De1o1uSd.js"
   ],
   "resources/js/Pages/Admin/Products/Trashed.tsx": [
-    "/build/assets/Trashed-B5T6ej8H.js"
+    "/build/assets/Trashed-CFGZhNS2.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
-    "/build/assets/ConfirmPassword-DyNmE_Pd.js"
+    "/build/assets/ConfirmPassword-DcZqH-6B.js"
   ],
   "resources/js/Pages/Auth/ForgotPassword.tsx": [
-    "/build/assets/ForgotPassword-D1JdgbXb.js"
+    "/build/assets/ForgotPassword-Dwgr7NK4.js"
   ],
   "resources/js/Pages/Auth/Login.tsx": [
-    "/build/assets/Login-zVJ4z61M.js"
+    "/build/assets/Login-XvGKgzmI.js"
   ],
   "resources/js/Pages/Auth/Register.tsx": [
-    "/build/assets/Register-vkTS85Hd.js"
+    "/build/assets/Register-BUHowwlD.js"
   ],
   "resources/js/Pages/Auth/ResetPassword.tsx": [
-    "/build/assets/ResetPassword-24Km26F_.js"
+    "/build/assets/ResetPassword-3-fwsdgH.js"
   ],
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
-    "/build/assets/VerifyEmail-D8egVeJV.js"
+    "/build/assets/VerifyEmail-B9Se-Q_-.js"
   ],
   "resources/js/Pages/Cart/Index.tsx": [
-    "/build/assets/Index-C7q7Pcpq.js"
+    "/build/assets/Index-DDSwd1Ri.js"
   ],
   "resources/js/Pages/Cart/Success.tsx": [
-    "/build/assets/Success-0p45n_8y.js"
+    "/build/assets/Success-BsmygGyL.js"
   ],
   "resources/js/Pages/Product/Show.tsx": [
-    "/build/assets/Show-DmS-T71O.js"
+    "/build/assets/Show-bmpsgQGc.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-DQfIZNB9.js"
+    "/build/assets/Edit-CxL_VOXZ.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
     "/build/assets/DeleteUserForm-DNhaPZp9.js"
@@ -313,19 +310,19 @@
     "/build/assets/UpdateProfileInformationForm-D1XSPcww.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-8414Idat.js"
+    "/build/assets/Welcome-DtCdG0tm.js"
   ],
   "resources/js/langue/eng.ts": [
-    "/build/assets/langue-CbfI8lEO.js"
+    "/build/assets/langue-BtFliKHl.js"
   ],
   "resources/js/langue/esp.ts": [
-    "/build/assets/langue-CbfI8lEO.js"
+    "/build/assets/langue-BtFliKHl.js"
   ],
   "resources/js/langue/fr.ts": [
-    "/build/assets/langue-CbfI8lEO.js"
+    "/build/assets/langue-BtFliKHl.js"
   ],
   "resources/js/langue/index.ts": [
-    "/build/assets/langue-CbfI8lEO.js"
+    "/build/assets/langue-BtFliKHl.js"
   ],
   "resources/js/ssr.tsx": []
 }
