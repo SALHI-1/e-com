@@ -3339,3 +3339,113 @@ html {
     padding: 12px;
   }
 }
+
+/* ==========================================================================
+   Scroll Reveal Animations (Luxury Editorial Motion)
+   ========================================================================== */
+
+/* Base fade-and-slide up */
+.au-reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  filter: blur(2px);
+  transition: 
+    opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+.au-reveal.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Variant: Subtle zoom & lift (ideal for cards and hero visuals) */
+.au-reveal-scale {
+  opacity: 0;
+  transform: scale(0.94) translateY(20px);
+  transition: 
+    opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.au-reveal-scale.is-revealed {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Variant: Slide in from Left */
+.au-reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: 
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.au-reveal-left.is-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Variant: Slide in from Right */
+.au-reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: 
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.au-reveal-right.is-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Staggered Children Group */
+.au-reveal-group > * {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: 
+    opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.au-reveal-group.is-revealed > * {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Cascading stagger delays */
+.au-reveal-group.is-revealed > *:nth-child(1)  { transition-delay: 0.04s; }
+.au-reveal-group.is-revealed > *:nth-child(2)  { transition-delay: 0.10s; }
+.au-reveal-group.is-revealed > *:nth-child(3)  { transition-delay: 0.16s; }
+.au-reveal-group.is-revealed > *:nth-child(4)  { transition-delay: 0.22s; }
+.au-reveal-group.is-revealed > *:nth-child(5)  { transition-delay: 0.28s; }
+.au-reveal-group.is-revealed > *:nth-child(6)  { transition-delay: 0.34s; }
+.au-reveal-group.is-revealed > *:nth-child(7)  { transition-delay: 0.40s; }
+.au-reveal-group.is-revealed > *:nth-child(8)  { transition-delay: 0.46s; }
+.au-reveal-group.is-revealed > *:nth-child(9)  { transition-delay: 0.52s; }
+.au-reveal-group.is-revealed > *:nth-child(10) { transition-delay: 0.58s; }
+.au-reveal-group.is-revealed > *:nth-child(11) { transition-delay: 0.64s; }
+.au-reveal-group.is-revealed > *:nth-child(12) { transition-delay: 0.70s; }
+
+/* Accessible fallback for reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .au-reveal,
+  .au-reveal-scale,
+  .au-reveal-left,
+  .au-reveal-right,
+  .au-reveal-group > * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+}

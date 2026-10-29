@@ -475,6 +475,49 @@ function WelcomeContent({ products = [], flash, errors }: any) {
     .filter((p: any) => activeCategory ? p.category.name === activeCategory : true)
     .filter((p: any) => activeBrand ? p.brand === activeBrand : true);
 
+  // Scroll reveal animation observer
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (!('IntersectionObserver' in window)) {
+      document
+        .querySelectorAll('.au-reveal, .au-reveal-scale, .au-reveal-left, .au-reveal-right, .au-reveal-group')
+        .forEach((el) => el.classList.add('is-revealed'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px -45px 0px',
+        threshold: 0.1,
+      }
+    );
+
+    const observeUnrevealed = () => {
+      const targets = document.querySelectorAll(
+        '.au-reveal:not(.is-revealed), .au-reveal-scale:not(.is-revealed), .au-reveal-left:not(.is-revealed), .au-reveal-right:not(.is-revealed), .au-reveal-group:not(.is-revealed)'
+      );
+      targets.forEach((el) => observer.observe(el));
+    };
+
+    observeUnrevealed();
+    const timer = setTimeout(observeUnrevealed, 200);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [filteredProducts, visibleCount, activeCategory, activeBrand]);
+
   return (
     <>
       <Head>
@@ -498,7 +541,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
       {/* ---------------- HERO ---------------- */}
       <div className="au-container au-hero">
         <div className="au-hero-grid">
-          <div>
+          <div className="au-reveal">
             <div className="au-eyebrow">
               <span className="au-eyebrow-line" />
               <span className="au-eyebrow-label">{copy.heroKicker}</span>
@@ -518,14 +561,14 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', minHeight: '400px' }}>
+          <div className="au-reveal-scale" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', minHeight: '400px' }}>
             <ApplicationLogo style={{ width: '80%', maxWidth: '400px', height: 'auto', objectFit: 'contain' }} />
           </div>
         </div>
       </div>
 
       {/* ---------------- MANIFESTO ---------------- */}
-      <div className="au-manifesto">
+      <div className="au-manifesto au-reveal">
         <div className="au-manifesto-inner">
           <div className="au-kicker">{copy.manifestoKicker}</div>
           <p className="au-quote">{copy.manifestoText}</p>
@@ -536,7 +579,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
       {/* ---------------- SIGNATURE SPREADS ---------------- */}
       {spreadProducts.length > 0 && (
         <div className="au-container au-spreads">
-          <div className="au-spreads-head">
+          <div className="au-spreads-head au-reveal">
             <div className="au-section-eyebrow">{copy.spreadKicker}</div>
             <h2 className="au-section-title">{copy.spreadTitle}</h2>
           </div>
@@ -546,7 +589,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             const shape = resolveShape(product);
             return (
               <div
-                className="au-spread-row"
+                className="au-spread-row au-reveal"
                 key={product.id}
                 style={{ flexDirection: i % 2 === 1 ? 'row-reverse' : 'row' }}
               >
@@ -590,13 +633,13 @@ function WelcomeContent({ products = [], flash, errors }: any) {
 
       {/* ---------------- CATEGORIES ---------------- */}
       <div className="au-container au-categories">
-        <div className="au-section-head">
+        <div className="au-section-head au-reveal">
           <div>
             <div className="au-section-eyebrow">{copy.catTitle}</div>
             <h2 className="au-section-title">{copy.catSub}</h2>
           </div>
         </div>
-        <div className="au-cat-grid">
+        <div className="au-cat-grid au-reveal-group">
           {categoriesList.map((cat, i) => {
             const count = products.filter((p: any) => p.category.name === cat && (activeBrand ? p.brand === activeBrand : true)).length;
             return (
@@ -627,7 +670,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
 
       {/* ---------------- COLLECTION (GRID) ---------------- */}
       <div className="au-container au-bestsellers" id="collection">
-        <div className="au-section-head au-section-head--lg">
+        <div className="au-section-head au-section-head--lg au-reveal">
           <div>
             <div className="au-section-eyebrow">{copy.bestTitle}</div>
             <h2 className="au-section-title">{copy.bestSub}</h2>
@@ -648,7 +691,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             </span>
           </div>
         </div>
-        <div className="au-prod-grid">
+        <div className="au-prod-grid au-reveal-group">
           {filteredProducts
             .slice(0, visibleCount)
             .map((product: any) => (
@@ -657,7 +700,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
         </div>
 
         {filteredProducts.length > visibleCount && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px', minHeight: '40px' }} className="au-reveal">
             {loadingMore ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
                 <div className="animate-spin" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent' }}></div>
@@ -679,14 +722,14 @@ function WelcomeContent({ products = [], flash, errors }: any) {
       {/* ---------------- DARK PHILOSOPHY BAND ---------------- */}
       <div className="au-dark-band">
         <div className="au-container au-dark-inner">
-          <div className="au-dark-head">
+          <div className="au-dark-head au-reveal">
             <div className="au-dark-kicker">{copy.darkKicker}</div>
             <h2 className="au-dark-title">
               {copy.darkTitle} <span className="au-dark-title-italic">{copy.darkTitleIt}</span>
             </h2>
             <p className="au-dark-text">{copy.darkText}</p>
           </div>
-          <div className="au-values-grid">
+          <div className="au-values-grid au-reveal-group">
             <div className="au-value">
               <div className="au-value-num">01</div>
               <h3 className="au-value-title">{copy.v1t}</h3>
@@ -703,7 +746,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
               <p className="au-value-text">{copy.v3d}</p>
             </div>
           </div>
-          <div className="au-dark-cta-wrap">
+          <div className="au-dark-cta-wrap au-reveal">
             <Link href="/about" className="au-btn-outline-dark">{copy.darkCta}</Link>
           </div>
         </div>

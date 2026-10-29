@@ -118,6 +118,49 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
     ? "Descubra nuestra gama de cuidados esenciales Ourélia, cosméticos y perfumes diseñados para su bienestar diario."
     : "Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être.";
 
+  // Scroll reveal observer for layout and child elements
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    if (!('IntersectionObserver' in window)) {
+      document.querySelectorAll('.au-reveal, .au-reveal-scale, .au-reveal-left, .au-reveal-right, .au-reveal-group').forEach((el) => {
+        el.classList.add('is-revealed');
+      });
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px -40px 0px',
+        threshold: 0.08,
+      }
+    );
+
+    const observeUnrevealed = () => {
+      const elements = document.querySelectorAll(
+        '.au-reveal:not(.is-revealed), .au-reveal-scale:not(.is-revealed), .au-reveal-left:not(.is-revealed), .au-reveal-right:not(.is-revealed), .au-reveal-group:not(.is-revealed)'
+      );
+      elements.forEach((el) => observer.observe(el));
+    };
+
+    observeUnrevealed();
+    const timer = setTimeout(observeUnrevealed, 250);
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [url, lang]);
+
   return (
     <AureliaContext.Provider value={contextValue}>
       <Head title={title ? (title === 'Ourélia' ? 'Ourélia' : `${title} · Ourélia`) : 'Ourélia — Essential Care'}>
@@ -474,7 +517,7 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
         <main key={lang} className="au-lang-fade">{children}</main>
 
         {/* newsletter */}
-        <section className="au-newsletter">
+        <section className="au-newsletter au-reveal">
           <div className="au-kicker">{t.promiseKicker}</div>
           <h2 className="au-newsletter-title">{t.promiseTitle}</h2>
           <p className="au-newsletter-text">{t.promiseText}</p>
