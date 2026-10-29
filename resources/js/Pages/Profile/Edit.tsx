@@ -58,8 +58,9 @@ function ProfileContent({
 }: PageProps<ProfileProps>) {
   const { auth } = usePage().props;
   const user = auth.user;
-  const { t } = useAurelia();
+  const { t, lang } = useAurelia();
   const p = t.profilePage;
+  const locale = lang === 'eng' ? 'en-US' : lang === 'esp' ? 'es-ES' : 'fr-FR';
 
   const [activeTab, setActiveTab] = useState<'orders' | 'info' | 'security' | 'danger'>('orders');
 
@@ -169,7 +170,7 @@ function ProfileContent({
               <div className="au-profile-meta">
                 <span>{user.email}</span>
                 {user.phone && <span>• {user.phone}</span>}
-                <span className="au-profile-meta-tag">Membre Ourélia</span>
+                <span className="au-profile-meta-tag">{p.memberTag}</span>
               </div>
             </div>
           </div>
@@ -181,7 +182,7 @@ function ProfileContent({
             </div>
             <div className="au-profile-stat-box">
               <div className="au-profile-stat-val">{activeOrders}</div>
-              <div className="au-profile-stat-lbl">En cours</div>
+              <div className="au-profile-stat-lbl">{p.activeOrdersLabel}</div>
             </div>
             <div className="au-profile-stat-box">
               <div className="au-profile-stat-val" style={{ color: 'var(--au-gold)' }}>
@@ -300,7 +301,7 @@ function ProfileContent({
                 {orders.map((order) => {
                   const badge = getStatusStyle(order.status);
                   const statusDisplay = p.statusLabels[order.status] || order.status;
-                  const formattedDate = new Date(order.created_at).toLocaleDateString(undefined, {
+                  const formattedDate = new Date(order.created_at).toLocaleDateString(locale, {
                     year: 'numeric',
                     month: 'short',
                     day: 'numeric',
@@ -309,9 +310,9 @@ function ProfileContent({
                   return (
                     <div key={order.id} className="au-order-card">
                       <div className="au-order-top">
-                        <div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <span style={{ fontWeight: 700, fontSize: '15px', color: 'var(--au-ink)' }}>
+                        <div className="au-order-top-left">
+                          <div className="au-order-id-row">
+                            <span className="au-order-num">
                               {order.order_number}
                             </span>
                             <span
@@ -325,23 +326,16 @@ function ProfileContent({
                               {statusDisplay}
                             </span>
                           </div>
-                          <div style={{ fontSize: '12px', color: 'var(--au-text-muted)', marginTop: '4px' }}>
+                          <div className="au-order-date">
                             {p.orderDate}: {formattedDate}
                           </div>
                         </div>
 
-                        <div style={{ textAlign: 'right' }}>
-                          <span style={{ fontSize: '12px', color: 'var(--au-text-muted)', textTransform: 'uppercase' }}>
+                        <div className="au-order-top-right">
+                          <span className="au-order-total-lbl">
                             {p.orderTotal}
                           </span>
-                          <div
-                            style={{
-                              fontFamily: 'var(--au-font-serif)',
-                              fontSize: '20px',
-                              fontWeight: 700,
-                              color: 'var(--au-ink)',
-                            }}
-                          >
+                          <div className="au-order-total-val">
                             {order.total_amount} <span style={{ fontSize: '13px' }}>DH</span>
                           </div>
                         </div>
@@ -349,7 +343,7 @@ function ProfileContent({
 
                       <div className="au-order-body">
                         {order.items && order.items.length > 0 && (
-                          <div style={{ marginBottom: '16px' }}>
+                          <div className="au-order-items-list">
                             {order.items.map((item) => (
                               <div key={item.id} className="au-order-item-row">
                                 {item.product?.image_url ? (
@@ -367,47 +361,21 @@ function ProfileContent({
                                   />
                                 )}
 
-                                <div style={{ flex: 1, minWidth: 0 }}>
-                                  <div
-                                    style={{
-                                      fontWeight: 600,
-                                      fontSize: '14px',
-                                      color: 'var(--au-ink)',
-                                      whiteSpace: 'nowrap',
-                                      overflow: 'hidden',
-                                      textOverflow: 'ellipsis',
-                                    }}
-                                  >
-                                    {item.product?.name || 'Produit'}
+                                <div className="au-order-item-details">
+                                  <div className="au-order-item-title">
+                                    {item.product?.name || p.productFallback}
                                   </div>
-                                  <div style={{ fontSize: '12px', color: 'var(--au-text-muted)', marginTop: '2px' }}>
-                                    {item.quantity} × {item.unit_price} DH
+                                  <div className="au-order-item-sub">
+                                    <span>{item.quantity} × {item.unit_price} DH</span>
                                     {item.is_preorder && (
-                                      <span
-                                        style={{
-                                          marginLeft: '8px',
-                                          background: '#EDE9FE',
-                                          color: '#5B21B6',
-                                          padding: '1px 6px',
-                                          borderRadius: '4px',
-                                          fontSize: '10px',
-                                          fontWeight: 600,
-                                        }}
-                                      >
-                                        Précommande
+                                      <span className="au-order-item-preorder">
+                                        {p.preorderBadge}
                                       </span>
                                     )}
                                   </div>
                                 </div>
 
-                                <div
-                                  style={{
-                                    fontWeight: 600,
-                                    fontSize: '14px',
-                                    color: 'var(--au-ink)',
-                                    whiteSpace: 'nowrap',
-                                  }}
-                                >
+                                <div className="au-order-item-price">
                                   {(item.quantity * item.unit_price).toFixed(2)} DH
                                 </div>
                               </div>
@@ -416,16 +384,7 @@ function ProfileContent({
                         )}
 
                         {order.shipping_address && (
-                          <div
-                            style={{
-                              background: 'var(--au-bg)',
-                              border: '1px solid var(--au-border)',
-                              borderRadius: '6px',
-                              padding: '10px 14px',
-                              fontSize: '12px',
-                              color: 'var(--au-text-muted)',
-                            }}
-                          >
+                          <div className="au-order-address-box">
                             <strong style={{ color: 'var(--au-ink)' }}>{p.orderAddress}:</strong>{' '}
                             {order.shipping_address}
                           </div>
@@ -433,7 +392,7 @@ function ProfileContent({
                       </div>
 
                       <div className="au-order-footer">
-                        <span style={{ fontSize: '12px', color: 'var(--au-text-muted)' }}>
+                        <span className="au-order-count">
                           {p.articlesCount(order.items?.length || 0)}
                         </span>
 
@@ -441,14 +400,7 @@ function ProfileContent({
                           href={route('profile.order.ticket', order.id)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="au-btn-ghost"
-                          style={{
-                            padding: '8px 16px',
-                            fontSize: '11px',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '6px',
-                          }}
+                          className="au-btn-ghost au-order-ticket-btn"
                         >
                           <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -561,7 +513,7 @@ function ProfileContent({
                   id="profile-phone"
                   type="tel"
                   className="au-input"
-                  placeholder="06 12 34 56 78"
+                  placeholder={p.phonePlaceholder}
                   value={infoForm.data.phone}
                   onChange={(e) => infoForm.setData('phone', e.target.value)}
                 />
@@ -747,11 +699,11 @@ function ProfileContent({
                   )}
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
+                <div className="au-modal-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
                   <button
                     type="button"
                     onClick={() => setConfirmingDeletion(false)}
-                    className="au-btn-ghost"
+                    className="au-btn-ghost au-modal-btn"
                     style={{ padding: '10px 20px', fontSize: '12px' }}
                   >
                     {p.cancelBtn}
@@ -760,6 +712,7 @@ function ProfileContent({
                   <button
                     type="submit"
                     disabled={deleteForm.processing}
+                    className="au-modal-btn"
                     style={{
                       background: '#EF4444',
                       color: '#fff',

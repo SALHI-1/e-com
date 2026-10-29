@@ -294,11 +294,13 @@ export interface Dictionary {
     title: string;
     subtitle: string;
     welcomeBack: (name: string) => string;
+    memberTag: string;
     memberSince: string;
     tabOrders: string;
     tabInfo: string;
     tabSecurity: string;
     tabDanger: string;
+    activeOrdersLabel: string;
     orderNumber: string;
     orderDate: string;
     orderTotal: string;
@@ -307,6 +309,8 @@ export interface Dictionary {
     articlesCount: (count: number) => string;
     noOrders: string;
     shopNow: string;
+    preorderBadge: string;
+    productFallback: string;
     statusLabels: Record<string, string>;
     infoTitle: string;
     infoSubtitle: string;
@@ -314,6 +318,7 @@ export interface Dictionary {
     emailAddress: string;
     phoneLabel: string;
     phoneHelp: string;
+    phonePlaceholder: string;
     saveChanges: string;
     savedSuccess: string;
     emailUnverified: string;

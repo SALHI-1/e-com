@@ -2876,6 +2876,49 @@ html {
   gap: 16px;
 }
 
+.au-order-top-left {
+  min-width: 0;
+}
+
+.au-order-id-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.au-order-num {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--au-ink);
+  letter-spacing: .02em;
+}
+
+.au-order-date {
+  font-size: 12px;
+  color: var(--au-text-muted);
+  margin-top: 4px;
+}
+
+.au-order-top-right {
+  text-align: right;
+}
+
+.au-order-total-lbl {
+  font-size: 11px;
+  color: var(--au-text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  display: block;
+}
+
+.au-order-total-val {
+  font-family: var(--au-font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--au-ink);
+}
+
 .au-order-status-badge {
   padding: 4px 12px;
   border-radius: 999px;
@@ -2883,10 +2926,16 @@ html {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: .06em;
+  display: inline-flex;
+  align-items: center;
 }
 
 .au-order-body {
   padding: 24px;
+}
+
+.au-order-items-list {
+  margin-bottom: 16px;
 }
 
 .au-order-item-row {
@@ -2912,6 +2961,58 @@ html {
   border: 1px solid var(--au-border);
 }
 
+.au-order-item-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.au-order-item-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--au-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.au-order-item-sub {
+  font-size: 12px;
+  color: var(--au-text-muted);
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.au-order-item-preorder {
+  background: #EDE9FE;
+  color: #5B21B6;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.au-order-item-price {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--au-ink);
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.au-order-address-box {
+  background: var(--au-bg);
+  border: 1px solid var(--au-border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--au-text-muted);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
 .au-order-footer {
   padding: 16px 24px;
   background: #FAF7F2;
@@ -2923,28 +3024,264 @@ html {
   gap: 12px;
 }
 
+.au-order-count {
+  font-size: 12px;
+  color: var(--au-text-muted);
+}
+
+.au-order-ticket-btn {
+  padding: 8px 16px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Profile Responsiveness (≤ 640px) ── */
 @media (max-width: 640px) {
-  .au-profile-header {
-    padding: 20px;
+  .au-profile-section {
+    padding: 24px 0 60px;
   }
+
+  .au-profile-header {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
   .au-profile-user-info {
     flex-direction: column;
     text-align: center;
     width: 100%;
+    gap: 12px;
   }
+
+  .au-profile-avatar {
+    width: 58px;
+    height: 58px;
+    font-size: 22px;
+    margin: 0 auto;
+  }
+
+  .au-profile-name {
+    font-size: 22px;
+    text-align: center;
+  }
+
   .au-profile-meta {
     justify-content: center;
+    gap: 6px;
+    font-size: 12px;
   }
+
+  .au-profile-meta span {
+    word-break: break-all;
+  }
+
   .au-profile-stats {
-    width: 100%;
-    justify-content: center;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin-top: 6px;
   }
+
+  .au-profile-stat-box {
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 10px 4px !important;
+    text-align: center;
+  }
+
+  .au-profile-stat-val {
+    font-size: 17px !important;
+  }
+
+  .au-profile-stat-lbl {
+    font-size: 9.5px !important;
+    letter-spacing: 0 !important;
+  }
+
+  .au-profile-tabs {
+    gap: 4px;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .au-profile-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .au-profile-tab-btn {
+    padding: 9px 12px;
+    font-size: 12px;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
   .au-profile-card {
     padding: 20px 16px;
   }
+
+  .au-profile-card-title {
+    font-size: 19px;
+  }
+
+  .au-profile-card-desc {
+    font-size: 12.5px;
+    margin-bottom: 18px;
+  }
+
+  .au-profile-card form {
+    max-width: 100% !important;
+  }
+
+  .au-profile-card form button.au-btn-gold {
+    width: 100% !important;
+    padding: 13px 18px !important;
+    justify-content: center;
+  }
+
+  .au-profile-card button[type="button"] {
+    max-width: 100%;
+  }
+
+  .au-order-top {
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .au-order-top-left {
+    width: 100%;
+  }
+
+  .au-order-id-row {
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .au-order-num {
+    font-size: 14px;
+  }
+
+  .au-order-status-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+    text-align: center;
+  }
+
+  .au-order-top-right {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    border-top: 1px dashed var(--au-border);
+    padding-top: 8px;
+    margin-top: 2px;
+    text-align: left;
+  }
+
+  .au-order-total-val {
+    font-size: 17px;
+  }
+
+  .au-order-body {
+    padding: 14px 16px;
+  }
+
+  .au-order-item-row {
+    gap: 12px;
+    padding: 10px 0;
+    align-items: flex-start;
+  }
+
+  .au-order-item-img {
+    width: 46px;
+    height: 46px;
+  }
+
+  .au-order-item-title {
+    font-size: 13px;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  .au-order-item-sub {
+    font-size: 11.5px;
+  }
+
+  .au-order-item-price {
+    font-size: 13px;
+  }
+
+  .au-order-footer {
+    padding: 12px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .au-order-ticket-btn {
+    width: 100% !important;
+    justify-content: center;
+    padding: 10px 14px !important;
+    font-size: 12px !important;
+  }
+
+  .au-modal-actions {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .au-modal-actions button {
+    width: 100% !important;
+  }
+}
+
+/* ── Profile Extra-Small Phones (≤ 360px) ── */
+@media (max-width: 360px) {
+  .au-profile-header {
+    padding: 16px 12px;
+  }
+
+  .au-profile-avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+
+  .au-profile-name {
+    font-size: 19px;
+  }
+
+  .au-profile-stat-box {
+    padding: 8px 2px !important;
+  }
+
+  .au-profile-stat-val {
+    font-size: 15px !important;
+  }
+
+  .au-profile-stat-lbl {
+    font-size: 8.5px !important;
+  }
+
+  .au-profile-tab-btn {
+    padding: 8px 10px;
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .au-profile-card,
   .au-order-top,
   .au-order-body,
   .au-order-footer {
-    padding: 16px;
+    padding: 12px;
   }
 }
