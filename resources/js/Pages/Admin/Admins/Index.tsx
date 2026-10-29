@@ -78,23 +78,94 @@ export default function Index({ admins }: { admins: any[] }) {
     return (
         <AdminLayout
             header={
-                <h2 className="au-h3 text-[#0F204B]">
-                    Administrator Management
-                </h2>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                    <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#0F204B]">
+                        Administrator Management
+                    </h2>
+                    <span className="text-xs text-gray-500">Back-office staff & privilege settings</span>
+                </div>
             }
         >
             <Head title="Administrators" />
 
-            <div className="py-12 bg-gray-50">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-100">
-                        <div className="p-6 bg-white border-b border-gray-100 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-[#0F204B]">Administrator Accounts</h3>
-                            <PrimaryButton onClick={openCreateModal} className="bg-[#0F204B]">
+            <div className="py-6 sm:py-10 bg-gray-50">
+                <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm rounded-lg sm:rounded-xl border border-gray-100">
+                        <div className="p-4 sm:p-6 bg-white border-b border-gray-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                            <div>
+                                <h3 className="text-base sm:text-lg font-bold text-[#0F204B]">Administrator Accounts</h3>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                    {admins.length} {admins.length === 1 ? 'account' : 'accounts'} registered
+                                </p>
+                            </div>
+                            <PrimaryButton onClick={openCreateModal} className="bg-[#0F204B] justify-center w-full sm:w-auto py-2.5">
                                 + New Administrator
                             </PrimaryButton>
                         </div>
-                        <div className="overflow-x-auto">
+
+                        {/* Mobile Cards View (< md) */}
+                        <div className="block md:hidden divide-y divide-gray-100">
+                            {admins.map((admin) => (
+                                <div key={admin.id} className="p-4 hover:bg-gray-50/50 transition-colors space-y-3">
+                                    <div className="flex items-start justify-between gap-2">
+                                        <div className="flex items-center gap-2.5 min-w-0">
+                                            <div className="w-9 h-9 rounded-full bg-[#0F204B]/10 text-[#0F204B] font-bold text-sm flex items-center justify-center shrink-0">
+                                                {admin.name ? admin.name.charAt(0).toUpperCase() : 'A'}
+                                            </div>
+                                            <div className="min-w-0">
+                                                <div className="flex items-center gap-1.5 flex-wrap">
+                                                    <p className="text-sm font-bold text-[#0F204B] truncate">{admin.name}</p>
+                                                    {currentUser?.id === admin.id && (
+                                                        <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">
+                                                            You
+                                                        </span>
+                                                    )}
+                                                </div>
+                                                <p className="text-xs text-gray-500 truncate">{admin.email}</p>
+                                            </div>
+                                        </div>
+                                        {admin.is_super_admin ? (
+                                            <span className="px-2 py-0.5 inline-flex text-[11px] font-bold rounded-full bg-purple-50 text-purple-700 shrink-0">
+                                                Super Admin
+                                            </span>
+                                        ) : (
+                                            <span className="px-2 py-0.5 inline-flex text-[11px] font-bold rounded-full bg-blue-50 text-blue-700 shrink-0">
+                                                Admin
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t border-gray-50">
+                                        <span>Added {new Date(admin.created_at).toLocaleDateString()}</span>
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => openEditModal(admin)}
+                                                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                                </svg>
+                                                Edit
+                                            </button>
+                                            {currentUser?.id !== admin.id && (
+                                                <button
+                                                    onClick={() => deleteAdmin(admin)}
+                                                    className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-md text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                    </svg>
+                                                    Delete
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Desktop Table View (>= md) */}
+                        <div className="hidden md:block overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-100">
                                 <thead className="bg-gray-50/50">
                                     <tr>
@@ -162,10 +233,10 @@ export default function Index({ admins }: { admins: any[] }) {
 
             {/* Create Modal */}
             <Modal show={isCreateModalOpen} onClose={closeCreateModal} maxWidth="md">
-                <form onSubmit={submitCreate} className="p-6">
+                <form onSubmit={submitCreate} className="p-4 sm:p-6 max-h-[85vh] overflow-y-auto">
                     <h2 className="text-lg font-bold text-[#0F204B]">New Administrator</h2>
 
-                    <div className="mt-6">
+                    <div className="mt-4 sm:mt-6">
                         <InputLabel htmlFor="name" value="Full Name" />
                         <TextInput
                             id="name"
@@ -217,7 +288,7 @@ export default function Index({ admins }: { admins: any[] }) {
                         <InputError className="mt-2" message={errors.password_confirmation} />
                     </div>
 
-                    <div className="block mt-6">
+                    <div className="block mt-5 sm:mt-6">
                         <label className="flex items-center">
                             <Checkbox
                                 name="is_super_admin"
@@ -229,9 +300,9 @@ export default function Index({ admins }: { admins: any[] }) {
                         <InputError className="mt-2" message={errors.is_super_admin} />
                     </div>
 
-                    <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeCreateModal}>Cancel</SecondaryButton>
-                        <PrimaryButton className="ms-3 bg-[#0F204B]" disabled={processing}>
+                    <div className="mt-6 flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+                        <SecondaryButton onClick={closeCreateModal} className="justify-center">Cancel</SecondaryButton>
+                        <PrimaryButton className="bg-[#0F204B] justify-center" disabled={processing}>
                             Create
                         </PrimaryButton>
                     </div>
@@ -240,10 +311,10 @@ export default function Index({ admins }: { admins: any[] }) {
 
             {/* Edit Modal */}
             <Modal show={isEditModalOpen} onClose={closeEditModal} maxWidth="md">
-                <form onSubmit={submitEdit} className="p-6">
+                <form onSubmit={submitEdit} className="p-4 sm:p-6 max-h-[85vh] overflow-y-auto">
                     <h2 className="text-lg font-bold text-[#0F204B]">Edit Administrator</h2>
 
-                    <div className="mt-6">
+                    <div className="mt-4 sm:mt-6">
                         <InputLabel htmlFor="edit_name" value="Full Name" />
                         <TextInput
                             id="edit_name"
@@ -294,7 +365,7 @@ export default function Index({ admins }: { admins: any[] }) {
                     </div>
 
                     {currentUser?.id !== editingAdmin?.id && (
-                        <div className="block mt-6">
+                        <div className="block mt-5 sm:mt-6">
                             <label className="flex items-center">
                                 <Checkbox
                                     name="edit_is_super_admin"
@@ -310,9 +381,9 @@ export default function Index({ admins }: { admins: any[] }) {
                         <p className="text-xs text-gray-500 mt-4 italic">You cannot modify your own super admin role from here.</p>
                     )}
 
-                    <div className="mt-6 flex justify-end">
-                        <SecondaryButton onClick={closeEditModal}>Cancel</SecondaryButton>
-                        <PrimaryButton className="ms-3 bg-[#0F204B]" disabled={processing}>
+                    <div className="mt-6 flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+                        <SecondaryButton onClick={closeEditModal} className="justify-center">Cancel</SecondaryButton>
+                        <PrimaryButton className="bg-[#0F204B] justify-center" disabled={processing}>
                             Save
                         </PrimaryButton>
                     </div>

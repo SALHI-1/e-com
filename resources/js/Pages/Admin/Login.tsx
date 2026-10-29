@@ -56,8 +56,8 @@ export default function Login({ status }: { status?: string }) {
                     </label>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
-                    <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 2rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginTop: '0.5rem' }}>
+                    <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.8rem 2rem', width: '100%', justifyContent: 'center' }}>
                         {processing ? 'Signing in…' : 'Sign In to Admin'}
                     </button>
                 </div>
