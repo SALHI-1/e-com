@@ -440,21 +440,35 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
           </div>
         </aside>
 
-        {/* brand marquee */}
-        <div className="au-marquee">
+        {/* luxury brand marquee */}
+        <section className="au-marquee" aria-label="Brand Philosophy">
           <div className="au-marquee-track">
-            {[0, 1].map((groupIndex) => (
-              <div className="au-marquee-group" key={groupIndex}>
-                {t.marquee.map((item, i) => (
+            {[0, 1, 2, 3].map((groupIndex) => (
+              <div
+                className="au-marquee-group"
+                key={groupIndex}
+                aria-hidden={groupIndex > 0 ? 'true' : undefined}
+              >
+                {[...t.marquee, ...t.marquee].map((item, i) => (
                   <Fragment key={i}>
-                    <span className="au-marquee-item">{item}</span>
-                    <span className="au-dot" />
+                    <span className="au-marquee-item">
+                      <span className="au-marquee-text">{item}</span>
+                    </span>
+                    <span className="au-marquee-star" aria-hidden="true">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="au-star-icon"
+                      >
+                        <path d="M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z" />
+                      </svg>
+                    </span>
                   </Fragment>
                 ))}
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* page content with soft fade effect on lang change */}
         <main key={lang} className="au-lang-fade">{children}</main>
