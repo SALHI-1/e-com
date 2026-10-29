@@ -96,14 +96,17 @@ function Login({ status }) {
 					style: {
 						display: "flex",
 						alignItems: "center",
-						justifyContent: "flex-end",
 						marginTop: "0.5rem"
 					},
 					children: /* @__PURE__ */ jsx("button", {
 						type: "submit",
 						disabled: processing,
 						className: "au-btn-gold",
-						style: { padding: "0.7rem 2rem" },
+						style: {
+							padding: "0.8rem 2rem",
+							width: "100%",
+							justifyContent: "center"
+						},
 						children: processing ? "Signing in…" : "Sign In to Admin"
 					})
 				})
