@@ -1,8 +1,16 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
 //#region resources/js/Pages/Admin/Orders/List.tsx
+var STATUS_LABELS = {
+	"en attente": "Pending",
+	"annulé avant la confirmation": "Cancelled (Pre-Confirm)",
+	"confirmé": "Confirmed",
+	"livré": "Delivered",
+	"annulé après la livraison": "Cancelled (Post-Delivery)",
+	"reçu": "Received"
+};
 function List({ orders, filters }) {
 	const [filterState, setFilterState] = useState({
 		order_number: filters?.order_number || "",
@@ -42,9 +50,9 @@ function List({ orders, filters }) {
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Toutes les Commandes"
+			children: "All Orders"
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: "Liste des Commandes" }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: "Orders List" }), /* @__PURE__ */ jsx("div", {
 			className: "py-12",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8",
@@ -53,47 +61,47 @@ function List({ orders, filters }) {
 					children: [
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
 							className: "block text-sm font-medium text-gray-700 mb-1",
-							children: "N° Commande"
+							children: "Order #"
 						}), /* @__PURE__ */ jsx("input", {
 							type: "text",
 							value: filterState.order_number,
 							onChange: (e) => handleFilter("order_number", e.target.value),
 							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
-							placeholder: "Rechercher..."
+							placeholder: "Search..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
 							className: "block text-sm font-medium text-gray-700 mb-1",
-							children: "Nom du client"
+							children: "Customer Name"
 						}), /* @__PURE__ */ jsx("input", {
 							type: "text",
 							value: filterState.client_name,
 							onChange: (e) => handleFilter("client_name", e.target.value),
 							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
-							placeholder: "Rechercher..."
+							placeholder: "Search..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
 							className: "block text-sm font-medium text-gray-700 mb-1",
-							children: "Email du client"
+							children: "Customer Email"
 						}), /* @__PURE__ */ jsx("input", {
 							type: "text",
 							value: filterState.client_email,
 							onChange: (e) => handleFilter("client_email", e.target.value),
 							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
-							placeholder: "Rechercher..."
+							placeholder: "Search..."
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
 							className: "block text-sm font-medium text-gray-700 mb-1",
-							children: "Statut"
+							children: "Status"
 						}), /* @__PURE__ */ jsxs("select", {
 							value: filterState.status,
 							onChange: (e) => handleFilter("status", e.target.value),
 							className: "w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm",
 							children: [/* @__PURE__ */ jsx("option", {
 								value: "",
-								children: "Tous les statuts"
+								children: "All Statuses"
 							}), STATUSES.map((s) => /* @__PURE__ */ jsx("option", {
 								value: s,
-								children: s
+								children: STATUS_LABELS[s] || s
 							}, s))]
 						})] }),
 						/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("label", {
@@ -106,15 +114,15 @@ function List({ orders, filters }) {
 							children: [
 								/* @__PURE__ */ jsx("option", {
 									value: "",
-									children: "Tous"
+									children: "All"
 								}),
 								/* @__PURE__ */ jsx("option", {
 									value: "normal",
-									children: "Normale"
+									children: "Standard"
 								}),
 								/* @__PURE__ */ jsx("option", {
 									value: "preorder",
-									children: "Précommande"
+									children: "Pre-order"
 								})
 							]
 						})] })
@@ -131,7 +139,7 @@ function List({ orders, filters }) {
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "N° Commande"
+										children: "Order #"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
@@ -146,7 +154,7 @@ function List({ orders, filters }) {
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Client"
+										children: "Customer"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
@@ -156,7 +164,7 @@ function List({ orders, filters }) {
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Statut"
+										children: "Status"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										scope: "col",
@@ -175,24 +183,24 @@ function List({ orders, filters }) {
 										}),
 										/* @__PURE__ */ jsxs("td", {
 											className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-											children: [/* @__PURE__ */ jsxs("div", { children: ["Création: ", new Date(order.created_at).toLocaleDateString()] }), order.status === "reçu" && /* @__PURE__ */ jsxs("div", {
+											children: [/* @__PURE__ */ jsxs("div", { children: ["Created: ", new Date(order.created_at).toLocaleDateString()] }), order.status === "reçu" && /* @__PURE__ */ jsxs("div", {
 												className: "text-green-700 font-semibold mt-1",
-												children: ["Reçue: ", new Date(order.updated_at).toLocaleDateString()]
+												children: ["Received: ", new Date(order.updated_at).toLocaleDateString()]
 											})]
 										}),
 										/* @__PURE__ */ jsx("td", {
 											className: "px-6 py-4 whitespace-nowrap text-sm",
 											children: order.items?.some((i) => i.is_preorder) ? /* @__PURE__ */ jsx("span", {
 												className: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800",
-												children: "Précommande"
+												children: "Pre-order"
 											}) : /* @__PURE__ */ jsx("span", {
 												className: "text-gray-500",
-												children: "Normale"
+												children: "Standard"
 											})
 										}),
 										/* @__PURE__ */ jsx("td", {
 											className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-											children: order.user?.name || "Client Inconnu"
+											children: order.user?.name || "Unknown Customer"
 										}),
 										/* @__PURE__ */ jsxs("td", {
 											className: "px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900",
@@ -202,7 +210,7 @@ function List({ orders, filters }) {
 											className: "px-6 py-4 whitespace-nowrap text-sm",
 											children: /* @__PURE__ */ jsx("span", {
 												className: `px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`,
-												children: order.status
+												children: STATUS_LABELS[order.status] || order.status
 											})
 										}),
 										/* @__PURE__ */ jsxs("td", {
@@ -212,7 +220,7 @@ function List({ orders, filters }) {
 												target: "_blank",
 												rel: "noopener noreferrer",
 												className: "text-gray-500 hover:text-gray-800 flex items-center gap-1",
-												title: "Télécharger le ticket de livraison",
+												title: "Download Delivery Slip",
 												children: [/* @__PURE__ */ jsx("svg", {
 													className: "w-4 h-4",
 													fill: "none",
@@ -226,19 +234,19 @@ function List({ orders, filters }) {
 													})
 												}), /* @__PURE__ */ jsx("span", {
 													className: "text-xs uppercase tracking-wider font-semibold",
-													children: "Ticket"
+													children: "Slip"
 												})]
 											}), /* @__PURE__ */ jsx(Link, {
 												href: route("admin.orders.show", order.id),
 												className: "au-link-underline",
-												children: "Voir"
+												children: "View"
 											})]
 										})
 									]
 								}, order.id)), filteredOrders.length === 0 && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
-									colSpan: 6,
+									colSpan: 7,
 									className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center",
-									children: "Aucune commande trouvée."
+									children: "No orders found."
 								}) })]
 							})]
 						})

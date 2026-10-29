@@ -19,6 +19,6 @@ class IsSuperAdmin
             return $next($request);
         }
 
-        return abort(403, 'Accès refusé. Vous devez être un super administrateur.');
+        return abort(403, 'Access denied. You must be a super administrator.');
     }
 }

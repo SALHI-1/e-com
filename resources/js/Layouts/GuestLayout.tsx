@@ -8,8 +8,6 @@ import {
   normalizeLang,
   getStoredLang,
   setStoredLang,
-  SUPPORTED_LANGS,
-  LANG_LABELS,
 } from '@/langue';
 
 interface GuestContextValue {
@@ -47,20 +45,6 @@ export default function Guest({ children }: PropsWithChildren) {
   return (
     <GuestContext.Provider value={{ lang, setLang, t }}>
       <div className="au-auth-wrap">
-        <div className="au-auth-lang-bar">
-          <div className="au-lang-toggle au-auth-lang-toggle">
-            {SUPPORTED_LANGS.map((code) => (
-              <button
-                key={code}
-                type="button"
-                className={`au-lang-btn${lang === code ? ' au-lang-btn--active' : ''}`}
-                onClick={() => setLang(code)}
-              >
-                {LANG_LABELS[code]}
-              </button>
-            ))}
-          </div>
-        </div>
         <Link href="/" className="au-auth-logo">
           OURÉLIA
         </Link>

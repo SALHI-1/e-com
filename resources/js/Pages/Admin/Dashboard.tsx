@@ -11,6 +11,15 @@ const SECONDARY_COLOR = '#8B95A5'; // Muted Grey
 const ACCENT_COLOR = '#F26D21'; // Muted Orange for highlights
 const GRID_COLOR = '#E5E7EB'; 
 
+const STATUS_LABELS: Record<string, string> = {
+    'en attente': 'Pending',
+    'annulé avant la confirmation': 'Cancelled (Pre-Confirm)',
+    'confirmé': 'Confirmed',
+    'livré': 'Delivered',
+    'annulé après la livraison': 'Cancelled (Post-Delivery)',
+    'reçu': 'Received',
+};
+
 export default function Dashboard({ 
     metrics, 
     salesData, 
@@ -19,6 +28,11 @@ export default function Dashboard({
     topProducts
 }: any) {
     const topProduct = topProducts && topProducts.length > 0 ? topProducts[0] : null;
+
+    const formattedOrderStatusData = (orderStatusData || []).map((item: any) => ({
+        ...item,
+        statusLabel: STATUS_LABELS[item.status] || item.status,
+    }));
 
     const scrollToSection = (id: string) => {
         const el = document.getElementById(id);
@@ -29,7 +43,7 @@ export default function Dashboard({
         <AdminLayout
             header={
                 <h2 className="au-h3">
-                    Tableau de bord Analytique
+                    Analytics Dashboard
                 </h2>
             }
         >
@@ -44,38 +58,38 @@ export default function Dashboard({
                             onClick={() => scrollToSection('transactions')}
                             className="bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
                         >
-                            ↓ Dernières transactions
+                            ↓ Recent Transactions
                         </button>
                         <button 
                             onClick={() => scrollToSection('top-products')}
                             className="bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors"
                         >
-                            ↓ Produits les plus demandés
+                            ↓ Top In-Demand Products
                         </button>
                     </div>
 
                     {/* Key Metrics Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
-                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Revenus d'aujourd'hui</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Today's Revenue</div>
                             <div className="text-3xl font-extrabold text-[#0F204B]">{Number(metrics?.revenue || 0).toFixed(2)} dh</div>
                         </div>
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
-                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Commandes Totales</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Total Orders</div>
                             <div className="text-3xl font-extrabold text-[#0F204B]">{metrics?.orders || 0}</div>
                         </div>
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
-                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Produits en Stock</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Products in Stock</div>
                             <div className="text-3xl font-extrabold text-[#0F204B]">{metrics?.stock || 0}</div>
                         </div>
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center">
-                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Le plus demandé</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Top In-Demand</div>
                             <div className="text-lg font-extrabold text-[#0F204B] leading-tight">
-                                {topProduct ? topProduct.name : 'Aucun'}
+                                {topProduct ? topProduct.name : 'None'}
                             </div>
                             {topProduct && (
                                 <div className="text-xs font-medium text-gray-500 mt-1">
-                                    {topProduct.order_items_sum_quantity} ventes
+                                    {topProduct.order_items_sum_quantity} sales
                                 </div>
                             )}
                         </div>
@@ -86,8 +100,8 @@ export default function Dashboard({
                         {/* Multilayered Sales Chart */}
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-8 lg:col-span-2">
                             <div className="mb-6">
-                                <h3 className="text-lg font-bold text-[#0F204B]">Corrélation : Revenus vs Volume (30 jours)</h3>
-                                <p className="text-sm text-gray-500 mt-1">Évaluation de l'impact du volume de commandes sur le chiffre d'affaires quotidien.</p>
+                                <h3 className="text-lg font-bold text-[#0F204B]">Correlation: Revenue vs Volume (30 Days)</h3>
+                                <p className="text-sm text-gray-500 mt-1">Evaluating the impact of daily order volume on daily revenue.</p>
                             </div>
                             <div className="h-80 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -129,8 +143,8 @@ export default function Dashboard({
                                             labelFormatter={(label) => new Date(label).toLocaleDateString()}
                                         />
                                         <Legend verticalAlign="top" align="right" wrapperStyle={{ fontSize: '11px', color: SECONDARY_COLOR, paddingBottom: '20px' }}/>
-                                        <Bar yAxisId="right" dataKey="orders_count" name="Volume (Commandes)" fill="#E5E7EB" radius={[2, 2, 0, 0]} />
-                                        <Line yAxisId="left" type="monotone" dataKey="total" name="Revenus (dh)" stroke={PRIMARY_COLOR} strokeWidth={2.5} dot={false} activeDot={{ r: 6, fill: PRIMARY_COLOR }} />
+                                        <Bar yAxisId="right" dataKey="orders_count" name="Volume (Orders)" fill="#E5E7EB" radius={[2, 2, 0, 0]} />
+                                        <Line yAxisId="left" type="monotone" dataKey="total" name="Revenue (dh)" stroke={PRIMARY_COLOR} strokeWidth={2.5} dot={false} activeDot={{ r: 6, fill: PRIMARY_COLOR }} />
                                     </ComposedChart>
                                 </ResponsiveContainer>
                             </div>
@@ -139,35 +153,35 @@ export default function Dashboard({
                         {/* Order Status Horizontal Bar Chart */}
                         <div className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-8">
                             <div className="mb-6">
-                                <h3 className="text-lg font-bold text-[#0F204B]">Entonnoir des statuts</h3>
-                                <p className="text-sm text-gray-500 mt-1">Répartition volumétrique globale.</p>
+                                <h3 className="text-lg font-bold text-[#0F204B]">Status Funnel</h3>
+                                <p className="text-sm text-gray-500 mt-1">Overall order distribution by status.</p>
                             </div>
                             <div className="h-80 w-full">
-                                {orderStatusData && orderStatusData.length > 0 ? (
+                                {formattedOrderStatusData && formattedOrderStatusData.length > 0 ? (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart
                                             layout="vertical"
-                                            data={orderStatusData}
+                                            data={formattedOrderStatusData}
                                             margin={{ top: 0, right: 30, left: 10, bottom: 0 }}
                                         >
                                             <XAxis type="number" hide />
                                             <YAxis 
-                                                dataKey="status" 
+                                                dataKey="statusLabel" 
                                                 type="category" 
                                                 axisLine={false} 
                                                 tickLine={false}
                                                 tick={{ fill: PRIMARY_COLOR, fontSize: 11, fontWeight: 500 }}
-                                                width={100}
+                                                width={110}
                                             />
                                             <RechartsTooltip 
                                                 cursor={{fill: 'transparent'}}
                                                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                             />
-                                            <Bar dataKey="count" name="Commandes" fill={PRIMARY_COLOR} radius={[0, 4, 4, 0]} />
+                                            <Bar dataKey="count" name="Orders" fill={PRIMARY_COLOR} radius={[0, 4, 4, 0]} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 ) : (
-                                    <p className="text-gray-500 text-sm mt-10 text-center">Aucune donnée disponible</p>
+                                    <p className="text-gray-500 text-sm mt-10 text-center">No data available</p>
                                 )}
                             </div>
                         </div>
@@ -176,18 +190,18 @@ export default function Dashboard({
                     {/* Recent Orders Table */}
                     <div id="transactions" className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-[#0F204B]">Dernières transactions</h3>
-                            <Link href={route('admin.orders.index')} className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#0F204B] transition-colors">Voir tout &rarr;</Link>
+                            <h3 className="text-lg font-bold text-[#0F204B]">Recent Transactions</h3>
+                            <Link href={route('admin.orders.index')} className="text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#0F204B] transition-colors">View all &rarr;</Link>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-100">
                                 <thead className="bg-gray-50/50">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Référence</th>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Client</th>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Montant</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Reference</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Customer</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Amount</th>
                                         <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Date</th>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Statut</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-50">
@@ -199,27 +213,27 @@ export default function Dashboard({
                                                 </Link>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {order.user?.name || 'Inconnu'}
+                                                {order.user?.name || 'Unknown'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                                 {order.total_amount} dh
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                <div>Création: {new Date(order.created_at).toLocaleDateString()}</div>
+                                                <div>Created: {new Date(order.created_at).toLocaleDateString()}</div>
                                                 {order.status === 'reçu' && (
-                                                    <div className="text-[#0F204B] font-semibold mt-1">Reçue: {new Date(order.updated_at).toLocaleDateString()}</div>
+                                                    <div className="text-[#0F204B] font-semibold mt-1">Received: {new Date(order.updated_at).toLocaleDateString()}</div>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <span className={`px-2 py-1 inline-flex text-xs leading-none font-bold rounded-full ${order.status.includes('annulé') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                                                    {order.status}
+                                                    {STATUS_LABELS[order.status] || order.status}
                                                 </span>
                                             </td>
                                         </tr>
                                     ))}
                                     {(!recentOrders || recentOrders.length === 0) && (
                                         <tr>
-                                            <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-400">Aucune transaction récente.</td>
+                                            <td colSpan={5} className="px-6 py-8 text-center text-sm text-gray-400">No recent transactions.</td>
                                         </tr>
                                     )}
                                 </tbody>
@@ -230,15 +244,15 @@ export default function Dashboard({
                     {/* Top Products Table */}
                     <div id="top-products" className="bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg">
                         <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                            <h3 className="text-lg font-bold text-[#0F204B]">Produits les plus demandés</h3>
+                            <h3 className="text-lg font-bold text-[#0F204B]">Top In-Demand Products</h3>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-100">
                                 <thead className="bg-gray-50/50">
                                     <tr>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Rang</th>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Produit</th>
-                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Quantité Commandée</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Rank</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Product</th>
+                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">Quantity Ordered</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-50">
@@ -251,13 +265,13 @@ export default function Dashboard({
                                                 {product.name}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                                {product.order_items_sum_quantity} unités
+                                                {product.order_items_sum_quantity} units
                                             </td>
                                         </tr>
                                     ))}
                                     {(!topProducts || topProducts.length === 0) && (
                                         <tr>
-                                            <td colSpan={3} className="px-6 py-8 text-center text-sm text-gray-400">Aucun produit vendu.</td>
+                                            <td colSpan={3} className="px-6 py-8 text-center text-sm text-gray-400">No products sold yet.</td>
                                         </tr>
                                     )}
                                 </tbody>

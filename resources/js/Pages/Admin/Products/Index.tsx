@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ProductModal from './ProductModal';
 
 export default function Index({ products, filters }: { products: any[], filters?: any }) {
@@ -16,7 +16,7 @@ export default function Index({ products, filters }: { products: any[], filters?
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+        if (confirm('Are you sure you want to delete this product?')) {
             router.delete(route('admin.products.destroy', id));
         }
     };
@@ -31,11 +31,11 @@ export default function Index({ products, filters }: { products: any[], filters?
         <AdminLayout
             header={
                 <h2 className="au-h3">
-                    Gestion des Produits
+                    Product Management
                 </h2>
             }
         >
-            <Head title="Produits" />
+            <Head title="Products" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ export default function Index({ products, filters }: { products: any[], filters?
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                             <input
                                 type="text"
-                                placeholder="Rechercher un produit..."
+                                placeholder="Search products..."
                                 className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -66,14 +66,14 @@ export default function Index({ products, filters }: { products: any[], filters?
                                 className="au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600"
                                 style={{ margin: 0 }}
                             >
-                                Corbeille
+                                Trash
                             </Link>
                             <Link
                                 href={route('admin.products.create')}
                                 className="au-btn whitespace-nowrap"
                                 style={{ margin: 0 }}
                             >
-                                Ajouter un produit
+                                Add Product
                             </Link>
                         </div>
                     </div>
@@ -83,9 +83,9 @@ export default function Index({ products, filters }: { products: any[], filters?
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catégorie</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -113,13 +113,13 @@ export default function Index({ products, filters }: { products: any[], filters?
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <Link href={route('admin.products.edit', product.id)} className="au-link-underline mr-4">
-                                                Modifier
+                                                Edit
                                             </Link>
                                             <button 
                                                 onClick={() => handleDelete(product.id)} 
                                                 className="text-red-600 hover:text-red-900 underline underline-offset-4 decoration-[0.1em]"
                                             >
-                                                Supprimer
+                                                Delete
                                             </button>
                                         </td>
                                     </tr>
@@ -127,7 +127,7 @@ export default function Index({ products, filters }: { products: any[], filters?
                             </tbody>
                         </table>
                         {filteredProducts.length === 0 && (
-                             <div className="p-6 text-center text-gray-500">Aucun produit trouvé.</div>
+                             <div className="p-6 text-center text-gray-500">No products found.</div>
                         )}
                     </div>
                 </div>

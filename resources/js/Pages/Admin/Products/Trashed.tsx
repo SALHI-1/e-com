@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, Link, router } from '@inertiajs/react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ProductModal from './ProductModal';
 
 export default function Trashed({ products, filters }: { products: any[], filters?: any }) {
@@ -15,7 +15,7 @@ export default function Trashed({ products, filters }: { products: any[], filter
     };
 
     const handleRestore = (id: number) => {
-        if (confirm('Êtes-vous sûr de vouloir restaurer ce produit ?')) {
+        if (confirm('Are you sure you want to restore this product?')) {
             router.post(route('admin.products.restore', id));
         }
     };
@@ -28,11 +28,11 @@ export default function Trashed({ products, filters }: { products: any[], filter
         <AdminLayout
             header={
                 <h2 className="au-h3">
-                    Produits Supprimés (Corbeille)
+                    Trashed Products
                 </h2>
             }
         >
-            <Head title="Corbeille Produits" />
+            <Head title="Trashed Products" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -40,7 +40,7 @@ export default function Trashed({ products, filters }: { products: any[], filter
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
                             <input
                                 type="text"
-                                placeholder="Rechercher un produit supprimé..."
+                                placeholder="Search trashed products..."
                                 className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
@@ -52,7 +52,7 @@ export default function Trashed({ products, filters }: { products: any[], filter
                             className="au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600"
                             style={{ margin: 0 }}
                         >
-                            Retour aux produits
+                            Back to Products
                         </Link>
                     </div>
 
@@ -61,9 +61,9 @@ export default function Trashed({ products, filters }: { products: any[], filter
                             <thead className="bg-gray-50">
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Catégorie</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                                 </tr>
@@ -94,7 +94,7 @@ export default function Trashed({ products, filters }: { products: any[], filter
                                                 onClick={() => handleRestore(product.id)} 
                                                 className="text-green-600 hover:text-green-900 underline underline-offset-4 decoration-[0.1em]"
                                             >
-                                                Restaurer
+                                                Restore
                                             </button>
                                         </td>
                                     </tr>
@@ -102,7 +102,7 @@ export default function Trashed({ products, filters }: { products: any[], filter
                             </tbody>
                         </table>
                         {filteredProducts.length === 0 && (
-                             <div className="p-6 text-center text-gray-500">Aucun produit trouvé.</div>
+                             <div className="p-6 text-center text-gray-500">No products found.</div>
                         )}
                     </div>
                 </div>

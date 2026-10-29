@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ticket de Livraison - {{ $order->order_number }}</title>
+    <title>Delivery Slip - {{ $order->order_number }}</title>
     <style>
         @page {
             margin: 20mm;
@@ -153,29 +153,29 @@
         <table class="details-grid">
             <tr>
                 <td>
-                    <div class="section-title">Informations de la Commande</div>
+                    <div class="section-title">Order Information</div>
                     <p>
-                        <span class="text-gray text-xs uppercase">Numéro :</span> <br>
+                        <span class="text-gray text-xs uppercase">Order Number:</span> <br>
                         <strong class="text-lg">{{ $order->order_number }}</strong>
                     </p>
                     <p>
-                        <span class="text-gray text-xs uppercase">Date :</span> <br>
+                        <span class="text-gray text-xs uppercase">Date:</span> <br>
                         <strong>{{ $order->created_at->format('d/m/Y H:i') }}</strong>
                     </p>
                 </td>
                 <td>
-                    <div class="section-title">Client & Livraison</div>
+                    <div class="section-title">Customer & Shipping</div>
                     <p>
-                        <span class="text-gray text-xs uppercase">Nom :</span> <br>
-                        <strong>{{ $order->user ? $order->user->name : 'Client' }}</strong>
+                        <span class="text-gray text-xs uppercase">Name:</span> <br>
+                        <strong>{{ $order->user ? $order->user->name : 'Customer' }}</strong>
                     </p>
                     <p>
-                        <span class="text-gray text-xs uppercase">Adresse :</span> <br>
-                        <strong>{{ $order->shipping_address ?? 'Non spécifiée' }}</strong>
+                        <span class="text-gray text-xs uppercase">Address:</span> <br>
+                        <strong>{{ $order->shipping_address ?? 'Not specified' }}</strong>
                     </p>
                     <p>
-                        <span class="text-gray text-xs uppercase">Téléphone :</span> <br>
-                        <strong>{{ $order->getWhatsappPhone() ?? 'Non spécifié' }}</strong>
+                        <span class="text-gray text-xs uppercase">Phone:</span> <br>
+                        <strong>{{ $order->getWhatsappPhone() ?? 'Not specified' }}</strong>
                     </p>
                 </td>
             </tr>
@@ -187,10 +187,10 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Réf.</th>
-                    <th>Désignation</th>
-                    <th class="text-center">Qté</th>
-                    <th class="text-right">P.U</th>
+                    <th>Ref.</th>
+                    <th>Description</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-right">Unit Price</th>
                     <th class="text-right">Total</th>
                 </tr>
             </thead>
@@ -204,7 +204,7 @@
                     @endphp
                     <tr>
                         <td class="text-gray text-xs">{{ $ref }}</td>
-                        <td>{{ $item->product ? $item->product->name : 'Produit supprimé' }}</td>
+                        <td>{{ $item->product ? $item->product->name : 'Deleted product' }}</td>
                         <td class="text-center">{{ $item->quantity }}</td>
                         <td class="text-right">{{ number_format($item->unit_price, 2) }} dh</td>
                         <td class="text-right">{{ number_format($lineTotal, 2) }} dh</td>
@@ -219,19 +219,19 @@
         <div class="summary-box">
             <table>
                 <tr>
-                    <td class="text-gray">Sous-total</td>
+                    <td class="text-gray">Subtotal</td>
                     <td class="text-right">{{ number_format($subtotal, 2) }} dh</td>
                 </tr>
                 <tr>
                     @php 
                         $shipping = $order->total_amount - $subtotal;
-                        $shippingDisplay = $shipping > 0 ? number_format($shipping, 2) . ' dh' : '0.00 dh (Gratuit)';
+                        $shippingDisplay = $shipping > 0 ? number_format($shipping, 2) . ' dh' : '0.00 dh (Free)';
                     @endphp
-                    <td class="text-gray">Frais de livraison</td>
+                    <td class="text-gray">Shipping Fee</td>
                     <td class="text-right">{{ $shippingDisplay }}</td>
                 </tr>
                 <tr class="total-row">
-                    <td class="uppercase">Total Net</td>
+                    <td class="uppercase">Net Total</td>
                     <td class="text-right">{{ number_format($order->total_amount, 2) }} dh</td>
                 </tr>
             </table>
@@ -240,10 +240,10 @@
 
     <!-- FOOTER -->
     <div class="footer">
-        <div class="serif footer-thanks">Merci pour votre commande !</div>
+        <div class="serif footer-thanks">Thank you for your order!</div>
         <div class="footer-policy">
-            Si vous avez des questions concernant votre commande, veuillez consulter notre site web.<br>
-            Les retours sont acceptés sous 14 jours, dans leur emballage d'origine.
+            If you have any questions regarding your order, please visit our website.<br>
+            Returns are accepted within 14 days in their original packaging.
         </div>
     </div>
 

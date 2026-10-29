@@ -1,6 +1,15 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
+
+const STATUS_LABELS: Record<string, string> = {
+    'en attente': 'Pending',
+    'annulé avant la confirmation': 'Cancelled (Pre-Confirm)',
+    'confirmé': 'Confirmed',
+    'livré': 'Delivered',
+    'annulé après la livraison': 'Cancelled (Post-Delivery)',
+    'reçu': 'Received',
+};
 
 export default function List({ orders, filters }: { orders: any[], filters: any }) {
     const [filterState, setFilterState] = useState({
@@ -42,52 +51,52 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
     };
 
     return (
-        <AdminLayout header={<h2 className="au-h3">Toutes les Commandes</h2>}>
-            <Head title="Liste des Commandes" />
+        <AdminLayout header={<h2 className="au-h3">All Orders</h2>}>
+            <Head title="Orders List" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="mb-6 bg-white p-4 rounded-lg shadow-sm grid grid-cols-1 md:grid-cols-5 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">N° Commande</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Order #</label>
                             <input
                                 type="text"
                                 value={filterState.order_number}
                                 onChange={(e) => handleFilter('order_number', e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-                                placeholder="Rechercher..."
+                                placeholder="Search..."
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom du client</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
                             <input
                                 type="text"
                                 value={filterState.client_name}
                                 onChange={(e) => handleFilter('client_name', e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-                                placeholder="Rechercher..."
+                                placeholder="Search..."
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email du client</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Customer Email</label>
                             <input
                                 type="text"
                                 value={filterState.client_email}
                                 onChange={(e) => handleFilter('client_email', e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
-                                placeholder="Rechercher..."
+                                placeholder="Search..."
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Statut</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                             <select
                                 value={filterState.status}
                                 onChange={(e) => handleFilter('status', e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                             >
-                                <option value="">Tous les statuts</option>
+                                <option value="">All Statuses</option>
                                 {STATUSES.map(s => (
-                                    <option key={s} value={s}>{s}</option>
+                                    <option key={s} value={s}>{STATUS_LABELS[s] || s}</option>
                                 ))}
                             </select>
                         </div>
@@ -98,9 +107,9 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 onChange={(e) => handleFilter('type', e.target.value)}
                                 className="w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm"
                             >
-                                <option value="">Tous</option>
-                                <option value="normal">Normale</option>
-                                <option value="preorder">Précommande</option>
+                                <option value="">All</option>
+                                <option value="normal">Standard</option>
+                                <option value="preorder">Pre-order</option>
                             </select>
                         </div>
                     </div>
@@ -110,7 +119,7 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                 <thead className="bg-gray-50">
                                     <tr>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            N° Commande
+                                            Order #
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Date
@@ -119,13 +128,13 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                             Type
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Client
+                                            Customer
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Total
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                            Statut
+                                            Status
                                         </th>
                                         <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                             Actions
@@ -139,46 +148,46 @@ export default function List({ orders, filters }: { orders: any[], filters: any 
                                                 {order.order_number}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                <div>Création: {new Date(order.created_at).toLocaleDateString()}</div>
+                                                <div>Created: {new Date(order.created_at).toLocaleDateString()}</div>
                                                 {order.status === 'reçu' && (
-                                                    <div className="text-green-700 font-semibold mt-1">Reçue: {new Date(order.updated_at).toLocaleDateString()}</div>
+                                                    <div className="text-green-700 font-semibold mt-1">Received: {new Date(order.updated_at).toLocaleDateString()}</div>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 {order.items?.some((i: any) => i.is_preorder) ? (
                                                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                                        Précommande
+                                                        Pre-order
                                                     </span>
                                                 ) : (
-                                                    <span className="text-gray-500">Normale</span>
+                                                    <span className="text-gray-500">Standard</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {order.user?.name || 'Client Inconnu'}
+                                                {order.user?.name || 'Unknown Customer'}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                                 {order.total_amount} dh
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm">
                                                 <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
-                                                    {order.status}
+                                                    {STATUS_LABELS[order.status] || order.status}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium flex items-center justify-end gap-4">
-                                                <a href={route('admin.orders.ticket', order.id)} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-800 flex items-center gap-1" title="Télécharger le ticket de livraison">
+                                                <a href={route('admin.orders.ticket', order.id)} target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-gray-800 flex items-center gap-1" title="Download Delivery Slip">
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                                                    <span className="text-xs uppercase tracking-wider font-semibold">Ticket</span>
+                                                    <span className="text-xs uppercase tracking-wider font-semibold">Slip</span>
                                                 </a>
                                                 <Link href={route('admin.orders.show', order.id)} className="au-link-underline">
-                                                    Voir
+                                                    View
                                                 </Link>
                                             </td>
                                         </tr>
                                     ))}
                                     {filteredOrders.length === 0 && (
                                         <tr>
-                                            <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                                Aucune commande trouvée.
+                                            <td colSpan={7} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                                No orders found.
                                             </td>
                                         </tr>
                                     )}

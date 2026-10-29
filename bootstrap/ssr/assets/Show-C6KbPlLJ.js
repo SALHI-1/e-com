@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Orders/Show.tsx
@@ -7,9 +7,9 @@ function Show({ order }) {
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsxs("h2", {
 			className: "au-h3",
-			children: ["Détails de la Commande ", order.order_number]
+			children: ["Order Details #", order.order_number]
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: `Commande ${order.order_number}` }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: `Order #${order.order_number}` }), /* @__PURE__ */ jsx("div", {
 			className: "py-12",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6",
@@ -18,20 +18,20 @@ function Show({ order }) {
 					children: [/* @__PURE__ */ jsxs("div", { children: [
 						/* @__PURE__ */ jsxs("h3", {
 							className: "text-lg font-bold",
-							children: ["Client : ", order.user.name]
+							children: ["Customer: ", order.user.name]
 						}),
 						/* @__PURE__ */ jsxs("p", {
 							className: "text-gray-600",
 							children: [
 								order.user.email,
 								" | ",
-								order.user.phone || "Pas de téléphone"
+								order.user.phone || "No phone provided"
 							]
 						}),
 						/* @__PURE__ */ jsxs("p", {
 							className: "text-gray-600 mt-2",
 							children: [
-								/* @__PURE__ */ jsx("strong", { children: "Adresse d'expédition :" }),
+								/* @__PURE__ */ jsx("strong", { children: "Shipping Address:" }),
 								" ",
 								/* @__PURE__ */ jsx("br", {}),
 								" ",
@@ -44,18 +44,18 @@ function Show({ order }) {
 							/* @__PURE__ */ jsxs("h3", {
 								className: "text-lg font-bold",
 								children: [
-									"Montant Total : ",
+									"Total Amount: ",
 									order.total_amount,
 									" dh"
 								]
 							}),
 							/* @__PURE__ */ jsxs("p", {
 								className: "text-gray-500",
-								children: ["Création : ", new Date(order.created_at).toLocaleString()]
+								children: ["Created: ", new Date(order.created_at).toLocaleString()]
 							}),
 							order.status === "reçu" && /* @__PURE__ */ jsxs("p", {
 								className: "text-green-700 font-bold mt-1",
-								children: ["Reçue le : ", new Date(order.updated_at).toLocaleString()]
+								children: ["Received on: ", new Date(order.updated_at).toLocaleString()]
 							})
 						]
 					})]
@@ -63,7 +63,7 @@ function Show({ order }) {
 					className: "bg-white p-6 shadow sm:rounded-lg",
 					children: [/* @__PURE__ */ jsx("h3", {
 						className: "text-lg font-bold mb-4",
-						children: "Articles commandés"
+						children: "Order Items"
 					}), /* @__PURE__ */ jsxs("table", {
 						className: "min-w-full divide-y divide-gray-200",
 						children: [/* @__PURE__ */ jsx("thead", {
@@ -71,15 +71,15 @@ function Show({ order }) {
 							children: /* @__PURE__ */ jsxs("tr", { children: [
 								/* @__PURE__ */ jsx("th", {
 									className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase",
-									children: "Produit"
+									children: "Product"
 								}),
 								/* @__PURE__ */ jsx("th", {
 									className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase",
-									children: "Prix Unitaire"
+									children: "Unit Price"
 								}),
 								/* @__PURE__ */ jsx("th", {
 									className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase",
-									children: "Quantité"
+									children: "Quantity"
 								}),
 								/* @__PURE__ */ jsx("th", {
 									className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase",

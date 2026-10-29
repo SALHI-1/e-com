@@ -74,14 +74,14 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('products');
             if (!$path) {
-                return back()->withErrors(['image' => 'Erreur lors de l\'upload de l\'image. Vérifiez la configuration du stockage.']);
+                return back()->withErrors(['image' => 'Error uploading image. Please check your storage configuration.']);
             }
             $data['image_url'] = Storage::url($path);
         }
 
         Product::create($data);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produit ajouté avec succès.');
+        return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
 
     public function edit(Product $product)
@@ -120,21 +120,21 @@ class ProductController extends Controller
 
             $path = $request->file('image')->store('products');
             if (!$path) {
-                return back()->withErrors(['image' => 'Erreur lors de l\'upload de l\'image. Vérifiez la configuration du stockage.']);
+                return back()->withErrors(['image' => 'Error uploading image. Please check your storage configuration.']);
             }
             $data['image_url'] = Storage::url($path);
         }
 
         $product->update($data);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produit modifié avec succès.');
+        return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
     public function destroy(Product $product)
     {
 
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('success', 'Produit supprimé avec succès.');
+        return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');
     }
 
     public function restore($id)
@@ -142,6 +142,6 @@ class ProductController extends Controller
         $product = Product::onlyTrashed()->findOrFail($id);
         $product->restore();
 
-        return redirect()->route('admin.products.trashed')->with('success', 'Produit restauré avec succès.');
+        return redirect()->route('admin.products.trashed')->with('success', 'Product restored successfully.');
     }
 }

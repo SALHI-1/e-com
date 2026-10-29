@@ -1,4 +1,4 @@
-import { a as normalizeLang, i as getStoredLang, n as SUPPORTED_LANGS, o as setStoredLang, r as dictionaries, t as LANG_LABELS } from "./langue-CbfI8lEO.js";
+import { a as normalizeLang, i as getStoredLang, o as setStoredLang, r as dictionaries } from "./langue-CbfI8lEO.js";
 import { Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { createContext, useContext, useState } from "react";
@@ -33,18 +33,6 @@ function Guest({ children }) {
 		children: /* @__PURE__ */ jsxs("div", {
 			className: "au-auth-wrap",
 			children: [
-				/* @__PURE__ */ jsx("div", {
-					className: "au-auth-lang-bar",
-					children: /* @__PURE__ */ jsx("div", {
-						className: "au-lang-toggle au-auth-lang-toggle",
-						children: SUPPORTED_LANGS.map((code) => /* @__PURE__ */ jsx("button", {
-							type: "button",
-							className: `au-lang-btn${lang === code ? " au-lang-btn--active" : ""}`,
-							onClick: () => setLang(code),
-							children: LANG_LABELS[code]
-						}, code))
-					})
-				}),
 				/* @__PURE__ */ jsx(Link, {
 					href: "/",
 					className: "au-auth-logo",

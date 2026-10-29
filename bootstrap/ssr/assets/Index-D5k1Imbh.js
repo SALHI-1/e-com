@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
@@ -11,6 +11,14 @@ var STATUSES = [
 	"annulé après la livraison",
 	"reçu"
 ];
+var STATUS_LABELS = {
+	"en attente": "Pending",
+	"annulé avant la confirmation": "Cancelled (Pre-Confirm)",
+	"confirmé": "Confirmed",
+	"livré": "Delivered",
+	"annulé après la livraison": "Cancelled (Post-Delivery)",
+	"reçu": "Received"
+};
 function Index({ orders, filters }) {
 	const [draggingId, setDraggingId] = useState(null);
 	const [dateFilter, setDateFilter] = useState(filters?.date || "");
@@ -38,7 +46,7 @@ function Index({ orders, filters }) {
 		if (!order) return;
 		const fromIndex = STATUSES.indexOf(order.status);
 		if (STATUSES.indexOf(targetStatus) <= fromIndex) {
-			alert("Mouvement invalide : Impossible de reculer le statut de la commande.");
+			alert("Invalid move: Cannot revert order status backwards.");
 			setDraggingId(null);
 			return;
 		}
@@ -50,9 +58,9 @@ function Index({ orders, filters }) {
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Gestion des Commandes (Kanban)"
+			children: "Orders Management (Kanban)"
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: "Commandes" }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: "Orders" }), /* @__PURE__ */ jsx("div", {
 			className: "py-8",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "mx-auto max-w-full px-4 sm:px-6 lg:px-8",
@@ -62,7 +70,7 @@ function Index({ orders, filters }) {
 						/* @__PURE__ */ jsx("label", {
 							htmlFor: "dateFilter",
 							className: "text-sm font-medium text-gray-700",
-							children: "Filtrer à partir du :"
+							children: "Filter from date:"
 						}),
 						/* @__PURE__ */ jsx("input", {
 							type: "date",
@@ -74,7 +82,7 @@ function Index({ orders, filters }) {
 						dateFilter && /* @__PURE__ */ jsx("button", {
 							onClick: () => setDateFilter(""),
 							className: "text-sm text-gray-500 hover:text-gray-700 underline",
-							children: "Effacer"
+							children: "Clear"
 						})
 					]
 				}), /* @__PURE__ */ jsx("div", {
@@ -85,7 +93,7 @@ function Index({ orders, filters }) {
 						onDrop: (e) => handleDrop(e, status),
 						children: [/* @__PURE__ */ jsxs("div", {
 							className: `p-3 border-b border-gray-300 rounded-t-lg font-bold capitalize text-sm text-center ${status.includes("annulé") ? "bg-red-100 text-red-800" : "bg-gray-200 text-gray-700"}`,
-							children: [status, /* @__PURE__ */ jsxs("span", {
+							children: [STATUS_LABELS[status] || status, /* @__PURE__ */ jsxs("span", {
 								className: "ml-2 text-xs font-normal text-gray-500",
 								children: [
 									"(",
@@ -112,16 +120,16 @@ function Index({ orders, filters }) {
 												className: "text-right",
 												children: [/* @__PURE__ */ jsxs("div", {
 													className: "text-[10px] text-gray-500 uppercase",
-													children: ["Création: ", new Date(order.created_at).toLocaleDateString()]
+													children: ["Created: ", new Date(order.created_at).toLocaleDateString()]
 												}), status === "reçu" && /* @__PURE__ */ jsxs("div", {
 													className: "text-[10px] text-green-700 font-bold uppercase mt-0.5",
-													children: ["Reçu: ", new Date(order.updated_at).toLocaleDateString()]
+													children: ["Received: ", new Date(order.updated_at).toLocaleDateString()]
 												})]
 											})]
 										}),
 										/* @__PURE__ */ jsx("div", {
 											className: "text-sm text-gray-700 mb-1",
-											children: order.user?.name || "Client"
+											children: order.user?.name || "Customer"
 										}),
 										/* @__PURE__ */ jsxs("div", {
 											className: "text-sm font-semibold text-gray-900 mb-3",
@@ -132,21 +140,21 @@ function Index({ orders, filters }) {
 											children: [isCancelled ? /* @__PURE__ */ jsx("button", {
 												onClick: (e) => {
 													e.stopPropagation();
-													if (confirm("Voulez-vous récupérer cette commande (en attente) ?")) router.put(route("admin.orders.update", order.id), { status: "en attente" }, { preserveScroll: true });
+													if (confirm("Do you want to restore this order to pending?")) router.put(route("admin.orders.update", order.id), { status: "en attente" }, { preserveScroll: true });
 												},
 												className: "text-xs text-blue-600 hover:underline bg-blue-50 px-2 py-1 rounded",
-												children: "Récupérer"
+												children: "Restore"
 											}) : /* @__PURE__ */ jsx("div", {}), /* @__PURE__ */ jsx(Link, {
 												href: route("admin.orders.show", order.id),
 												className: "text-xs au-link-underline",
-												children: "Détails →"
+												children: "Details →"
 											})]
 										})
 									]
 								}, order.id);
 							}), filteredOrders.filter((o) => o.status === status).length === 0 && /* @__PURE__ */ jsx("div", {
 								className: "text-center text-sm text-gray-400 italic py-4",
-								children: "Aucune commande"
+								children: "No orders"
 							})]
 						})]
 					}, status))

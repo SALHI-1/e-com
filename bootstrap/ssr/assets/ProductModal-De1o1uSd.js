@@ -14,7 +14,7 @@ function ProductModal({ product, show, onClose }) {
 					className: "flex justify-between items-center mb-4",
 					children: [/* @__PURE__ */ jsx("h2", {
 						className: "text-xl font-bold text-gray-900",
-						children: "Détails du Produit"
+						children: "Product Details"
 					}), /* @__PURE__ */ jsx("button", {
 						onClick: onClose,
 						className: "text-gray-500 hover:text-gray-700",
@@ -44,7 +44,7 @@ function ProductModal({ product, show, onClose }) {
 							className: "w-full h-48 bg-gray-100 flex items-center justify-center rounded-md border border-gray-200",
 							children: /* @__PURE__ */ jsx("span", {
 								className: "text-gray-400",
-								children: "Aucune image"
+								children: "No image available"
 							})
 						})
 					}), /* @__PURE__ */ jsxs("div", {
@@ -69,7 +69,7 @@ function ProductModal({ product, show, onClose }) {
 									className: "bg-gray-50 p-3 rounded border border-gray-100",
 									children: [/* @__PURE__ */ jsx("span", {
 										className: "block text-xs text-gray-500 uppercase font-semibold",
-										children: "Prix"
+										children: "Price"
 									}), /* @__PURE__ */ jsxs("span", {
 										className: "text-lg font-bold text-gray-900",
 										children: [product.price, " dh"]
@@ -91,7 +91,7 @@ function ProductModal({ product, show, onClose }) {
 									product.brand && /* @__PURE__ */ jsxs("div", { children: [
 										/* @__PURE__ */ jsx("span", {
 											className: "font-semibold text-gray-700",
-											children: "Marque :"
+											children: "Brand:"
 										}),
 										" ",
 										/* @__PURE__ */ jsx("span", {
@@ -102,7 +102,7 @@ function ProductModal({ product, show, onClose }) {
 									product.volume && /* @__PURE__ */ jsxs("div", { children: [
 										/* @__PURE__ */ jsx("span", {
 											className: "font-semibold text-gray-700",
-											children: "Volume :"
+											children: "Volume:"
 										}),
 										" ",
 										/* @__PURE__ */ jsx("span", {
@@ -112,23 +112,23 @@ function ProductModal({ product, show, onClose }) {
 									] }),
 									/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("span", {
 										className: "font-semibold text-gray-700",
-										children: "Nouveau :"
+										children: "New:"
 									}), /* @__PURE__ */ jsx("span", {
 										className: "ml-2 text-gray-600",
-										children: product.is_new ? "Oui" : "Non"
+										children: product.is_new ? "Yes" : "No"
 									})] }),
 									/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("span", {
 										className: "font-semibold text-gray-700",
-										children: "Bestseller :"
+										children: "Best Seller:"
 									}), /* @__PURE__ */ jsx("span", {
 										className: "ml-2 text-gray-600",
-										children: product.is_bestseller ? "Oui" : "Non"
+										children: product.is_bestseller ? "Yes" : "No"
 									})] })
 								]
 							}),
 							product.description && /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("span", {
 								className: "block text-sm font-semibold text-gray-700 mb-1",
-								children: "Description :"
+								children: "Description:"
 							}), /* @__PURE__ */ jsx("div", {
 								className: "text-sm text-gray-600 bg-gray-50 p-3 rounded whitespace-pre-wrap max-h-40 overflow-y-auto",
 								children: product.description
@@ -141,7 +141,7 @@ function ProductModal({ product, show, onClose }) {
 					children: /* @__PURE__ */ jsx("button", {
 						onClick: onClose,
 						className: "au-btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none",
-						children: "Fermer"
+						children: "Close"
 					})
 				})
 			]

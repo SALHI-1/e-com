@@ -1,5 +1,5 @@
 import { t as Modal } from "./Modal-D5A3RQdx.js";
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
 import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";
@@ -57,15 +57,15 @@ function Index({ admins }) {
 		put(route("admin.admins.update", editingAdmin.id), { onSuccess: () => closeEditModal() });
 	};
 	const deleteAdmin = (admin) => {
-		if (confirm("Êtes-vous sûr de vouloir supprimer cet administrateur ?")) router.delete(route("admin.admins.destroy", admin.id));
+		if (confirm("Are you sure you want to delete this administrator?")) router.delete(route("admin.admins.destroy", admin.id));
 	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3 text-[#0F204B]",
-			children: "Gestion des Administrateurs"
+			children: "Administrator Management"
 		}),
 		children: [
-			/* @__PURE__ */ jsx(Head, { title: "Administrateurs" }),
+			/* @__PURE__ */ jsx(Head, { title: "Administrators" }),
 			/* @__PURE__ */ jsx("div", {
 				className: "py-12 bg-gray-50",
 				children: /* @__PURE__ */ jsx("div", {
@@ -76,11 +76,11 @@ function Index({ admins }) {
 							className: "p-6 bg-white border-b border-gray-100 flex justify-between items-center",
 							children: [/* @__PURE__ */ jsx("h3", {
 								className: "text-lg font-bold text-[#0F204B]",
-								children: "Comptes Administrateurs"
+								children: "Administrator Accounts"
 							}), /* @__PURE__ */ jsx(PrimaryButton, {
 								onClick: openCreateModal,
 								className: "bg-[#0F204B]",
-								children: "+ Nouvel Administrateur"
+								children: "+ New Administrator"
 							})]
 						}), /* @__PURE__ */ jsx("div", {
 							className: "overflow-x-auto",
@@ -91,7 +91,7 @@ function Index({ admins }) {
 									children: /* @__PURE__ */ jsxs("tr", { children: [
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Nom"
+											children: "Name"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
@@ -99,11 +99,11 @@ function Index({ admins }) {
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Rôle"
+											children: "Role"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Date d'ajout"
+											children: "Date Added"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider",
@@ -119,7 +119,7 @@ function Index({ admins }) {
 												className: "px-6 py-4 whitespace-nowrap text-sm font-bold text-[#0F204B]",
 												children: [admin.name, currentUser?.id === admin.id && /* @__PURE__ */ jsx("span", {
 													className: "ml-2 text-xs font-normal text-gray-500",
-													children: "(Vous)"
+													children: "(You)"
 												})]
 											}),
 											/* @__PURE__ */ jsx("td", {
@@ -145,7 +145,7 @@ function Index({ admins }) {
 												children: [/* @__PURE__ */ jsx("button", {
 													onClick: () => openEditModal(admin),
 													className: "text-gray-400 hover:text-[#0F204B] transition-colors",
-													title: "Modifier",
+													title: "Edit",
 													children: /* @__PURE__ */ jsx("svg", {
 														xmlns: "http://www.w3.org/2000/svg",
 														fill: "none",
@@ -162,7 +162,7 @@ function Index({ admins }) {
 												}), currentUser?.id !== admin.id && /* @__PURE__ */ jsx("button", {
 													onClick: () => deleteAdmin(admin),
 													className: "text-gray-400 hover:text-red-600 transition-colors ml-2",
-													title: "Supprimer",
+													title: "Delete",
 													children: /* @__PURE__ */ jsx("svg", {
 														xmlns: "http://www.w3.org/2000/svg",
 														fill: "none",
@@ -196,14 +196,14 @@ function Index({ admins }) {
 					children: [
 						/* @__PURE__ */ jsx("h2", {
 							className: "text-lg font-bold text-[#0F204B]",
-							children: "Nouvel Administrateur"
+							children: "New Administrator"
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "mt-6",
 							children: [
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "name",
-									value: "Nom complet"
+									value: "Full Name"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "name",
@@ -245,7 +245,7 @@ function Index({ admins }) {
 							children: [
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "password",
-									value: "Mot de passe"
+									value: "Password"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "password",
@@ -266,7 +266,7 @@ function Index({ admins }) {
 							children: [
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "password_confirmation",
-									value: "Confirmer le mot de passe"
+									value: "Confirm Password"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "password_confirmation",
@@ -292,7 +292,7 @@ function Index({ admins }) {
 									onChange: (e) => setData("is_super_admin", e.target.checked)
 								}), /* @__PURE__ */ jsx("span", {
 									className: "ms-2 text-sm text-gray-600",
-									children: "Donner les privilèges de Super Administrateur"
+									children: "Grant Super Administrator privileges"
 								})]
 							}), /* @__PURE__ */ jsx(InputError, {
 								className: "mt-2",
@@ -303,11 +303,11 @@ function Index({ admins }) {
 							className: "mt-6 flex justify-end",
 							children: [/* @__PURE__ */ jsx(SecondaryButton, {
 								onClick: closeCreateModal,
-								children: "Annuler"
+								children: "Cancel"
 							}), /* @__PURE__ */ jsx(PrimaryButton, {
 								className: "ms-3 bg-[#0F204B]",
 								disabled: processing,
-								children: "Créer"
+								children: "Create"
 							})]
 						})
 					]
@@ -323,14 +323,14 @@ function Index({ admins }) {
 					children: [
 						/* @__PURE__ */ jsx("h2", {
 							className: "text-lg font-bold text-[#0F204B]",
-							children: "Modifier l'Administrateur"
+							children: "Edit Administrator"
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "mt-6",
 							children: [
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "edit_name",
-									value: "Nom complet"
+									value: "Full Name"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "edit_name",
@@ -371,11 +371,11 @@ function Index({ admins }) {
 							children: [
 								/* @__PURE__ */ jsx("p", {
 									className: "text-xs text-gray-500 mb-2",
-									children: "Laissez vide si vous ne souhaitez pas modifier le mot de passe."
+									children: "Leave blank if you do not wish to change the password."
 								}),
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "edit_password",
-									value: "Nouveau mot de passe (optionnel)"
+									value: "New Password (optional)"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "edit_password",
@@ -395,7 +395,7 @@ function Index({ admins }) {
 							children: [
 								/* @__PURE__ */ jsx(InputLabel, {
 									htmlFor: "edit_password_confirmation",
-									value: "Confirmer le nouveau mot de passe"
+									value: "Confirm New Password"
 								}),
 								/* @__PURE__ */ jsx(TextInput_default, {
 									id: "edit_password_confirmation",
@@ -420,7 +420,7 @@ function Index({ admins }) {
 									onChange: (e) => setData("is_super_admin", e.target.checked)
 								}), /* @__PURE__ */ jsx("span", {
 									className: "ms-2 text-sm text-gray-600",
-									children: "Donner les privilèges de Super Administrateur"
+									children: "Grant Super Administrator privileges"
 								})]
 							}), /* @__PURE__ */ jsx(InputError, {
 								className: "mt-2",
@@ -429,17 +429,17 @@ function Index({ admins }) {
 						}),
 						currentUser?.id === editingAdmin?.id && /* @__PURE__ */ jsx("p", {
 							className: "text-xs text-gray-500 mt-4 italic",
-							children: "Vous ne pouvez pas modifier votre propre rôle super admin d'ici."
+							children: "You cannot modify your own super admin role from here."
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "mt-6 flex justify-end",
 							children: [/* @__PURE__ */ jsx(SecondaryButton, {
 								onClick: closeEditModal,
-								children: "Annuler"
+								children: "Cancel"
 							}), /* @__PURE__ */ jsx(PrimaryButton, {
 								className: "ms-3 bg-[#0F204B]",
 								disabled: processing,
-								children: "Enregistrer"
+								children: "Save"
 							})]
 						})
 					]

@@ -19,14 +19,14 @@ export default function Login({ status }: { status?: string }) {
 
     return (
         <GuestLayout>
-            <Head title="Administration — Aurélia" />
+            <Head title="Administration — Ourélia" />
             <h2 className="au-auth-title">Administration</h2>
 
             {status && <div className="au-flash au-flash-success" style={{ margin: '0 0 1rem' }}>{status}</div>}
 
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 <div>
-                    <label className="au-label" htmlFor="email">Email Admin</label>
+                    <label className="au-label" htmlFor="email">Admin Email</label>
                     <input
                         id="email" type="email" value={data.email}
                         onChange={(e) => setData('email', e.target.value)}
@@ -36,7 +36,7 @@ export default function Login({ status }: { status?: string }) {
                 </div>
 
                 <div>
-                    <label className="au-label" htmlFor="password">Mot de passe</label>
+                    <label className="au-label" htmlFor="password">Password</label>
                     <input
                         id="password" type="password" value={data.password}
                         onChange={(e) => setData('password', e.target.value)}
@@ -52,13 +52,13 @@ export default function Login({ status }: { status?: string }) {
                         onChange={(e) => setData('remember', e.target.checked as false)}
                     />
                     <label htmlFor="remember" style={{ fontSize: '0.8rem', color: 'var(--cream-dim)', cursor: 'pointer' }}>
-                        Se souvenir de moi
+                        Remember me
                     </label>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
                     <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 2rem' }}>
-                        {processing ? 'Connexion…' : 'Accéder au panel'}
+                        {processing ? 'Signing in…' : 'Sign In to Admin'}
                     </button>
                 </div>
             </form>

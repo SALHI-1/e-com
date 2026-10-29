@@ -5,7 +5,9 @@ import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
 //#region resources/js/Layouts/AdminLayout.tsx
 function AdminLayout({ header, children }) {
-	const user = usePage().props.auth.admin || usePage().props.auth.user;
+	const pageProps = usePage().props;
+	const user = pageProps.auth.admin || pageProps.auth.user;
+	const flashSuccess = pageProps.flash?.success;
 	const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 	return /* @__PURE__ */ jsxs("div", {
 		className: "min-h-screen bg-gray-100",
@@ -31,27 +33,27 @@ function AdminLayout({ header, children }) {
 										/* @__PURE__ */ jsx(NavLink, {
 											href: route("admin.dashboard"),
 											active: route().current("admin.dashboard"),
-											children: "Tableau de bord"
+											children: "Dashboard"
 										}),
 										/* @__PURE__ */ jsx(NavLink, {
 											href: route("admin.products.index"),
 											active: route().current("admin.products.*"),
-											children: "Produits"
+											children: "Products"
 										}),
 										/* @__PURE__ */ jsx(NavLink, {
 											href: route("admin.orders.index"),
 											active: route().current("admin.orders.index"),
-											children: "Kanban Commandes"
+											children: "Orders Kanban"
 										}),
 										/* @__PURE__ */ jsx(NavLink, {
 											href: route("admin.orders.list"),
 											active: route().current("admin.orders.list"),
-											children: "Liste Commandes"
+											children: "Orders List"
 										}),
 										user?.is_super_admin && /* @__PURE__ */ jsx(NavLink, {
 											href: route("admin.admins.index"),
 											active: route().current("admin.admins.*"),
-											children: "Administrateurs"
+											children: "Administrators"
 										})
 									]
 								})]
@@ -81,7 +83,7 @@ function AdminLayout({ header, children }) {
 										href: route("admin.logout"),
 										method: "post",
 										as: "button",
-										children: "Déconnexion"
+										children: "Log Out"
 									}) })] })
 								})
 							}),
@@ -121,27 +123,27 @@ function AdminLayout({ header, children }) {
 							/* @__PURE__ */ jsx(ResponsiveNavLink, {
 								href: route("admin.dashboard"),
 								active: route().current("admin.dashboard"),
-								children: "Tableau de bord"
+								children: "Dashboard"
 							}),
 							/* @__PURE__ */ jsx(ResponsiveNavLink, {
 								href: route("admin.products.index"),
 								active: route().current("admin.products.*"),
-								children: "Produits"
+								children: "Products"
 							}),
 							/* @__PURE__ */ jsx(ResponsiveNavLink, {
 								href: route("admin.orders.index"),
 								active: route().current("admin.orders.index"),
-								children: "Kanban Commandes"
+								children: "Orders Kanban"
 							}),
 							/* @__PURE__ */ jsx(ResponsiveNavLink, {
 								href: route("admin.orders.list"),
 								active: route().current("admin.orders.list"),
-								children: "Liste Commandes"
+								children: "Orders List"
 							}),
 							user?.is_super_admin && /* @__PURE__ */ jsx(ResponsiveNavLink, {
 								href: route("admin.admins.index"),
 								active: route().current("admin.admins.*"),
-								children: "Administrateurs"
+								children: "Administrators"
 							})
 						]
 					}), /* @__PURE__ */ jsxs("div", {
@@ -161,7 +163,7 @@ function AdminLayout({ header, children }) {
 								method: "post",
 								href: route("admin.logout"),
 								as: "button",
-								children: "Déconnexion"
+								children: "Log Out"
 							})
 						})]
 					})]
@@ -172,6 +174,13 @@ function AdminLayout({ header, children }) {
 				children: /* @__PURE__ */ jsx("div", {
 					className: "mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8",
 					children: header
+				})
+			}),
+			flashSuccess && /* @__PURE__ */ jsx("div", {
+				className: "mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8",
+				children: /* @__PURE__ */ jsx("div", {
+					className: "rounded-md bg-green-50 p-4 border border-green-200 text-sm text-green-800",
+					children: flashSuccess
 				})
 			}),
 			/* @__PURE__ */ jsx("main", { children })

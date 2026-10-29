@@ -1,5 +1,5 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
-import ProductModal from "./ProductModal-FCOIWgKp.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
+import ProductModal from "./ProductModal-De1o1uSd.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
@@ -13,7 +13,7 @@ function Trashed({ products, filters }) {
 		setIsModalOpen(true);
 	};
 	const handleRestore = (id) => {
-		if (confirm("Êtes-vous sûr de vouloir restaurer ce produit ?")) router.post(route("admin.products.restore", id));
+		if (confirm("Are you sure you want to restore this product?")) router.post(route("admin.products.restore", id));
 	};
 	const filteredProducts = products.filter((product) => {
 		return product.name.toLowerCase().includes(search.toLowerCase());
@@ -21,10 +21,10 @@ function Trashed({ products, filters }) {
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Produits Supprimés (Corbeille)"
+			children: "Trashed Products"
 		}),
 		children: [
-			/* @__PURE__ */ jsx(Head, { title: "Corbeille Produits" }),
+			/* @__PURE__ */ jsx(Head, { title: "Trashed Products" }),
 			/* @__PURE__ */ jsx("div", {
 				className: "py-12",
 				children: /* @__PURE__ */ jsxs("div", {
@@ -35,7 +35,7 @@ function Trashed({ products, filters }) {
 							className: "flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto",
 							children: /* @__PURE__ */ jsx("input", {
 								type: "text",
-								placeholder: "Rechercher un produit supprimé...",
+								placeholder: "Search trashed products...",
 								className: "border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64",
 								value: search,
 								onChange: (e) => setSearch(e.target.value)
@@ -44,7 +44,7 @@ function Trashed({ products, filters }) {
 							href: route("admin.products.index"),
 							className: "au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600",
 							style: { margin: 0 },
-							children: "Retour aux produits"
+							children: "Back to Products"
 						})]
 					}), /* @__PURE__ */ jsxs("div", {
 						className: "overflow-hidden bg-white shadow-sm sm:rounded-lg",
@@ -59,15 +59,15 @@ function Trashed({ products, filters }) {
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Nom"
+										children: "Name"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Catégorie"
+										children: "Category"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Prix"
+										children: "Price"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
@@ -113,14 +113,14 @@ function Trashed({ products, filters }) {
 										children: /* @__PURE__ */ jsx("button", {
 											onClick: () => handleRestore(product.id),
 											className: "text-green-600 hover:text-green-900 underline underline-offset-4 decoration-[0.1em]",
-											children: "Restaurer"
+											children: "Restore"
 										})
 									})
 								] }, product.id))
 							})]
 						}), filteredProducts.length === 0 && /* @__PURE__ */ jsx("div", {
 							className: "p-6 text-center text-gray-500",
-							children: "Aucun produit trouvé."
+							children: "No products found."
 						})]
 					})]
 				})

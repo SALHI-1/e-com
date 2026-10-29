@@ -39,12 +39,12 @@ class AdminAuthController extends Controller
 
             Auth::logout();
             return back()->withErrors([
-                'email' => 'Accès refusé. Vous n\'êtes pas administrateur.',
+                'email' => 'Access denied. You do not have administrator privileges.',
             ]);
         }
 
         return back()->withErrors([
-            'email' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.',
+            'email' => 'These credentials do not match our records.',
         ]);
     }
 

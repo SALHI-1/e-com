@@ -1,4 +1,4 @@
-import { n as useGuestLang, t as Guest } from "./GuestLayout-BhrsokB9.js";
+import { n as useGuestLang, t as Guest } from "./GuestLayout-Bq3z4XbT.js";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Auth/Register.tsx

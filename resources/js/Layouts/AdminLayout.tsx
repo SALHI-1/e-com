@@ -9,7 +9,9 @@ export default function AdminLayout({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage().props.auth.admin || usePage().props.auth.user;
+    const pageProps = usePage().props as any;
+    const user = pageProps.auth.admin || pageProps.auth.user;
+    const flashSuccess = pageProps.flash?.success;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -31,32 +33,32 @@ export default function AdminLayout({
                                     href={route('admin.dashboard')}
                                     active={route().current('admin.dashboard')}
                                 >
-                                    Tableau de bord
+                                    Dashboard
                                 </NavLink>
                                 <NavLink
                                     href={route('admin.products.index')}
                                     active={route().current('admin.products.*')}
                                 >
-                                    Produits
+                                    Products
                                 </NavLink>
                                 <NavLink
                                     href={route('admin.orders.index')}
                                     active={route().current('admin.orders.index')}
                                 >
-                                    Kanban Commandes
+                                    Orders Kanban
                                 </NavLink>
                                 <NavLink
                                     href={route('admin.orders.list')}
                                     active={route().current('admin.orders.list')}
                                 >
-                                    Liste Commandes
+                                    Orders List
                                 </NavLink>
                                 {user?.is_super_admin && (
                                     <NavLink
                                         href={route('admin.admins.index')}
                                         active={route().current('admin.admins.*')}
                                     >
-                                        Administrateurs
+                                        Administrators
                                     </NavLink>
                                 )}
                             </div>
@@ -95,7 +97,7 @@ export default function AdminLayout({
                                             method="post"
                                             as="button"
                                         >
-                                            Déconnexion
+                                            Log Out
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
@@ -156,32 +158,32 @@ export default function AdminLayout({
                             href={route('admin.dashboard')}
                             active={route().current('admin.dashboard')}
                         >
-                            Tableau de bord
+                            Dashboard
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('admin.products.index')}
                             active={route().current('admin.products.*')}
                         >
-                            Produits
+                            Products
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('admin.orders.index')}
                             active={route().current('admin.orders.index')}
                         >
-                            Kanban Commandes
+                            Orders Kanban
                         </ResponsiveNavLink>
                         <ResponsiveNavLink
                             href={route('admin.orders.list')}
                             active={route().current('admin.orders.list')}
                         >
-                            Liste Commandes
+                            Orders List
                         </ResponsiveNavLink>
                         {user?.is_super_admin && (
                             <ResponsiveNavLink
                                 href={route('admin.admins.index')}
                                 active={route().current('admin.admins.*')}
                             >
-                                Administrateurs
+                                Administrators
                             </ResponsiveNavLink>
                         )}
                     </div>
@@ -202,7 +204,7 @@ export default function AdminLayout({
                                 href={route('admin.logout')}
                                 as="button"
                             >
-                                Déconnexion
+                                Log Out
                             </ResponsiveNavLink>
                         </div>
                     </div>
@@ -215,6 +217,14 @@ export default function AdminLayout({
                         {header}
                     </div>
                 </header>
+            )}
+
+            {flashSuccess && (
+                <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+                    <div className="rounded-md bg-green-50 p-4 border border-green-200 text-sm text-green-800">
+                        {flashSuccess}
+                    </div>
+                </div>
             )}
 
             <main>{children}</main>

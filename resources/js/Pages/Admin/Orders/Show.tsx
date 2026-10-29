@@ -15,8 +15,8 @@ export default function Show({ order }: { order: any }) {
     };
 
     return (
-        <AdminLayout header={<h2 className="au-h3">Détails de la Commande {order.order_number}</h2>}>
-            <Head title={`Commande ${order.order_number}`} />
+        <AdminLayout header={<h2 className="au-h3">Order Details #{order.order_number}</h2>}>
+            <Head title={`Order #${order.order_number}`} />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
@@ -24,53 +24,28 @@ export default function Show({ order }: { order: any }) {
                     {/* Header Info */}
                     <div className="bg-white p-6 shadow sm:rounded-lg flex justify-between items-center">
                         <div>
-                            <h3 className="text-lg font-bold">Client : {order.user.name}</h3>
-                            <p className="text-gray-600">{order.user.email} | {order.user.phone || 'Pas de téléphone'}</p>
-                            <p className="text-gray-600 mt-2"><strong>Adresse d'expédition :</strong> <br /> {order.shipping_address}</p>
+                            <h3 className="text-lg font-bold">Customer: {order.user.name}</h3>
+                            <p className="text-gray-600">{order.user.email} | {order.user.phone || 'No phone provided'}</p>
+                            <p className="text-gray-600 mt-2"><strong>Shipping Address:</strong> <br /> {order.shipping_address}</p>
                         </div>
                         <div className="text-right">
-                            <h3 className="text-lg font-bold">Montant Total : {order.total_amount} dh</h3>
-                            <p className="text-gray-500">Création : {new Date(order.created_at).toLocaleString()}</p>
+                            <h3 className="text-lg font-bold">Total Amount: {order.total_amount} dh</h3>
+                            <p className="text-gray-500">Created: {new Date(order.created_at).toLocaleString()}</p>
                             {order.status === 'reçu' && (
-                                <p className="text-green-700 font-bold mt-1">Reçue le : {new Date(order.updated_at).toLocaleString()}</p>
+                                <p className="text-green-700 font-bold mt-1">Received on: {new Date(order.updated_at).toLocaleString()}</p>
                             )}
                         </div>
                     </div>
 
-                    {/* Status Update Form */}
-                    {/* <div className="bg-white p-6 shadow sm:rounded-lg">
-                        <h3 className="text-lg font-bold mb-4">Modifier le statut</h3>
-                        <form onSubmit={submitStatus} className="flex items-center space-x-4">
-                            <select 
-                                value={data.status} 
-                                onChange={(e) => setData('status', e.target.value)}
-                                className="border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm"
-                            >
-                                <option value="en attente">En attente</option>
-                                <option value="payée">Payée</option>
-                                <option value="expédiée">Expédiée</option>
-                                <option value="livrée">Livrée</option>
-                                <option value="annulée">Annulée</option>
-                            </select>
-                            <button 
-                                type="submit" 
-                                disabled={processing}
-                                className="au-btn"
-                            >
-                                Mettre à jour
-                            </button>
-                        </form>
-                    </div> */}
-
                     {/* Order Items */}
                     <div className="bg-white p-6 shadow sm:rounded-lg">
-                        <h3 className="text-lg font-bold mb-4">Articles commandés</h3>
+                        <h3 className="text-lg font-bold mb-4">Order Items</h3>
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Produit</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Prix Unitaire</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantité</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Product</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
                                 </tr>
                             </thead>

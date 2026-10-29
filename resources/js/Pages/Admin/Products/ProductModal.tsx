@@ -15,7 +15,7 @@ export default function ProductModal({
         <Modal show={show} onClose={onClose} maxWidth="2xl">
             <div className="p-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-gray-900">Détails du Produit</h2>
+                    <h2 className="text-xl font-bold text-gray-900">Product Details</h2>
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -34,7 +34,7 @@ export default function ProductModal({
                             />
                         ) : (
                             <div className="w-full h-48 bg-gray-100 flex items-center justify-center rounded-md border border-gray-200">
-                                <span className="text-gray-400">Aucune image</span>
+                                <span className="text-gray-400">No image available</span>
                             </div>
                         )}
                     </div>
@@ -53,7 +53,7 @@ export default function ProductModal({
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-gray-50 p-3 rounded border border-gray-100">
-                                <span className="block text-xs text-gray-500 uppercase font-semibold">Prix</span>
+                                <span className="block text-xs text-gray-500 uppercase font-semibold">Price</span>
                                 <span className="text-lg font-bold text-gray-900">{product.price} dh</span>
                             </div>
                             <div className="bg-gray-50 p-3 rounded border border-gray-100">
@@ -67,27 +67,27 @@ export default function ProductModal({
                         <div className="grid grid-cols-2 gap-4 text-sm">
                             {product.brand && (
                                 <div>
-                                    <span className="font-semibold text-gray-700">Marque :</span> <span className="text-gray-600">{product.brand}</span>
+                                    <span className="font-semibold text-gray-700">Brand:</span> <span className="text-gray-600">{product.brand}</span>
                                 </div>
                             )}
                             {product.volume && (
                                 <div>
-                                    <span className="font-semibold text-gray-700">Volume :</span> <span className="text-gray-600">{product.volume}</span>
+                                    <span className="font-semibold text-gray-700">Volume:</span> <span className="text-gray-600">{product.volume}</span>
                                 </div>
                             )}
                             <div>
-                                <span className="font-semibold text-gray-700">Nouveau :</span> 
-                                <span className="ml-2 text-gray-600">{product.is_new ? 'Oui' : 'Non'}</span>
+                                <span className="font-semibold text-gray-700">New:</span> 
+                                <span className="ml-2 text-gray-600">{product.is_new ? 'Yes' : 'No'}</span>
                             </div>
                             <div>
-                                <span className="font-semibold text-gray-700">Bestseller :</span> 
-                                <span className="ml-2 text-gray-600">{product.is_bestseller ? 'Oui' : 'Non'}</span>
+                                <span className="font-semibold text-gray-700">Best Seller:</span> 
+                                <span className="ml-2 text-gray-600">{product.is_bestseller ? 'Yes' : 'No'}</span>
                             </div>
                         </div>
 
                         {product.description && (
                             <div>
-                                <span className="block text-sm font-semibold text-gray-700 mb-1">Description :</span>
+                                <span className="block text-sm font-semibold text-gray-700 mb-1">Description:</span>
                                 <div className="text-sm text-gray-600 bg-gray-50 p-3 rounded whitespace-pre-wrap max-h-40 overflow-y-auto">
                                     {product.description}
                                 </div>
@@ -101,7 +101,7 @@ export default function ProductModal({
                         onClick={onClose}
                         className="au-btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none"
                     >
-                        Fermer
+                        Close
                     </button>
                 </div>
             </div>

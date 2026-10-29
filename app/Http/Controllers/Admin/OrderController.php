@@ -98,7 +98,7 @@ class OrderController extends Controller
             });
         }
 
-        return back()->with('success', 'Statut de la commande mis à jour.');
+        return back()->with('success', 'Order status updated successfully.');
     }
 
     public function ticket(Order $order)

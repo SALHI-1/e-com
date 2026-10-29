@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { Bar, BarChart, ComposedChart, Legend, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
@@ -6,8 +6,20 @@ import { Bar, BarChart, ComposedChart, Legend, Line, ResponsiveContainer, Toolti
 var PRIMARY_COLOR = "#0F204B";
 var SECONDARY_COLOR = "#8B95A5";
 var GRID_COLOR = "#E5E7EB";
+var STATUS_LABELS = {
+	"en attente": "Pending",
+	"annulé avant la confirmation": "Cancelled (Pre-Confirm)",
+	"confirmé": "Confirmed",
+	"livré": "Delivered",
+	"annulé après la livraison": "Cancelled (Post-Delivery)",
+	"reçu": "Received"
+};
 function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProducts }) {
 	const topProduct = topProducts && topProducts.length > 0 ? topProducts[0] : null;
+	const formattedOrderStatusData = (orderStatusData || []).map((item) => ({
+		...item,
+		statusLabel: STATUS_LABELS[item.status] || item.status
+	}));
 	const scrollToSection = (id) => {
 		const el = document.getElementById(id);
 		if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -15,7 +27,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Tableau de bord Analytique"
+			children: "Analytics Dashboard"
 		}),
 		children: [/* @__PURE__ */ jsx(Head, { title: "Admin Dashboard" }), /* @__PURE__ */ jsx("div", {
 			className: "py-12 bg-gray-50",
@@ -27,11 +39,11 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 						children: [/* @__PURE__ */ jsx("button", {
 							onClick: () => scrollToSection("transactions"),
 							className: "bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors",
-							children: "↓ Dernières transactions"
+							children: "↓ Recent Transactions"
 						}), /* @__PURE__ */ jsx("button", {
 							onClick: () => scrollToSection("top-products"),
 							className: "bg-white px-4 py-2 text-sm font-bold text-[#0F204B] border border-gray-200 rounded-md shadow-sm hover:bg-gray-50 transition-colors",
-							children: "↓ Produits les plus demandés"
+							children: "↓ Top In-Demand Products"
 						})]
 					}),
 					/* @__PURE__ */ jsxs("div", {
@@ -41,7 +53,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center",
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "text-xs font-bold text-gray-400 uppercase tracking-widest mb-1",
-									children: "Revenus d'aujourd'hui"
+									children: "Today's Revenue"
 								}), /* @__PURE__ */ jsxs("div", {
 									className: "text-3xl font-extrabold text-[#0F204B]",
 									children: [Number(metrics?.revenue || 0).toFixed(2), " dh"]
@@ -51,7 +63,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center",
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "text-xs font-bold text-gray-400 uppercase tracking-widest mb-1",
-									children: "Commandes Totales"
+									children: "Total Orders"
 								}), /* @__PURE__ */ jsx("div", {
 									className: "text-3xl font-extrabold text-[#0F204B]",
 									children: metrics?.orders || 0
@@ -61,7 +73,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								className: "bg-white overflow-hidden shadow-sm border border-gray-100 sm:rounded-lg p-6 flex flex-col justify-center",
 								children: [/* @__PURE__ */ jsx("div", {
 									className: "text-xs font-bold text-gray-400 uppercase tracking-widest mb-1",
-									children: "Produits en Stock"
+									children: "Products in Stock"
 								}), /* @__PURE__ */ jsx("div", {
 									className: "text-3xl font-extrabold text-[#0F204B]",
 									children: metrics?.stock || 0
@@ -72,15 +84,15 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								children: [
 									/* @__PURE__ */ jsx("div", {
 										className: "text-xs font-bold text-gray-400 uppercase tracking-widest mb-1",
-										children: "Le plus demandé"
+										children: "Top In-Demand"
 									}),
 									/* @__PURE__ */ jsx("div", {
 										className: "text-lg font-extrabold text-[#0F204B] leading-tight",
-										children: topProduct ? topProduct.name : "Aucun"
+										children: topProduct ? topProduct.name : "None"
 									}),
 									topProduct && /* @__PURE__ */ jsxs("div", {
 										className: "text-xs font-medium text-gray-500 mt-1",
-										children: [topProduct.order_items_sum_quantity, " ventes"]
+										children: [topProduct.order_items_sum_quantity, " sales"]
 									})
 								]
 							})
@@ -94,10 +106,10 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								className: "mb-6",
 								children: [/* @__PURE__ */ jsx("h3", {
 									className: "text-lg font-bold text-[#0F204B]",
-									children: "Corrélation : Revenus vs Volume (30 jours)"
+									children: "Correlation: Revenue vs Volume (30 Days)"
 								}), /* @__PURE__ */ jsx("p", {
 									className: "text-sm text-gray-500 mt-1",
-									children: "Évaluation de l'impact du volume de commandes sur le chiffre d'affaires quotidien."
+									children: "Evaluating the impact of daily order volume on daily revenue."
 								})]
 							}), /* @__PURE__ */ jsx("div", {
 								className: "h-80 w-full",
@@ -169,7 +181,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 											/* @__PURE__ */ jsx(Bar, {
 												yAxisId: "right",
 												dataKey: "orders_count",
-												name: "Volume (Commandes)",
+												name: "Volume (Orders)",
 												fill: "#E5E7EB",
 												radius: [
 													2,
@@ -182,7 +194,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 												yAxisId: "left",
 												type: "monotone",
 												dataKey: "total",
-												name: "Revenus (dh)",
+												name: "Revenue (dh)",
 												stroke: PRIMARY_COLOR,
 												strokeWidth: 2.5,
 												dot: false,
@@ -201,19 +213,19 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 								className: "mb-6",
 								children: [/* @__PURE__ */ jsx("h3", {
 									className: "text-lg font-bold text-[#0F204B]",
-									children: "Entonnoir des statuts"
+									children: "Status Funnel"
 								}), /* @__PURE__ */ jsx("p", {
 									className: "text-sm text-gray-500 mt-1",
-									children: "Répartition volumétrique globale."
+									children: "Overall order distribution by status."
 								})]
 							}), /* @__PURE__ */ jsx("div", {
 								className: "h-80 w-full",
-								children: orderStatusData && orderStatusData.length > 0 ? /* @__PURE__ */ jsx(ResponsiveContainer, {
+								children: formattedOrderStatusData && formattedOrderStatusData.length > 0 ? /* @__PURE__ */ jsx(ResponsiveContainer, {
 									width: "100%",
 									height: "100%",
 									children: /* @__PURE__ */ jsxs(BarChart, {
 										layout: "vertical",
-										data: orderStatusData,
+										data: formattedOrderStatusData,
 										margin: {
 											top: 0,
 											right: 30,
@@ -226,7 +238,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 												hide: true
 											}),
 											/* @__PURE__ */ jsx(YAxis, {
-												dataKey: "status",
+												dataKey: "statusLabel",
 												type: "category",
 												axisLine: false,
 												tickLine: false,
@@ -235,7 +247,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 													fontSize: 11,
 													fontWeight: 500
 												},
-												width: 100
+												width: 110
 											}),
 											/* @__PURE__ */ jsx(Tooltip, {
 												cursor: { fill: "transparent" },
@@ -247,7 +259,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 											}),
 											/* @__PURE__ */ jsx(Bar, {
 												dataKey: "count",
-												name: "Commandes",
+												name: "Orders",
 												fill: PRIMARY_COLOR,
 												radius: [
 													0,
@@ -260,7 +272,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 									})
 								}) : /* @__PURE__ */ jsx("p", {
 									className: "text-gray-500 text-sm mt-10 text-center",
-									children: "Aucune donnée disponible"
+									children: "No data available"
 								})
 							})]
 						})]
@@ -272,11 +284,11 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 							className: "p-6 border-b border-gray-100 flex justify-between items-center",
 							children: [/* @__PURE__ */ jsx("h3", {
 								className: "text-lg font-bold text-[#0F204B]",
-								children: "Dernières transactions"
+								children: "Recent Transactions"
 							}), /* @__PURE__ */ jsx(Link, {
 								href: route("admin.orders.index"),
 								className: "text-xs font-bold uppercase tracking-wider text-gray-400 hover:text-[#0F204B] transition-colors",
-								children: "Voir tout →"
+								children: "View all →"
 							})]
 						}), /* @__PURE__ */ jsx("div", {
 							className: "overflow-x-auto",
@@ -287,15 +299,15 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 									children: /* @__PURE__ */ jsxs("tr", { children: [
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Référence"
+											children: "Reference"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Client"
+											children: "Customer"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Montant"
+											children: "Amount"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
@@ -303,7 +315,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Statut"
+											children: "Status"
 										})
 									] })
 								}), /* @__PURE__ */ jsxs("tbody", {
@@ -321,7 +333,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 											}),
 											/* @__PURE__ */ jsx("td", {
 												className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-												children: order.user?.name || "Inconnu"
+												children: order.user?.name || "Unknown"
 											}),
 											/* @__PURE__ */ jsxs("td", {
 												className: "px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900",
@@ -329,23 +341,23 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 											}),
 											/* @__PURE__ */ jsxs("td", {
 												className: "px-6 py-4 whitespace-nowrap text-sm text-gray-500",
-												children: [/* @__PURE__ */ jsxs("div", { children: ["Création: ", new Date(order.created_at).toLocaleDateString()] }), order.status === "reçu" && /* @__PURE__ */ jsxs("div", {
+												children: [/* @__PURE__ */ jsxs("div", { children: ["Created: ", new Date(order.created_at).toLocaleDateString()] }), order.status === "reçu" && /* @__PURE__ */ jsxs("div", {
 													className: "text-[#0F204B] font-semibold mt-1",
-													children: ["Reçue: ", new Date(order.updated_at).toLocaleDateString()]
+													children: ["Received: ", new Date(order.updated_at).toLocaleDateString()]
 												})]
 											}),
 											/* @__PURE__ */ jsx("td", {
 												className: "px-6 py-4 whitespace-nowrap text-sm",
 												children: /* @__PURE__ */ jsx("span", {
 													className: `px-2 py-1 inline-flex text-xs leading-none font-bold rounded-full ${order.status.includes("annulé") ? "bg-red-50 text-red-700" : "bg-green-50 text-green-700"}`,
-													children: order.status
+													children: STATUS_LABELS[order.status] || order.status
 												})
 											})
 										]
 									}, order.id)), (!recentOrders || recentOrders.length === 0) && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
 										colSpan: 5,
 										className: "px-6 py-8 text-center text-sm text-gray-400",
-										children: "Aucune transaction récente."
+										children: "No recent transactions."
 									}) })]
 								})]
 							})
@@ -358,7 +370,7 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 							className: "p-6 border-b border-gray-100 flex justify-between items-center",
 							children: /* @__PURE__ */ jsx("h3", {
 								className: "text-lg font-bold text-[#0F204B]",
-								children: "Produits les plus demandés"
+								children: "Top In-Demand Products"
 							})
 						}), /* @__PURE__ */ jsx("div", {
 							className: "overflow-x-auto",
@@ -369,15 +381,15 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 									children: /* @__PURE__ */ jsxs("tr", { children: [
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Rang"
+											children: "Rank"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Produit"
+											children: "Product"
 										}),
 										/* @__PURE__ */ jsx("th", {
 											className: "px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider",
-											children: "Quantité Commandée"
+											children: "Quantity Ordered"
 										})
 									] })
 								}), /* @__PURE__ */ jsxs("tbody", {
@@ -395,13 +407,13 @@ function Dashboard({ metrics, salesData, orderStatusData, recentOrders, topProdu
 											}),
 											/* @__PURE__ */ jsxs("td", {
 												className: "px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900",
-												children: [product.order_items_sum_quantity, " unités"]
+												children: [product.order_items_sum_quantity, " units"]
 											})
 										]
 									}, product.id)), (!topProducts || topProducts.length === 0) && /* @__PURE__ */ jsx("tr", { children: /* @__PURE__ */ jsx("td", {
 										colSpan: 3,
 										className: "px-6 py-8 text-center text-sm text-gray-400",
-										children: "Aucun produit vendu."
+										children: "No products sold yet."
 									}) })]
 								})]
 							})

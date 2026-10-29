@@ -43,7 +43,7 @@ class AdminAccountController extends Controller
             'is_super_admin' => $request->boolean('is_super_admin'),
         ]);
 
-        return redirect()->route('admin.admins.index')->with('success', 'Administrateur créé avec succès.');
+        return redirect()->route('admin.admins.index')->with('success', 'Administrator created successfully.');
     }
 
     /**
@@ -74,14 +74,14 @@ class AdminAccountController extends Controller
 
         // Prevent a super admin from removing their own super admin status
         if ($admin->id === auth()->id() && !$request->boolean('is_super_admin')) {
-            return back()->withErrors(['is_super_admin' => 'Vous ne pouvez pas retirer votre propre rôle super administrateur.']);
+            return back()->withErrors(['is_super_admin' => 'You cannot remove your own super administrator role.']);
         }
 
         $data['is_super_admin'] = $request->boolean('is_super_admin');
 
         $admin->update($data);
 
-        return redirect()->route('admin.admins.index')->with('success', 'Administrateur mis à jour avec succès.');
+        return redirect()->route('admin.admins.index')->with('success', 'Administrator updated successfully.');
     }
 
     /**
@@ -90,11 +90,11 @@ class AdminAccountController extends Controller
     public function destroy(User $admin)
     {
         if ($admin->id === auth()->id()) {
-            return back()->withErrors(['message' => 'Vous ne pouvez pas supprimer votre propre compte.']);
+            return back()->withErrors(['message' => 'You cannot delete your own account.']);
         }
 
         $admin->delete();
 
-        return redirect()->route('admin.admins.index')->with('success', 'Administrateur supprimé avec succès.');
+        return redirect()->route('admin.admins.index')->with('success', 'Administrator deleted successfully.');
     }
 }

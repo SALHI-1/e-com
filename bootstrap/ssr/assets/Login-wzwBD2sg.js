@@ -1,4 +1,4 @@
-import { t as Guest } from "./GuestLayout-BhrsokB9.js";
+import { t as Guest } from "./GuestLayout-Bq3z4XbT.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Login.tsx
@@ -13,7 +13,7 @@ function Login({ status }) {
 		post(route("admin.login"), { onFinish: () => reset("password") });
 	};
 	return /* @__PURE__ */ jsxs(Guest, { children: [
-		/* @__PURE__ */ jsx(Head, { title: "Administration — Aurélia" }),
+		/* @__PURE__ */ jsx(Head, { title: "Administration — Ourélia" }),
 		/* @__PURE__ */ jsx("h2", {
 			className: "au-auth-title",
 			children: "Administration"
@@ -35,7 +35,7 @@ function Login({ status }) {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "email",
-						children: "Email Admin"
+						children: "Admin Email"
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "email",
@@ -55,7 +55,7 @@ function Login({ status }) {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "password",
-						children: "Mot de passe"
+						children: "Password"
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "password",
@@ -89,7 +89,7 @@ function Login({ status }) {
 							color: "var(--cream-dim)",
 							cursor: "pointer"
 						},
-						children: "Se souvenir de moi"
+						children: "Remember me"
 					})]
 				}),
 				/* @__PURE__ */ jsx("div", {
@@ -104,7 +104,7 @@ function Login({ status }) {
 						disabled: processing,
 						className: "au-btn-gold",
 						style: { padding: "0.7rem 2rem" },
-						children: processing ? "Connexion…" : "Accéder au panel"
+						children: processing ? "Signing in…" : "Sign In to Admin"
 					})
 				})
 			]

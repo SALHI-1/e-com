@@ -1,5 +1,5 @@
-import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
-import ProductModal from "./ProductModal-FCOIWgKp.js";
+import { t as AdminLayout } from "./AdminLayout-CjENzdXY.js";
+import ProductModal from "./ProductModal-De1o1uSd.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";
@@ -14,7 +14,7 @@ function Index({ products, filters }) {
 		setIsModalOpen(true);
 	};
 	const handleDelete = (id) => {
-		if (confirm("Êtes-vous sûr de vouloir supprimer ce produit ?")) router.delete(route("admin.products.destroy", id));
+		if (confirm("Are you sure you want to delete this product?")) router.delete(route("admin.products.destroy", id));
 	};
 	const filteredProducts = products.filter((product) => {
 		const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
@@ -24,10 +24,10 @@ function Index({ products, filters }) {
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsx("h2", {
 			className: "au-h3",
-			children: "Gestion des Produits"
+			children: "Product Management"
 		}),
 		children: [
-			/* @__PURE__ */ jsx(Head, { title: "Produits" }),
+			/* @__PURE__ */ jsx(Head, { title: "Products" }),
 			/* @__PURE__ */ jsx("div", {
 				className: "py-12",
 				children: /* @__PURE__ */ jsxs("div", {
@@ -38,7 +38,7 @@ function Index({ products, filters }) {
 							className: "flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto",
 							children: [/* @__PURE__ */ jsx("input", {
 								type: "text",
-								placeholder: "Rechercher un produit...",
+								placeholder: "Search products...",
 								className: "border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm w-full sm:w-64",
 								value: search,
 								onChange: (e) => setSearch(e.target.value)
@@ -61,12 +61,12 @@ function Index({ products, filters }) {
 								href: route("admin.products.trashed"),
 								className: "au-btn whitespace-nowrap bg-gray-500 hover:bg-gray-600",
 								style: { margin: 0 },
-								children: "Corbeille"
+								children: "Trash"
 							}), /* @__PURE__ */ jsx(Link, {
 								href: route("admin.products.create"),
 								className: "au-btn whitespace-nowrap",
 								style: { margin: 0 },
-								children: "Ajouter un produit"
+								children: "Add Product"
 							})]
 						})]
 					}), /* @__PURE__ */ jsxs("div", {
@@ -82,15 +82,15 @@ function Index({ products, filters }) {
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Nom"
+										children: "Name"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Catégorie"
+										children: "Category"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
-										children: "Prix"
+										children: "Price"
 									}),
 									/* @__PURE__ */ jsx("th", {
 										className: "px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider",
@@ -136,18 +136,18 @@ function Index({ products, filters }) {
 										children: [/* @__PURE__ */ jsx(Link, {
 											href: route("admin.products.edit", product.id),
 											className: "au-link-underline mr-4",
-											children: "Modifier"
+											children: "Edit"
 										}), /* @__PURE__ */ jsx("button", {
 											onClick: () => handleDelete(product.id),
 											className: "text-red-600 hover:text-red-900 underline underline-offset-4 decoration-[0.1em]",
-											children: "Supprimer"
+											children: "Delete"
 										})]
 									})
 								] }, product.id))
 							})]
 						}), filteredProducts.length === 0 && /* @__PURE__ */ jsx("div", {
 							className: "p-6 text-center text-gray-500",
-							children: "Aucun produit trouvé."
+							children: "No products found."
 						})]
 					})]
 				})

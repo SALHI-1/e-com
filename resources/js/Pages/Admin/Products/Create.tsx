@@ -28,29 +28,29 @@ export default function Create({ categories }: { categories: any[] }) {
     };
 
     return (
-        <AdminLayout header={<h2 className="au-h3">Ajouter un produit</h2>}>
-            <Head title="Ajouter un produit" />
+        <AdminLayout header={<h2 className="au-h3">Add Product</h2>}>
+            <Head title="Add Product" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-2xl sm:px-6 lg:px-8">
                     <div className="bg-white p-6 shadow sm:rounded-lg">
                         <form onSubmit={submit} className="space-y-4">
                             <div>
-                                <InputLabel htmlFor="name" value="Nom du produit" />
+                                <InputLabel htmlFor="name" value="Product Name" />
                                 <TextInput id="name" type="text" className="mt-1 block w-full" value={data.name} onChange={(e) => setData('name', e.target.value)} required />
                                 <InputError message={errors.name} className="mt-2" />
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="brand" value="Marque (optionnel)" />
+                                <InputLabel htmlFor="brand" value="Brand (optional)" />
                                 <TextInput id="brand" type="text" className="mt-1 block w-full" value={data.brand} onChange={(e) => setData('brand', e.target.value)} />
                                 <InputError message={errors.brand} className="mt-2" />
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="category_id" value="Catégorie" />
+                                <InputLabel htmlFor="category_id" value="Category" />
                                 <select id="category_id" className="mt-1 block w-full border-gray-300 focus:border-gray-500 focus:ring-gray-500 rounded-md shadow-sm" value={data.category_id} onChange={(e) => setData('category_id', e.target.value)} required>
-                                    <option value="" disabled>Sélectionner une catégorie</option>
+                                    <option value="" disabled>Select a category</option>
                                     {categories.map((cat) => (
                                         <option key={cat.id} value={cat.id}>{cat.name}</option>
                                     ))}
@@ -66,7 +66,7 @@ export default function Create({ categories }: { categories: any[] }) {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <InputLabel htmlFor="price" value="Prix (dh)" />
+                                    <InputLabel htmlFor="price" value="Price (dh)" />
                                     <TextInput id="price" type="number" step="0.01" className="mt-1 block w-full" value={data.price} onChange={(e) => setData('price', e.target.value)} required />
                                     <InputError message={errors.price} className="mt-2" />
                                 </div>
@@ -78,19 +78,19 @@ export default function Create({ categories }: { categories: any[] }) {
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="volume" value="Volume (ex: ml, optionnel)" />
+                                <InputLabel htmlFor="volume" value="Volume (e.g. ml, optional)" />
                                 <TextInput id="volume" type="number" className="mt-1 block w-full" value={data.volume} onChange={(e) => setData('volume', e.target.value)} />
                                 <InputError message={errors.volume} className="mt-2" />
                             </div>
 
                             <div>
-                                <InputLabel htmlFor="image" value="Image du produit (optionnel)" />
+                                <InputLabel htmlFor="image" value="Product Image (optional)" />
                                 <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md relative overflow-hidden group hover:border-gray-500 transition-colors">
                                     {data.image ? (
                                         <div className="text-center w-full">
-                                            <p className="text-sm text-gray-600 mb-2">Fichier sélectionné : {data.image.name}</p>
+                                            <p className="text-sm text-gray-600 mb-2">Selected file: {data.image.name}</p>
                                             <img src={URL.createObjectURL(data.image)} alt="Preview" className="mx-auto max-h-48 object-contain mb-4" />
-                                            <button type="button" onClick={() => setData('image', null)} className="text-red-600 hover:text-red-800 text-sm">Retirer l'image</button>
+                                            <button type="button" onClick={() => setData('image', null)} className="text-red-600 hover:text-red-800 text-sm">Remove image</button>
                                         </div>
                                     ) : (
                                         <div className="space-y-1 text-center">
@@ -99,12 +99,12 @@ export default function Create({ categories }: { categories: any[] }) {
                                             </svg>
                                             <div className="flex text-sm text-gray-600 justify-center">
                                                 <label htmlFor="file-upload" className="relative cursor-pointer bg-white rounded-md font-medium au-link-underline focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-gray-500">
-                                                    <span>Importer un fichier</span>
+                                                    <span>Upload a file</span>
                                                     <input id="file-upload" name="image" type="file" className="sr-only" accept="image/*" onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)} />
                                                 </label>
-                                                <p className="pl-1">ou glisser-déposer</p>
+                                                <p className="pl-1">or drag and drop</p>
                                             </div>
-                                            <p className="text-xs text-gray-500">PNG, JPG, WEBP jusqu'à 10MB</p>
+                                            <p className="text-xs text-gray-500">PNG, JPG, WEBP up to 10MB</p>
                                         </div>
                                     )}
                                 </div>
@@ -114,20 +114,20 @@ export default function Create({ categories }: { categories: any[] }) {
                             <div className="flex space-x-6">
                                 <label className="flex items-center">
                                     <Checkbox name="is_new" checked={data.is_new} onChange={(e) => setData('is_new', e.target.checked)} />
-                                    <span className="ms-2 text-sm text-gray-600">Nouveau produit</span>
+                                    <span className="ms-2 text-sm text-gray-600">New Product</span>
                                 </label>
                                 <label className="flex items-center">
                                     <Checkbox name="is_bestseller" checked={data.is_bestseller} onChange={(e) => setData('is_bestseller', e.target.checked)} />
-                                    <span className="ms-2 text-sm text-gray-600">Bestseller</span>
+                                    <span className="ms-2 text-sm text-gray-600">Best Seller</span>
                                 </label>
                                 <label className="flex items-center">
                                     <Checkbox name="allow_preorder" checked={data.allow_preorder} onChange={(e) => setData('allow_preorder', e.target.checked)} />
-                                    <span className="ms-2 text-sm text-gray-600">Autoriser précommande</span>
+                                    <span className="ms-2 text-sm text-gray-600">Allow Pre-order</span>
                                 </label>
                             </div>
 
                             <div className="flex justify-end">
-                                <PrimaryButton disabled={processing}>Enregistrer</PrimaryButton>
+                                <PrimaryButton disabled={processing}>Save Product</PrimaryButton>
                             </div>
                         </form>
                     </div>
