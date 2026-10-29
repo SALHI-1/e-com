@@ -1,51 +1,57 @@
-import PrimaryButton from '@/Components/PrimaryButton';
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestLayout, { useGuestLang } from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
-export default function VerifyEmail({ status }: { status?: string }) {
+function VerifyEmailContent({ status }: { status?: string }) {
+    const { t } = useGuestLang();
+    const a = t.auth;
+
     const { post, processing } = useForm({});
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-
         post(route('verification.send'));
     };
 
     return (
-        <GuestLayout>
-            <Head title="Email Verification" />
+        <>
+            <Head title={`${a.verifyEmailTitle} — Aurélia`} />
+            <h2 className="au-auth-title">{a.verifyEmailTitle}</h2>
 
-            <div className="mb-4 text-sm text-gray-600">
-                Thanks for signing up! Before getting started, could you verify
-                your email address by clicking on the link we just emailed to
-                you? If you didn't receive the email, we will gladly send you
-                another.
-            </div>
+            <p style={{ fontSize: '0.875rem', color: 'var(--au-text-muted)', marginBottom: '1.25rem', lineHeight: 1.6 }}>
+                {a.verifyEmailText}
+            </p>
 
             {status === 'verification-link-sent' && (
-                <div className="mb-4 text-sm font-medium text-green-600">
-                    A new verification link has been sent to the email address
-                    you provided during registration.
+                <div className="au-flash au-flash-success" style={{ margin: '0 0 1rem' }}>
+                    {a.verifyEmailSent}
                 </div>
             )}
 
             <form onSubmit={submit}>
-                <div className="mt-4 flex items-center justify-between">
-                    <PrimaryButton disabled={processing}>
-                        Resend Verification Email
-                    </PrimaryButton>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem' }}>
+                    <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 1.5rem' }}>
+                        {processing ? a.loggingIn : a.resendVerificationEmail}
+                    </button>
 
                     <Link
                         href={route('logout')}
                         method="post"
                         as="button"
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        className="au-auth-link"
                     >
-                        Log Out
+                        {a.logout}
                     </Link>
                 </div>
             </form>
+        </>
+    );
+}
+
+export default function VerifyEmail(props: { status?: string }) {
+    return (
+        <GuestLayout>
+            <VerifyEmailContent {...props} />
         </GuestLayout>
     );
 }

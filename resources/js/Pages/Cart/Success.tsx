@@ -16,14 +16,11 @@ export default function Success(props: Props) {
 
 function SuccessContent() {
     const { t } = useAurelia();
-    
-    // Pour accéder aux nouvelles traductions, on les caste en tant que Record pour éviter les erreurs TypeScript
-    // si l'interface CommonDict n'a pas été parfaitement mise à jour dans ce contexte.
-    const trans = t as Record<string, any>;
+    const sDict = t.success;
 
     return (
         <div className="au-container" style={{ padding: '80px 0', minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-            <Head title={`${trans.successTitle || 'Merci pour votre commande !'} · Ourélia`} />
+            <Head title={`${sDict.title} · Ourélia`} />
             
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--au-gold)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginBottom: '24px' }}>
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -31,19 +28,19 @@ function SuccessContent() {
             </svg>
 
             <h1 className="au-h3" style={{ marginBottom: '16px', maxWidth: '600px' }}>
-                {trans.successTitle || 'Merci pour votre confiance !'}
+                {sDict.title}
             </h1>
             
             <p className="au-body-text" style={{ marginBottom: '8px', maxWidth: '500px', color: 'var(--au-text)' }}>
-                {trans.successMessage || 'Votre commande a bien été enregistrée.'}
+                {sDict.message}
             </p>
             
             <p className="au-body-text" style={{ marginBottom: '40px', maxWidth: '500px', color: 'var(--au-text-muted)' }}>
-                {trans.successContact || 'Nous allons vous contacter le plus tôt possible pour confirmer la commande.'}
+                {sDict.contact}
             </p>
             
             <Link href={route('home')} className="au-btn" style={{ display: 'inline-block', alignSelf: 'center', textAlign: 'center' }}>
-                {trans.continueShopping || 'Continuer mes achats'}
+                {sDict.continueShopping}
             </Link>
         </div>
     );

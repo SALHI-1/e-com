@@ -1,285 +1,8 @@
+import { a as normalizeLang, i as getStoredLang, n as SUPPORTED_LANGS, o as setStoredLang, r as dictionaries, t as LANG_LABELS } from "./langue-CbfI8lEO.js";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { Fragment as Fragment$1, createContext, useContext, useState } from "react";
 //#region resources/js/Layouts/ClientLayout.tsx
-var COMMON = {
-	fr: {
-		announce: "Livraison gratuite dès 300 DH ou partout à Casa & Tanger",
-		navHome: "Accueil",
-		navShop: "Boutique",
-		navHair: "Cheveux",
-		navAbout: "Histoire",
-		add: "Ajouter",
-		addCart: "Ajouter au panier",
-		allLabel: "Tout",
-		discover: "Découvrir",
-		best: "Best-seller",
-		newTag: "Nouveau",
-		sale: "Promo",
-		"hair care": "Cheveux",
-		"face care": "Visage",
-		"makeup": "Maquillage",
-		"body & bath": "Corps et Bain",
-		"perfumes": "Parfums",
-		marquee: [
-			"Beauté honnête",
-			"Soins essentiels",
-			"Ingrédients réels",
-			"Pour chaque jour",
-			"Prix juste"
-		],
-		promiseKicker: "Rejoignez-nous",
-		promiseTitle: "Prenez soin de vous",
-		promiseText: "Recevez des conseils pour votre routine. Pas de spam, juste l'essentiel.",
-		emailPh: "Votre adresse e-mail",
-		subscribe: "S'abonner",
-		footerTagline: "Des soins essentiels pour chaque jour.",
-		footerNote: "Fait avec soin · Espagne",
-		footer: [{
-			title: "Boutique",
-			items: [
-				{
-					label: "Cheveux",
-					href: "/?category=Hair%20Care#collection"
-				},
-				{
-					label: "Visage",
-					href: "/?category=Face%20Care#collection"
-				},
-				{
-					label: "Maquillage",
-					href: "/?category=Makeup#collection"
-				},
-				{
-					label: "Corps et Bain",
-					href: "/?category=Body%20%26%20Bath#collection"
-				},
-				{
-					label: "Parfums",
-					href: "/?category=Perfumes#collection"
-				}
-			]
-		}, {
-			title: "Société",
-			items: [{
-				label: "Notre histoire",
-				href: "/about"
-			}]
-		}],
-		login: "Connexion",
-		register: "Créer un compte",
-		profile: "Profil",
-		logout: "Déconnexion",
-		cartTitle: "Votre Panier",
-		cartEmpty: "Votre panier est vide.",
-		backShop: "Retourner à la boutique",
-		unit: "unité",
-		subtotal: "Sous-total",
-		shipping: "Livraison",
-		free: "Gratuite",
-		total: "Total",
-		checkout: "Passer la commande",
-		waNote: "📱 Vous recevrez un message WhatsApp pour confirmer votre commande.",
-		guestName: "Votre nom *",
-		deliveryCity: "Ville de livraison *",
-		deliveryFee: "Frais de livraison",
-		deliveryFree: "Gratuit",
-		orderTotal: "Total commande",
-		waPhone: "Numéro WhatsApp *",
-		address: "Adresse de livraison *",
-		back: "Retour",
-		confirm: "Confirmer",
-		sending: "Envoi…",
-		successTitle: "Merci pour votre confiance !",
-		successMessage: "Votre commande a bien été enregistrée.",
-		successContact: "Nous allons vous contacter le plus tôt possible pour confirmer la commande.",
-		continueShopping: "Continuer mes achats"
-	},
-	es: {
-		announce: "Envío gratis desde 300 DH o para Casa y Tánger",
-		navHome: "Inicio",
-		navShop: "Tienda",
-		navHair: "Cabello",
-		navAbout: "Historia",
-		add: "Añadir",
-		addCart: "Añadir al carro",
-		allLabel: "Todo",
-		discover: "Descubrir",
-		best: "Más vendido",
-		newTag: "Nuevo",
-		sale: "Oferta",
-		"hair care": "Cabello",
-		"face care": "Rostro",
-		"makeup": "Maquillaje",
-		"body & bath": "Cuerpo y Baño",
-		"perfumes": "Perfumes",
-		marquee: [
-			"Belleza honesta",
-			"Cuidado esencial",
-			"Ingredientes reales",
-			"Para cada día",
-			"Precio justo"
-		],
-		promiseKicker: "Únete",
-		promiseTitle: "Cuídate con nosotras",
-		promiseText: "Recibe consejos de rutina y nuestras novedades. Sin spam, solo lo esencial.",
-		emailPh: "Tu correo electrónico",
-		subscribe: "Suscribirme",
-		footerTagline: "Cuidado esencial para cada día.",
-		footerNote: "Hecho con cariño · España",
-		footer: [{
-			title: "Tienda",
-			items: [
-				{
-					label: "Cabello",
-					href: "/?category=Hair%20Care#collection"
-				},
-				{
-					label: "Rostro",
-					href: "/?category=Face%20Care#collection"
-				},
-				{
-					label: "Maquillaje",
-					href: "/?category=Makeup#collection"
-				},
-				{
-					label: "Cuerpo y Baño",
-					href: "/?category=Body%20%26%20Bath#collection"
-				},
-				{
-					label: "Perfumes",
-					href: "/?category=Perfumes#collection"
-				}
-			]
-		}, {
-			title: "Compañía",
-			items: [{
-				label: "Nuestra historia",
-				href: "/about"
-			}]
-		}],
-		login: "Acceder",
-		register: "Crear cuenta",
-		profile: "Perfil",
-		logout: "Salir",
-		cartTitle: "Tu Carrito",
-		cartEmpty: "Tu carrito está vacío.",
-		backShop: "Volver a la tienda",
-		unit: "unidad",
-		subtotal: "Subtotal",
-		shipping: "Envío",
-		free: "Gratis",
-		total: "Total",
-		checkout: "Realizar pedido",
-		waNote: "📱 Recibirás un mensaje de WhatsApp para confirmar tu pedido.",
-		guestName: "Tu nombre *",
-		deliveryCity: "Ciudad de entrega *",
-		deliveryFee: "Gastos de envío",
-		deliveryFree: "Gratis",
-		orderTotal: "Total pedido",
-		waPhone: "Número de WhatsApp *",
-		address: "Dirección de envío *",
-		back: "Atrás",
-		confirm: "Confirmar",
-		sending: "Enviando…",
-		successTitle: "¡Gracias por su confianza!",
-		successMessage: "Su pedido ha sido registrado con éxito.",
-		successContact: "Nos pondremos en contacto con usted lo antes posible para confirmar el pedido.",
-		continueShopping: "Seguir comprando"
-	},
-	en: {
-		announce: "Free shipping from 300 DH or to Casa & Tangier",
-		navHome: "Home",
-		navShop: "Shop",
-		navHair: "Hair",
-		navAbout: "About",
-		add: "Add",
-		addCart: "Add to cart",
-		allLabel: "All",
-		discover: "Discover",
-		best: "Best seller",
-		newTag: "New",
-		sale: "Sale",
-		"hair care": "Hair Care",
-		"face care": "Face Care",
-		"makeup": "Makeup",
-		"body & bath": "Body & Bath",
-		"perfumes": "Perfumes",
-		marquee: [
-			"Honest beauty",
-			"Essential care",
-			"Real ingredients",
-			"For every day",
-			"Fair pricing"
-		],
-		promiseKicker: "Join us",
-		promiseTitle: "Take care, with us",
-		promiseText: "Get routine tips and new arrivals. No spam, only the essentials.",
-		emailPh: "Your email address",
-		subscribe: "Subscribe",
-		footerTagline: "Essential care for every day.",
-		footerNote: "Made with care · Spain",
-		footer: [{
-			title: "Shop",
-			items: [
-				{
-					label: "Hair Care",
-					href: "/?category=Hair%20Care#collection"
-				},
-				{
-					label: "Face Care",
-					href: "/?category=Face%20Care#collection"
-				},
-				{
-					label: "Makeup",
-					href: "/?category=Makeup#collection"
-				},
-				{
-					label: "Body & Bath",
-					href: "/?category=Body%20%26%20Bath#collection"
-				},
-				{
-					label: "Perfumes",
-					href: "/?category=Perfumes#collection"
-				}
-			]
-		}, {
-			title: "Company",
-			items: [{
-				label: "Our story",
-				href: "/about"
-			}]
-		}],
-		login: "Log in",
-		register: "Create account",
-		profile: "Profile",
-		logout: "Log out",
-		cartTitle: "Your Cart",
-		cartEmpty: "Your cart is empty.",
-		backShop: "Back to shop",
-		unit: "unit",
-		subtotal: "Subtotal",
-		shipping: "Shipping",
-		free: "Free",
-		total: "Total",
-		checkout: "Checkout",
-		waNote: "📱 You will receive a WhatsApp message to confirm your order.",
-		guestName: "Your name *",
-		deliveryCity: "Delivery city *",
-		deliveryFee: "Delivery fee",
-		deliveryFree: "Free",
-		orderTotal: "Order total",
-		waPhone: "WhatsApp number *",
-		address: "Shipping address *",
-		back: "Back",
-		confirm: "Confirm",
-		sending: "Sending…",
-		successTitle: "Thank you for your trust!",
-		successMessage: "Your order has been successfully recorded.",
-		successContact: "We will contact you as soon as possible to confirm the order.",
-		continueShopping: "Continue shopping"
-	}
-};
 var CATEGORY_TINTS = {
 	"hair care": "#ECE0CF",
 	"face care": "#E7E5D6",
@@ -287,11 +10,6 @@ var CATEGORY_TINTS = {
 	"perfumes": "#EBDFDB",
 	"body & bath": "#E4E7E1"
 };
-var LANGS = [
-	"fr",
-	"en",
-	"es"
-];
 var AureliaContext = createContext(null);
 function useAurelia() {
 	const ctx = useContext(AureliaContext);
@@ -305,24 +23,17 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 	"Perfumes",
 	"Body & Bath"
 ], children }) {
-	const [lang, setLangState] = useState(() => {
-		try {
-			if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
-				const saved = localStorage.getItem("au_lang");
-				if (saved === "fr" || saved === "en" || saved === "es") return saved;
-			}
-		} catch {}
-		return "fr";
-	});
+	const [lang, setLangState] = useState(() => getStoredLang());
 	const setLang = (newLang) => {
-		setLangState(newLang);
-		if (typeof window !== "undefined") localStorage.setItem("au_lang", newLang);
+		const normalized = normalizeLang(newLang);
+		setLangState(normalized);
+		setStoredLang(normalized);
 	};
 	const [menuOpen, setMenuOpen] = useState(false);
 	const { url } = usePage();
-	const t = COMMON[lang];
+	const t = dictionaries[lang] || dictionaries.fr;
 	const categoryTint = (cat) => CATEGORY_TINTS[cat.toLowerCase()] || "#ECE0CF";
-	const categoryLabel = (cat) => t[cat.toLowerCase()] || cat;
+	const categoryLabel = (cat) => t.common?.categoryLabels && t.common.categoryLabels[cat.toLowerCase()] || t[cat.toLowerCase()] || cat;
 	const tagLabel = (tag) => tag === "best" ? t.best : tag === "new" ? t.newTag : tag === "sale" ? t.sale : tag || "";
 	const contextValue = {
 		lang,
@@ -332,6 +43,7 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 		categoryLabel,
 		tagLabel
 	};
+	const metaDesc = lang === "eng" ? "Discover our range of Ourélia essential care products, cosmetics and perfumes crafted for your daily ritual." : lang === "esp" ? "Descubra nuestra gama de cuidados esenciales Ourélia, cosméticos y perfumes diseñados para su bienestar diario." : "Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être.";
 	return /* @__PURE__ */ jsxs(AureliaContext.Provider, {
 		value: contextValue,
 		children: [/* @__PURE__ */ jsxs(Head, {
@@ -340,7 +52,7 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 				/* @__PURE__ */ jsx("meta", {
 					"head-key": "description",
 					name: "description",
-					content: "Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être."
+					content: metaDesc
 				}),
 				/* @__PURE__ */ jsx("meta", {
 					"head-key": "og:title",
@@ -350,7 +62,7 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 				/* @__PURE__ */ jsx("meta", {
 					"head-key": "og:description",
 					property: "og:description",
-					content: "Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être."
+					content: metaDesc
 				}),
 				/* @__PURE__ */ jsx("meta", {
 					"head-key": "og:image",
@@ -446,11 +158,11 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 								children: [
 									/* @__PURE__ */ jsx("div", {
 										className: "au-lang-toggle",
-										children: LANGS.map((code) => /* @__PURE__ */ jsx("button", {
+										children: SUPPORTED_LANGS.map((code) => /* @__PURE__ */ jsx("button", {
 											type: "button",
 											className: `au-lang-btn${lang === code ? " au-lang-btn--active" : ""}`,
 											onClick: () => setLang(code),
-											children: code.toUpperCase()
+											children: LANG_LABELS[code]
 										}, code))
 									}),
 									/* @__PURE__ */ jsx("div", {
@@ -558,17 +270,23 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 									onClick: () => setMenuOpen(false),
 									children: t.register
 								})] }),
-								/* @__PURE__ */ jsx("div", {
-									className: "au-mobile-lang",
-									children: /* @__PURE__ */ jsx("div", {
-										className: "au-lang-toggle",
-										children: LANGS.map((code) => /* @__PURE__ */ jsx("button", {
+								/* @__PURE__ */ jsxs("div", {
+									className: "au-mobile-lang-section",
+									children: [/* @__PURE__ */ jsxs("div", {
+										className: "au-mobile-lang-kicker",
+										children: [/* @__PURE__ */ jsx("span", { children: "🌐" }), /* @__PURE__ */ jsx("span", { children: lang === "eng" ? "Language" : lang === "esp" ? "Idioma" : "Langue" })]
+									}), /* @__PURE__ */ jsx("div", {
+										className: "au-mobile-lang-pills",
+										children: SUPPORTED_LANGS.map((code) => /* @__PURE__ */ jsx("button", {
 											type: "button",
-											className: `au-lang-btn${lang === code ? " au-lang-btn--active" : ""}`,
-											onClick: () => setLang(code),
-											children: code.toUpperCase()
+											className: `au-mobile-lang-pill${lang === code ? " au-mobile-lang-pill--active" : ""}`,
+											onClick: () => {
+												setLang(code);
+												setMenuOpen(false);
+											},
+											children: LANG_LABELS[code]
 										}, code))
-									})
+									})]
 								})
 							]
 						})
@@ -644,11 +362,29 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 						})] }, i))]
 					}), /* @__PURE__ */ jsxs("div", {
 						className: "au-footer-bottom",
-						children: [/* @__PURE__ */ jsxs("span", { children: [
-							"© ",
-							(/* @__PURE__ */ new Date()).getFullYear(),
-							" Ourélia"
-						] }), /* @__PURE__ */ jsx("span", { children: t.footerNote })]
+						children: [
+							/* @__PURE__ */ jsxs("span", { children: [
+								"© ",
+								(/* @__PURE__ */ new Date()).getFullYear(),
+								" Ourélia"
+							] }),
+							/* @__PURE__ */ jsxs("div", {
+								className: "au-footer-lang",
+								children: [/* @__PURE__ */ jsxs("span", {
+									className: "au-footer-lang-label",
+									children: [lang === "eng" ? "Language" : lang === "esp" ? "Idioma" : "Langue", " :"]
+								}), /* @__PURE__ */ jsx("div", {
+									className: "au-lang-toggle au-lang-toggle--footer",
+									children: SUPPORTED_LANGS.map((code) => /* @__PURE__ */ jsx("button", {
+										type: "button",
+										className: `au-lang-btn${lang === code ? " au-lang-btn--active" : ""}`,
+										onClick: () => setLang(code),
+										children: LANG_LABELS[code]
+									}, code))
+								})]
+							}),
+							/* @__PURE__ */ jsx("span", { children: t.footerNote })
+						]
 					})]
 				})
 			]

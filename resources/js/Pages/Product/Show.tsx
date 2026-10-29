@@ -3,6 +3,8 @@ import { PageProps } from '@/types';
 import { Head, Link, router } from '@inertiajs/react';
 import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
 import PreorderModal from '@/Components/PreorderModal';
+import ImageWithLoader from '@/Components/ImageWithLoader';
+import ProductImagePlaceholder from '@/Components/ProductImagePlaceholder';
 
 interface Product {
     id: number;
@@ -68,17 +70,20 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
     const isError = type === 'error';
     const isSuccess = type === 'success';
     return (
-        <div style={{
-            position: 'fixed', top: '88px', right: '24px', zIndex: 9999,
-            display: 'flex', alignItems: 'flex-start', gap: '14px',
-            padding: '18px 22px', borderRadius: '6px',
-            background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
-            boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
-            color: 'var(--au-bg, #F6F0E4)', minWidth: '290px', maxWidth: '400px',
-            animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-            borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
-            fontFamily: 'var(--au-font-sans, sans-serif)',
-        }}>
+        <div
+            className="au-toast"
+            style={{
+                position: 'fixed', top: '88px', right: '24px', zIndex: 9999,
+                display: 'flex', alignItems: 'flex-start', gap: '14px',
+                padding: '18px 22px', borderRadius: '6px',
+                background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
+                boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
+                color: 'var(--au-bg, #F6F0E4)',
+                animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
+                borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
+                fontFamily: 'var(--au-font-sans, sans-serif)',
+            }}
+        >
             <span style={{ fontSize: '18px', lineHeight: 1, flexShrink: 0, marginTop: '2px', color: isError ? '#e07070' : 'var(--au-gold, #C2A063)', fontFamily: 'var(--au-font-serif)' }}>
                 {isSuccess ? '✓' : isError ? '✕' : 'ℹ'}
             </span>
@@ -99,6 +104,7 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
 
 function ProductDetail({ product, flash, errors, auth }: Props) {
     const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
+    const pDict = t.product;
     const [quantity, setQuantity] = useState<number | string>(1);
     const [loading, setLoading] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
@@ -118,7 +124,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
     const addToCart = () => {
         let finalQty = parseInt(quantity as string) || 1;
         if (finalQty > product.stock) {
-            setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+            setToast({ message: pDict.stockInsufficient, type: 'info' });
             setQuantity(product.stock);
             return;
         }
@@ -144,7 +150,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
         <div className="au-container" style={{ paddingTop: '40px', paddingBottom: '40px', minHeight: '60vh' }}>
             <Head>
                 <title>{`${product.name} · Ourélia`}</title>
-                <meta head-key="description" name="description" content={product.description || `Découvrez ${product.name} chez Ourélia.`} />
+                <meta head-key="description" name="description" content={product.description || pDict.defaultDescription} />
                 <link head-key="canonical" rel="canonical" href={route('product.show', product.id)} />
                 <style>{`
                     input[type="number"]::-webkit-inner-spin-button,
@@ -170,16 +176,18 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                 <div style={{ background: categoryTint(product.category.name), borderRadius: '8px', overflow: 'hidden', position: 'relative', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '400px', width: '100%', margin: '0 auto' }}>
                     {tag && (
                         <div className="au-prod-tag" style={tag === 'out' ? { background: 'var(--au-dark)', color: 'var(--au-bg)', position: 'absolute', top: '16px', left: '16px' } : { position: 'absolute', top: '16px', left: '16px' }}>
-                            {tag === 'out' ? 'Épuisé' : tagLabel(tag)}
+                            {tag === 'out' ? pDict.soldOut : tagLabel(tag)}
                         </div>
                     )}
                     {product.image_url ? (
-                        <img src={product.image_url} alt={`Soin Ourélia - ${product.name}`} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+                        <ImageWithLoader
+                            src={product.image_url}
+                            alt={`Soin Ourélia - ${product.name}`}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }}
+                            fallback={<ProductImagePlaceholder category={product.category.name} productName={product.name} size="lg" />}
+                        />
                     ) : (
-                        <div style={{ padding: '40px', textAlign: 'center', color: 'var(--au-text)' }}>
-                            <div style={{ fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '8px' }}>Ourélia</div>
-                            <div style={{ fontFamily: 'var(--au-font-serif)', fontSize: '24px' }}>{categoryLabel(product.category.name)}</div>
-                        </div>
+                        <ProductImagePlaceholder category={product.category.name} productName={product.name} size="lg" />
                     )}
                 </div>
 
@@ -196,7 +204,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
                         <StarRating rating={Math.round(product.reviews_avg_rating || 0)} />
                         <span style={{ fontSize: '13px', color: 'var(--au-text-muted)' }}>
-                            {product.reviews_count || 0} avis
+                            {pDict.reviewsCount(product.reviews_count || 0)}
                         </span>
                     </div>
 
@@ -210,11 +218,11 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                     </div>
 
                     <p className="au-body-text" style={{ marginBottom: '40px', whiteSpace: 'pre-line', color: 'var(--au-text-muted)' }}>
-                        {product.description || "Un soin essentiel, conçu avec des ingrédients naturels pour répondre aux besoins de votre peau avec efficacité."}
+                        {product.description || pDict.defaultDescription}
                     </p>
 
-                    <div style={{ display: 'flex', gap: '16px', alignItems: 'stretch', marginBottom: '20px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '120px', height: '48px' }}>
+                    <div className="au-prod-action-row" style={{ display: 'flex', gap: '16px', alignItems: 'stretch', marginBottom: '20px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '120px', flexShrink: 0, height: '48px' }}>
                             <button
                                 type="button"
                                 onClick={() => {
@@ -227,20 +235,33 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                 -
                             </button>
                             <input
-                                type="number"
-                                min="1"
-                                max={product.stock}
+                                type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 value={quantity}
-                                onChange={(e) => setQuantity(e.target.value)}
+                                onChange={(e) => {
+                                    const clean = e.target.value.replace(/[^0-9]/g, '');
+                                    if (!clean) {
+                                        setQuantity(1);
+                                        return;
+                                    }
+                                    const val = parseInt(clean, 10);
+                                    if (!isPreorderable && val > product.stock) {
+                                        setToast({ message: pDict.stockInsufficient, type: 'info' });
+                                        setQuantity(product.stock);
+                                    } else {
+                                        setQuantity(Math.max(1, val));
+                                    }
+                                }}
                                 disabled={isOut && !isPreorderable}
-                                style={{ width: '40px', height: '100%', border: 'none', borderRadius: 0, textAlign: 'center', MozAppearance: 'textfield', padding: 0 }}
+                                style={{ width: '40px', height: '100%', border: 'none', borderRadius: 0, textAlign: 'center', MozAppearance: 'textfield', appearance: 'textfield', padding: 0 }}
                             />
                             <button
                                 type="button"
                                 onClick={() => {
                                     const curr = parseInt(quantity as string) || 1;
                                     if (!isPreorderable && curr >= product.stock) {
-                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                        setToast({ message: pDict.stockInsufficient, type: 'info' });
                                     } else {
                                         setQuantity(curr + 1);
                                     }
@@ -259,13 +280,13 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                             disabled={loading || (isOut && !isPreorderable)}
                             style={{ flex: 1, height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                         >
-                            {loading ? '…' : isPreorderable ? 'Précommander' : isOut ? 'Épuisé' : t.addCart}
+                            {loading ? '…' : isPreorderable ? pDict.preorder : isOut ? pDict.soldOut : t.addCart}
                         </button>
                     </div>
 
                     {isOut && (
                         <p style={{ color: 'var(--au-sale)', fontSize: '0.9rem', marginTop: '10px' }}>
-                            Ce produit est actuellement en rupture de stock.
+                            {pDict.outOfStockNotice}
                         </p>
                     )}
                 </div>
@@ -273,16 +294,16 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
 
             {/* Section Avis */}
             <div style={{ marginTop: '80px', borderTop: '1px solid var(--au-border)', paddingTop: '40px' }}>
-                <h2 className="au-h4" style={{ marginBottom: '24px' }}>Avis clients</h2>
+                <h2 className="au-h4" style={{ marginBottom: '24px' }}>{pDict.reviewsTitle}</h2>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
                     {/* Formulaire d'avis */}
                     <div>
-                        <h3 style={{ fontSize: '16px', marginBottom: '16px', fontFamily: 'var(--au-font-serif)' }}>Laisser un avis</h3>
+                        <h3 style={{ fontSize: '16px', marginBottom: '16px', fontFamily: 'var(--au-font-serif)' }}>{pDict.leaveReview}</h3>
                         {auth.user ? (
                             userReview ? (
                                 <div style={{ padding: '24px', background: 'var(--au-bg-alt, #efe9db)', borderRadius: '8px', textAlign: 'center' }}>
-                                    <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '12px' }}>Vous avez déjà évalué ce produit :</p>
+                                    <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '12px' }}>{pDict.alreadyReviewed}</p>
                                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                                         <StarRating rating={userReview.rating} size={20} />
                                     </div>
@@ -295,7 +316,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                     router.post(route('reviews.store', product.id), Object.fromEntries(data.entries()), {
                                         preserveScroll: true,
                                         onSuccess: () => {
-                                            setToast({ message: 'Votre avis a été enregistré avec succès.', type: 'success' });
+                                            setToast({ message: pDict.reviewSuccess, type: 'success' });
                                             form.reset();
                                         },
                                         onError: (err) => {
@@ -304,13 +325,13 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                     });
                                 }}>
                                     <div style={{ marginBottom: '16px' }}>
-                                        <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>Note</label>
+                                        <label style={{ display: 'block', fontSize: '13px', marginBottom: '8px', color: 'var(--au-text-muted)' }}>{pDict.ratingLabel}</label>
                                         <div style={{ display: 'flex', gap: '4px' }}>
                                             {[1, 2, 3, 4, 5].map(star => (
                                                 <label key={star} style={{ cursor: 'pointer' }}>
                                                     <input type="radio" name="rating" value={star} required style={{ display: 'none' }} 
                                                         onChange={(e) => {
-                                                            const svg = e.target.parentElement?.parentElement?.querySelectorAll('svg');
+                                                             const svg = e.target.parentElement?.parentElement?.querySelectorAll('svg');
                                                             svg?.forEach((s, i) => {
                                                                 s.style.fill = i < star ? 'var(--au-gold, #C2A063)' : 'none';
                                                             });
@@ -323,13 +344,13 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                             ))}
                                         </div>
                                     </div>
-                                    <button type="submit" className="au-btn" style={{ padding: '12px 24px' }}>Publier mon avis</button>
+                                    <button type="submit" className="au-btn" style={{ padding: '12px 24px' }}>{pDict.submitReview}</button>
                                 </form>
                             )
                         ) : (
                             <div style={{ padding: '24px', background: 'var(--au-bg-alt, #efe9db)', borderRadius: '8px', textAlign: 'center' }}>
-                                <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '16px' }}>Vous devez être connecté pour laisser un avis.</p>
-                                <Link href={route('login')} className="au-btn-outline" style={{ display: 'inline-block', padding: '10px 20px' }}>Se connecter</Link>
+                                <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', marginBottom: '16px' }}>{pDict.loginRequired}</p>
+                                <Link href={route('login')} className="au-btn-outline" style={{ display: 'inline-block', padding: '10px 20px' }}>{pDict.loginBtn}</Link>
                             </div>
                         )}
                     </div>
@@ -343,7 +364,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
                                             <span style={{ fontWeight: 500, fontSize: '14px' }}>{review.user.name}</span>
                                             <span style={{ fontSize: '12px', color: 'var(--au-text-muted)' }}>
-                                                {new Date(review.created_at).toLocaleDateString('fr-FR')}
+                                                {new Date(review.created_at).toLocaleDateString(pDict.dateLocale)}
                                             </span>
                                         </div>
                                         <div>
@@ -353,7 +374,7 @@ function ProductDetail({ product, flash, errors, auth }: Props) {
                                 ))}
                             </div>
                         ) : (
-                            <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', fontStyle: 'italic' }}>Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>
+                            <p style={{ fontSize: '14px', color: 'var(--au-text-muted)', fontStyle: 'italic' }}>{pDict.noReviews}</p>
                         )}
                     </div>
                 </div>

@@ -4,304 +4,33 @@ import { Head, Link, usePage } from '@inertiajs/react';
 /* ============================================================================
  * Types
  * ========================================================================== */
-export type Lang = 'es' | 'en' | 'fr';
+import {
+  Dictionary,
+  Lang,
+  SupportedLang,
+  dictionaries,
+  normalizeLang,
+  getStoredLang,
+  setStoredLang,
+  SUPPORTED_LANGS,
+  LANG_LABELS,
+} from '@/langue';
+
+/* ============================================================================
+ * Types & Compatibility
+ * ========================================================================== */
+export type { Lang, SupportedLang, Dictionary };
 export type ProductCategory = 'cabello' | 'rostro' | 'solar' | 'perfume' | 'bucal';
 export type ProductTag = 'best' | 'new' | 'sale';
 
-interface FooterItem {
-  label: string;
-  href: string;
-}
-
-interface FooterColumn {
-  title: string;
-  items: FooterItem[];
-}
-
-interface CommonDict {
-  announce: string;
-  navHome: string;
-  navShop: string;
-  navHair: string;
-  navAbout: string;
-  add: string;
-  addCart: string;
-  allLabel: string;
-  discover: string;
-  best: string;
-  newTag: string;
-  sale: string;
-  'hair care': string;
-  'face care': string;
-  'makeup': string;
-  'body & bath': string;
-  'perfumes': string;
-  marquee: string[];
-  promiseKicker: string;
-  promiseTitle: string;
-  promiseText: string;
-  emailPh: string;
-  subscribe: string;
-  footerTagline: string;
-  footerNote: string;
-  footer: FooterColumn[];
-  login: string;
-  register: string;
-  profile: string;
-  logout: string;
-  cartTitle: string;
-  cartEmpty: string;
-  backShop: string;
-  unit: string;
-  subtotal: string;
-  shipping: string;
-  free: string;
-  total: string;
-  checkout: string;
-  waNote: string;
-  guestName: string;
-  deliveryCity: string;
-  deliveryFee: string;
-  deliveryFree: string;
-  orderTotal: string;
-  waPhone: string;
-  address: string;
-  back: string;
-  confirm: string;
-  sending: string;
-  successTitle: string;
-  successMessage: string;
-  successContact: string;
-  continueShopping: string;
-}
-
-interface AureliaContextValue {
-  lang: Lang;
+export interface AureliaContextValue {
+  lang: SupportedLang;
   setLang: (lang: Lang) => void;
-  t: CommonDict;
+  t: Dictionary;
   categoryTint: (cat: ProductCategory | string) => string;
   categoryLabel: (cat: ProductCategory | string) => string;
   tagLabel: (tag?: ProductTag | string) => string;
 }
-
-/* ============================================================================
- * Shared vocabulary
- * ========================================================================== */
-const COMMON: Record<Lang, CommonDict> = {
-  fr: {
-    announce: 'Livraison gratuite dès 300 DH ou partout à Casa & Tanger',
-    navHome: 'Accueil',
-    navShop: 'Boutique',
-    navHair: 'Cheveux',
-    navAbout: 'Histoire',
-    add: 'Ajouter',
-    addCart: 'Ajouter au panier',
-    allLabel: 'Tout',
-    discover: 'Découvrir',
-    best: 'Best-seller',
-    newTag: 'Nouveau',
-    sale: 'Promo',
-    'hair care': 'Cheveux',
-    'face care': 'Visage',
-    'makeup': 'Maquillage',
-    'body & bath': 'Corps et Bain',
-    'perfumes': 'Parfums',
-    marquee: ['Beauté honnête', 'Soins essentiels', 'Ingrédients réels', 'Pour chaque jour', 'Prix juste'],
-    promiseKicker: 'Rejoignez-nous',
-    promiseTitle: 'Prenez soin de vous',
-    promiseText: 'Recevez des conseils pour votre routine. Pas de spam, juste l\'essentiel.',
-    emailPh: 'Votre adresse e-mail',
-    subscribe: 'S\'abonner',
-    footerTagline: 'Des soins essentiels pour chaque jour.',
-    footerNote: 'Fait avec soin · Espagne',
-    footer: [
-      {
-        title: 'Boutique', items: [
-          { label: 'Cheveux', href: '/?category=Hair%20Care#collection' },
-          { label: 'Visage', href: '/?category=Face%20Care#collection' },
-          { label: 'Maquillage', href: '/?category=Makeup#collection' },
-          { label: 'Corps et Bain', href: '/?category=Body%20%26%20Bath#collection' },
-          { label: 'Parfums', href: '/?category=Perfumes#collection' }
-        ]
-      },
-      {
-        title: 'Société', items: [
-          { label: 'Notre histoire', href: '/about' }
-        ]
-      },
-    ],
-    login: 'Connexion',
-    register: 'Créer un compte',
-    profile: 'Profil',
-    logout: 'Déconnexion',
-    cartTitle: 'Votre Panier',
-    cartEmpty: 'Votre panier est vide.',
-    backShop: 'Retourner à la boutique',
-    unit: 'unité',
-    subtotal: 'Sous-total',
-    shipping: 'Livraison',
-    free: 'Gratuite',
-    total: 'Total',
-    checkout: 'Passer la commande',
-    waNote: '📱 Vous recevrez un message WhatsApp pour confirmer votre commande.',
-    guestName: 'Votre nom *',
-    deliveryCity: 'Ville de livraison *',
-    deliveryFee: 'Frais de livraison',
-    deliveryFree: 'Gratuit',
-    orderTotal: 'Total commande',
-    waPhone: 'Numéro WhatsApp *',
-    address: 'Adresse de livraison *',
-    back: 'Retour',
-    confirm: 'Confirmer',
-    sending: 'Envoi…',
-    successTitle: 'Merci pour votre confiance !',
-    successMessage: 'Votre commande a bien été enregistrée.',
-    successContact: 'Nous allons vous contacter le plus tôt possible pour confirmer la commande.',
-    continueShopping: 'Continuer mes achats',
-  },
-  es: {
-    announce: 'Envío gratis desde 300 DH o para Casa y Tánger',
-    navHome: 'Inicio',
-    navShop: 'Tienda',
-    navHair: 'Cabello',
-    navAbout: 'Historia',
-    add: 'Añadir',
-    addCart: 'Añadir al carro',
-    allLabel: 'Todo',
-    discover: 'Descubrir',
-    best: 'Más vendido',
-    newTag: 'Nuevo',
-    sale: 'Oferta',
-    'hair care': 'Cabello',
-    'face care': 'Rostro',
-    'makeup': 'Maquillaje',
-    'body & bath': 'Cuerpo y Baño',
-    'perfumes': 'Perfumes',
-    marquee: ['Belleza honesta', 'Cuidado esencial', 'Ingredientes reales', 'Para cada día', 'Precio justo'],
-    promiseKicker: 'Únete',
-    promiseTitle: 'Cuídate con nosotras',
-    promiseText: 'Recibe consejos de rutina y nuestras novedades. Sin spam, solo lo esencial.',
-    emailPh: 'Tu correo electrónico',
-    subscribe: 'Suscribirme',
-    footerTagline: 'Cuidado esencial para cada día.',
-    footerNote: 'Hecho con cariño · España',
-    footer: [
-      {
-        title: 'Tienda', items: [
-          { label: 'Cabello', href: '/?category=Hair%20Care#collection' },
-          { label: 'Rostro', href: '/?category=Face%20Care#collection' },
-          { label: 'Maquillaje', href: '/?category=Makeup#collection' },
-          { label: 'Cuerpo y Baño', href: '/?category=Body%20%26%20Bath#collection' },
-          { label: 'Perfumes', href: '/?category=Perfumes#collection' }
-        ]
-      },
-      {
-        title: 'Compañía', items: [
-          { label: 'Nuestra historia', href: '/about' }
-        ]
-      },
-    ],
-    login: 'Acceder',
-    register: 'Crear cuenta',
-    profile: 'Perfil',
-    logout: 'Salir',
-    cartTitle: 'Tu Carrito',
-    cartEmpty: 'Tu carrito está vacío.',
-    backShop: 'Volver a la tienda',
-    unit: 'unidad',
-    subtotal: 'Subtotal',
-    shipping: 'Envío',
-    free: 'Gratis',
-    total: 'Total',
-    checkout: 'Realizar pedido',
-    waNote: '📱 Recibirás un mensaje de WhatsApp para confirmar tu pedido.',
-    guestName: 'Tu nombre *',
-    deliveryCity: 'Ciudad de entrega *',
-    deliveryFee: 'Gastos de envío',
-    deliveryFree: 'Gratis',
-    orderTotal: 'Total pedido',
-    waPhone: 'Número de WhatsApp *',
-    address: 'Dirección de envío *',
-    back: 'Atrás',
-    confirm: 'Confirmar',
-    sending: 'Enviando…',
-    successTitle: '¡Gracias por su confianza!',
-    successMessage: 'Su pedido ha sido registrado con éxito.',
-    successContact: 'Nos pondremos en contacto con usted lo antes posible para confirmar el pedido.',
-    continueShopping: 'Seguir comprando',
-  },
-  en: {
-    announce: 'Free shipping from 300 DH or to Casa & Tangier',
-    navHome: 'Home',
-    navShop: 'Shop',
-    navHair: 'Hair',
-    navAbout: 'About',
-    add: 'Add',
-    addCart: 'Add to cart',
-    allLabel: 'All',
-    discover: 'Discover',
-    best: 'Best seller',
-    newTag: 'New',
-    sale: 'Sale',
-    'hair care': 'Hair Care',
-    'face care': 'Face Care',
-    'makeup': 'Makeup',
-    'body & bath': 'Body & Bath',
-    'perfumes': 'Perfumes',
-    marquee: ['Honest beauty', 'Essential care', 'Real ingredients', 'For every day', 'Fair pricing'],
-    promiseKicker: 'Join us',
-    promiseTitle: 'Take care, with us',
-    promiseText: 'Get routine tips and new arrivals. No spam, only the essentials.',
-    emailPh: 'Your email address',
-    subscribe: 'Subscribe',
-    footerTagline: 'Essential care for every day.',
-    footerNote: 'Made with care · Spain',
-    footer: [
-      {
-        title: 'Shop', items: [
-          { label: 'Hair Care', href: '/?category=Hair%20Care#collection' },
-          { label: 'Face Care', href: '/?category=Face%20Care#collection' },
-          { label: 'Makeup', href: '/?category=Makeup#collection' },
-          { label: 'Body & Bath', href: '/?category=Body%20%26%20Bath#collection' },
-          { label: 'Perfumes', href: '/?category=Perfumes#collection' }
-        ]
-      },
-      {
-        title: 'Company', items: [
-          { label: 'Our story', href: '/about' }
-        ]
-      },
-    ],
-    login: 'Log in',
-    register: 'Create account',
-    profile: 'Profile',
-    logout: 'Log out',
-    cartTitle: 'Your Cart',
-    cartEmpty: 'Your cart is empty.',
-    backShop: 'Back to shop',
-    unit: 'unit',
-    subtotal: 'Subtotal',
-    shipping: 'Shipping',
-    free: 'Free',
-    total: 'Total',
-    checkout: 'Checkout',
-    waNote: '📱 You will receive a WhatsApp message to confirm your order.',
-    guestName: 'Your name *',
-    deliveryCity: 'Delivery city *',
-    deliveryFee: 'Delivery fee',
-    deliveryFree: 'Free',
-    orderTotal: 'Order total',
-    waPhone: 'WhatsApp number *',
-    address: 'Shipping address *',
-    back: 'Back',
-    confirm: 'Confirm',
-    sending: 'Sending…',
-    successTitle: 'Thank you for your trust!',
-    successMessage: 'Your order has been successfully recorded.',
-    successContact: 'We will contact you as soon as possible to confirm the order.',
-    continueShopping: 'Continue shopping',
-  },
-};
 
 const CATEGORY_TINTS: Record<string, string> = {
   'hair care': '#ECE0CF',
@@ -310,8 +39,6 @@ const CATEGORY_TINTS: Record<string, string> = {
   'perfumes': '#EBDFDB',
   'body & bath': '#E4E7E1',
 };
-
-const LANGS: Lang[] = ['fr', 'en', 'es'];
 
 /* ============================================================================
  * Context
@@ -338,31 +65,20 @@ interface ClientLayoutProps {
 }
 
 export default function ClientLayout({ auth, cartCount = 0, title, categories = ['Hair Care', 'Face Care', 'Makeup', 'Perfumes', 'Body & Bath'], children }: ClientLayoutProps) {
-  const [lang, setLangState] = useState<Lang>(() => {
-    try {
-      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-        const saved = localStorage.getItem('au_lang');
-        if (saved === 'fr' || saved === 'en' || saved === 'es') return saved as Lang;
-      }
-    } catch {
-      // localStorage inaccessible en SSR (Node.js) — on utilise la langue par défaut
-    }
-    return 'fr';
-  });
+  const [lang, setLangState] = useState<SupportedLang>(() => getStoredLang());
 
   const setLang = (newLang: Lang) => {
-    setLangState(newLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('au_lang', newLang);
-    }
+    const normalized = normalizeLang(newLang);
+    setLangState(normalized);
+    setStoredLang(normalized);
   };
 
   const [menuOpen, setMenuOpen] = useState(false);
   const { url } = usePage();
 
-  const t = COMMON[lang];
+  const t = dictionaries[lang] || dictionaries.fr;
   const categoryTint = (cat: string) => CATEGORY_TINTS[cat.toLowerCase()] || '#ECE0CF';
-  const categoryLabel = (cat: string) => (t as any)[cat.toLowerCase()] || cat;
+  const categoryLabel = (cat: string) => (t.common?.categoryLabels && t.common.categoryLabels[cat.toLowerCase()]) || (t as any)[cat.toLowerCase()] || cat;
   const tagLabel = (tag?: string) => (tag === 'best' ? t.best : tag === 'new' ? t.newTag : tag === 'sale' ? t.sale : tag || '');
 
   const contextValue: AureliaContextValue = {
@@ -374,12 +90,18 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
     tagLabel,
   };
 
+  const metaDesc = lang === 'eng'
+    ? "Discover our range of Ourélia essential care products, cosmetics and perfumes crafted for your daily ritual."
+    : lang === 'esp'
+    ? "Descubra nuestra gama de cuidados esenciales Ourélia, cosméticos y perfumes diseñados para su bienestar diario."
+    : "Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être.";
+
   return (
     <AureliaContext.Provider value={contextValue}>
       <Head title={title ? (title === 'Ourélia' ? 'Ourélia' : `${title} · Ourélia`) : 'Ourélia — Essential Care'}>
-        <meta head-key="description" name="description" content="Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être." />
+        <meta head-key="description" name="description" content={metaDesc} />
         <meta head-key="og:title" property="og:title" content={title ? (title === 'Ourélia' ? 'Ourélia' : `${title} · Ourélia`) : 'Ourélia — Essential Care'} />
-        <meta head-key="og:description" property="og:description" content="Découvrez notre gamme de soins essentiels Ourélia, de cosmétiques et de parfums conçus pour votre bien-être." />
+        <meta head-key="og:description" property="og:description" content={metaDesc} />
         <meta head-key="og:image" property="og:image" content="/assets/og-default.jpg" />
         <meta head-key="og:type" property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -451,16 +173,16 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
             </nav>
 
             <div className="au-nav-right">
-              {/* language toggle — all three languages reachable */}
+              {/* language toggle — FR, ENG, ESP */}
               <div className="au-lang-toggle">
-                {LANGS.map((code) => (
+                {SUPPORTED_LANGS.map((code) => (
                   <button
                     key={code}
                     type="button"
                     className={`au-lang-btn${lang === code ? ' au-lang-btn--active' : ''}`}
                     onClick={() => setLang(code)}
                   >
-                    {code.toUpperCase()}
+                    {LANG_LABELS[code]}
                   </button>
                 ))}
               </div>
@@ -544,17 +266,24 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
                 </>
               )}
 
-              {/* language switcher inside the menu (desktop toggle is hidden on phones) */}
-              <div className="au-mobile-lang">
-                <div className="au-lang-toggle">
-                  {LANGS.map((code) => (
+              {/* language switcher inside the mobile drawer */}
+              <div className="au-mobile-lang-section">
+                <div className="au-mobile-lang-kicker">
+                  <span>🌐</span>
+                  <span>{lang === 'eng' ? 'Language' : lang === 'esp' ? 'Idioma' : 'Langue'}</span>
+                </div>
+                <div className="au-mobile-lang-pills">
+                  {SUPPORTED_LANGS.map((code) => (
                     <button
                       key={code}
                       type="button"
-                      className={`au-lang-btn${lang === code ? ' au-lang-btn--active' : ''}`}
-                      onClick={() => setLang(code)}
+                      className={`au-mobile-lang-pill${lang === code ? ' au-mobile-lang-pill--active' : ''}`}
+                      onClick={() => {
+                        setLang(code);
+                        setMenuOpen(false);
+                      }}
                     >
-                      {code.toUpperCase()}
+                      {LANG_LABELS[code]}
                     </button>
                   ))}
                 </div>
@@ -615,6 +344,23 @@ export default function ClientLayout({ auth, cartCount = 0, title, categories = 
 
           <div className="au-footer-bottom">
             <span>© {new Date().getFullYear()} Ourélia</span>
+            <div className="au-footer-lang">
+              <span className="au-footer-lang-label">
+                {lang === 'eng' ? 'Language' : lang === 'esp' ? 'Idioma' : 'Langue'} :
+              </span>
+              <div className="au-lang-toggle au-lang-toggle--footer">
+                {SUPPORTED_LANGS.map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    className={`au-lang-btn${lang === code ? ' au-lang-btn--active' : ''}`}
+                    onClick={() => setLang(code)}
+                  >
+                    {LANG_LABELS[code]}
+                  </button>
+                ))}
+              </div>
+            </div>
             <span>{t.footerNote}</span>
           </div>
         </footer>

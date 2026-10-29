@@ -1,8 +1,8 @@
 import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
 import { n as NavLink, r as Dropdown, t as ResponsiveNavLink } from "./ResponsiveNavLink-DBOVWhQ9.js";
-import DeleteUserForm from "./DeleteUserForm-Cq0r606J.js";
-import UpdatePasswordForm from "./UpdatePasswordForm-pi-h2dom.js";
-import UpdateProfileInformation from "./UpdateProfileInformationForm-BBmKlf_W.js";
+import DeleteUserForm from "./DeleteUserForm-DNhaPZp9.js";
+import UpdatePasswordForm from "./UpdatePasswordForm-B5OYfF5q.js";
+import UpdateProfileInformation from "./UpdateProfileInformationForm-D1XSPcww.js";
 import { Head, Link, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";

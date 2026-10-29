@@ -1,4 +1,5 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BxqbMFN4.js";
+import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
 import { Head, Link, router, useForm } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useMemo, useState } from "react";
@@ -120,6 +121,7 @@ function Toast({ message, type = "success", onClose }) {
 	}, [onClose]);
 	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
+		className: "au-toast",
 		style: {
 			position: "fixed",
 			top: "88px",
@@ -133,8 +135,6 @@ function Toast({ message, type = "success", onClose }) {
 			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
-			minWidth: "290px",
-			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
 			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
@@ -206,6 +206,7 @@ function Index(props) {
 }
 function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 	const { t } = useAurelia();
+	const cDict = t.cart;
 	const [showCheckout, setShowCheckout] = useState(false);
 	const [toast, setToast] = useState(null);
 	const { data, setData, post, processing, errors: formErrors } = useForm({
@@ -220,7 +221,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 			type: "success"
 		});
 		else if (errors?.cart || errors?.stock) setToast({
-			message: errors.cart || errors.stock || "Une erreur est survenue.",
+			message: errors.cart || errors.stock || cDict.genericError,
 			type: "error"
 		});
 	}, [
@@ -303,10 +304,24 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 					children: cartItems.map((item) => /* @__PURE__ */ jsxs("div", {
 						className: "au-cart-item",
 						children: [
-							item.product.image_url && /* @__PURE__ */ jsx("img", {
-								src: item.product.image_url,
-								alt: item.product.name,
-								className: "au-cart-item-img"
+							/* @__PURE__ */ jsx("div", {
+								className: "au-cart-item-img",
+								style: { overflow: "hidden" },
+								children: item.product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
+									src: item.product.image_url,
+									alt: item.product.name,
+									fallback: /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+										category: item.product.category?.name,
+										productName: item.product.name,
+										size: "sm",
+										showBrand: false
+									})
+								}) : /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+									category: item.product.category?.name,
+									productName: item.product.name,
+									size: "sm",
+									showBrand: false
+								})
 							}),
 							/* @__PURE__ */ jsxs("div", {
 								className: "au-cart-item-info",
@@ -336,7 +351,9 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 									border: "1px solid var(--au-border)",
 									borderRadius: "4px",
 									overflow: "hidden",
-									width: "80px",
+									width: "88px",
+									minWidth: "88px",
+									flexShrink: 0,
 									height: "36px"
 								},
 								children: [
@@ -354,15 +371,17 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 										children: "-"
 									}),
 									/* @__PURE__ */ jsx("input", {
-										type: "number",
-										min: "1",
-										max: item.product.stock,
+										type: "text",
+										inputMode: "numeric",
+										pattern: "[0-9]*",
 										value: item.quantity,
 										onChange: (e) => {
-											const val = parseInt(e.target.value) || 1;
+											const clean = e.target.value.replace(/[^0-9]/g, "");
+											if (!clean) return;
+											const val = parseInt(clean, 10);
 											if (val > item.product.stock) {
 												setToast({
-													message: "Le stock est insuffisant pour le moment.",
+													message: cDict.stockInsufficient,
 													type: "info"
 												});
 												updateQuantity(item.product.id, item.product.stock);
@@ -375,6 +394,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 											textAlign: "center",
 											width: "100%",
 											MozAppearance: "textfield",
+											appearance: "textfield",
 											padding: 0
 										}
 									}),
@@ -382,7 +402,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 										type: "button",
 										onClick: () => {
 											if (item.quantity >= item.product.stock) setToast({
-												message: "Le stock est insuffisant pour le moment.",
+												message: cDict.stockInsufficient,
 												type: "info"
 											});
 											else updateQuantity(item.product.id, item.quantity + 1);
@@ -405,7 +425,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 							/* @__PURE__ */ jsx("button", {
 								onClick: () => removeItem(item.product.id),
 								className: "au-cart-remove",
-								title: "Retirer du panier",
+								title: cDict.removeTooltip,
 								children: "✕"
 							})
 						]
@@ -415,7 +435,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 					children: [
 						/* @__PURE__ */ jsx("h2", {
 							className: "au-cart-summary-title",
-							children: "Récapitulatif"
+							children: cDict.summary
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-cart-summary-row",
@@ -455,7 +475,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 								marginBottom: "0.4rem",
 								lineHeight: 1.4
 							},
-							children: "💡 Livraison gratuite pour Casablanca & Tanger, ou pour toute commande supérieure à 299 dh."
+							children: cDict.freeShippingNotice
 						}),
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-cart-summary-total",
@@ -561,7 +581,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 										style: { cursor: "pointer" },
 										children: [/* @__PURE__ */ jsx("option", {
 											value: "",
-											children: "— Choisir une ville —"
+											children: cDict.chooseCity
 										}), MOROCCO_CITIES.map((city) => /* @__PURE__ */ jsx("option", {
 											value: city,
 											children: city
@@ -577,7 +597,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }) {
 											marginTop: "0.3rem",
 											color: deliveryFee === 0 ? "var(--au-gold)" : "var(--au-text-muted)"
 										},
-										children: deliveryFee === 0 ? `✓ Livraison gratuite pour ${data.delivery_city}` : `Frais de livraison : ${deliveryFee} dh`
+										children: deliveryFee === 0 ? cDict.freeShippingForCity(data.delivery_city) : cDict.deliveryFeeForCity(deliveryFee)
 									})
 								] }),
 								/* @__PURE__ */ jsxs("div", { children: [

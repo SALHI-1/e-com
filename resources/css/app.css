@@ -4,3 +4,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Supprimer définitivement les flèches haut/bas des inputs de quantité (Firefox, Chrome, Safari, Edge) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button,
+.au-qty-input::-webkit-outer-spin-button,
+.au-qty-input::-webkit-inner-spin-button,
+.au-qty::-webkit-outer-spin-button,
+.au-qty::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+input[type="number"],
+.au-qty-input,
+.au-qty {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+

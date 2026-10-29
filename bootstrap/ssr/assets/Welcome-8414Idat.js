@@ -1,165 +1,11 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BxqbMFN4.js";
 import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
-import { t as PreorderModal } from "./PreorderModal-BUnAXYOF.js";
+import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
+import { t as PreorderModal } from "./PreorderModal-COYnguxr.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
-//#region resources/js/Components/ImageWithLoader.tsx
-function ImageWithLoader({ src, alt, className, style, fallback, ...props }) {
-	const [isLoaded, setIsLoaded] = useState(false);
-	const [hasError, setHasError] = useState(false);
-	if (hasError && fallback) return /* @__PURE__ */ jsx(Fragment, { children: fallback });
-	return /* @__PURE__ */ jsxs("div", {
-		style: {
-			position: "relative",
-			width: "100%",
-			height: "100%",
-			overflow: "hidden"
-		},
-		className,
-		children: [!isLoaded && /* @__PURE__ */ jsx("div", {
-			style: {
-				position: "absolute",
-				inset: 0,
-				display: "flex",
-				alignItems: "center",
-				justifyContent: "center",
-				background: "rgba(246, 240, 228, 0.5)",
-				zIndex: 1
-			},
-			children: /* @__PURE__ */ jsx("div", {
-				className: "animate-spin",
-				style: {
-					width: "24px",
-					height: "24px",
-					borderRadius: "50%",
-					border: "1.5px solid rgba(194, 160, 99, 0.2)",
-					borderTopColor: "var(--au-gold, #C2A063)"
-				}
-			})
-		}), /* @__PURE__ */ jsx("img", {
-			src,
-			alt,
-			onLoad: () => setIsLoaded(true),
-			onError: () => {
-				setHasError(true);
-				setIsLoaded(true);
-			},
-			style: {
-				width: "100%",
-				height: "100%",
-				objectFit: "cover",
-				opacity: isLoaded ? 1 : 0,
-				transition: "opacity 0.5s ease-in-out",
-				...style
-			},
-			...props
-		})]
-	});
-}
-//#endregion
 //#region resources/js/Pages/Welcome.tsx
-var HOME_COPY = {
-	fr: {
-		heroKicker: "Soins essentiels · chaque jour",
-		heroTitle: "Beauté honnête",
-		heroItalic: "pour votre routine",
-		heroSub: "Des formules simples et efficaces pour les cheveux, le visage et la peau. L'essentiel, sans excès.",
-		heroCta: "Voir la collection",
-		heroLink: "Notre histoire",
-		heroPanelCap: "oro líquido",
-		heroPanelTag: "Huile d'argan",
-		manifestoKicker: "La maison",
-		manifestoText: "Les bons soins n'ont pas besoin d'être compliqués ou chers. Nous sélectionnons des formules efficaces, avec des ingrédients que vous reconnaissez, et les présentons sans bruit — car la beauté honnête commence par l'essentiel.",
-		spreadKicker: "Icônes Ourélia",
-		spreadTitle: "Les signatures",
-		catTitle: "Acheter par catégorie",
-		catSub: "Tout ce dont votre routine a besoin",
-		bestTitle: "Les favoris",
-		bestSub: "Ce que nos clientes choisissent le plus",
-		viewAll: "Tout voir",
-		productsWord: "Produits",
-		darkKicker: "Notre philosophie",
-		darkTitle: "Moins de produits.",
-		darkTitleIt: "De meilleures formules.",
-		darkText: "Nous croyons aux soins essentiels : des ingrédients qui fonctionnent, des emballages honnêtes et des prix justes. Sans promesses impossibles.",
-		darkCta: "Découvrez-nous",
-		v1t: "Ingrédients reconnaissables",
-		v1d: "Huile d'argan, argile blanche, camomille. Des actifs que vous savez lire.",
-		v2t: "Prix honnête",
-		v2d: "Une cosmétique de qualité qui prend soin de votre peau et de votre porte-monnaie.",
-		v3t: "Pour chaque jour",
-		v3d: "Des routines simples qui s'adaptent à votre rythme, pas l'inverse.",
-		soldOut: "Épuisé",
-		essentialCare: "Soin essentiel"
-	},
-	es: {
-		heroKicker: "Cuidado esencial · cada día",
-		heroTitle: "Belleza honesta",
-		heroItalic: "para tu rutina diaria",
-		heroSub: "Fórmulas sencillas y eficaces para el cabello, el rostro y la piel. Lo esencial, sin excesos.",
-		heroCta: "Ver la colección",
-		heroLink: "Nuestra historia",
-		heroPanelCap: "oro líquido",
-		heroPanelTag: "Aceite de argán",
-		manifestoKicker: "La maison",
-		manifestoText: "El buen cuidado no necesita ser complicado ni caro. Seleccionamos fórmulas eficaces, con ingredientes que reconoces, y las presentamos sin ruido — porque la belleza honesta empieza por lo esencial.",
-		spreadKicker: "Iconos Ourélia",
-		spreadTitle: "Las firmas",
-		catTitle: "Compra por categoría",
-		catSub: "Todo lo que tu rutina necesita",
-		bestTitle: "Los favoritos",
-		bestSub: "Lo que más repiten nuestras clientas",
-		viewAll: "Ver todo",
-		productsWord: "Productos",
-		darkKicker: "Nuestra filosofía",
-		darkTitle: "Menos productos.",
-		darkTitleIt: "Mejores fórmulas.",
-		darkText: "Creemos en el cuidado esencial: ingredientes que funcionan, envases honestos y precios justos. Sin promesas imposibles.",
-		darkCta: "Conócenos",
-		v1t: "Ingredientes reconocibles",
-		v1d: "Aceite de argán, arcilla blanca, camomila. Activos que sabes leer.",
-		v2t: "Precio honesto",
-		v2d: "Cosmética de calidad que cuida tu piel y tu bolsillo.",
-		v3t: "Para cada día",
-		v3d: "Rutinas sencillas que se adaptan a tu ritmo, no al revés.",
-		soldOut: "Agotado",
-		essentialCare: "Cuidado esencial"
-	},
-	en: {
-		heroKicker: "Essential care · every day",
-		heroTitle: "Honest beauty",
-		heroItalic: "for your daily ritual",
-		heroSub: "Simple, effective formulas for hair, face and skin. The essentials, nothing more.",
-		heroCta: "Shop the collection",
-		heroLink: "Our story",
-		heroPanelCap: "oro líquido",
-		heroPanelTag: "Argan oil",
-		manifestoKicker: "The maison",
-		manifestoText: "Good care doesn’t need to be complicated or expensive. We choose effective formulas, with ingredients you recognise, and present them without the noise — because honest beauty starts with the essentials.",
-		spreadKicker: "Ourélia icons",
-		spreadTitle: "The signatures",
-		catTitle: "Shop by category",
-		catSub: "Everything your routine needs",
-		bestTitle: "The favourites",
-		bestSub: "What our customers reach for again",
-		viewAll: "View all",
-		productsWord: "Products",
-		darkKicker: "Our philosophy",
-		darkTitle: "Fewer products.",
-		darkTitleIt: "Better formulas.",
-		darkText: "We believe in essential care: ingredients that work, honest packaging and fair prices. No impossible promises.",
-		darkCta: "About us",
-		v1t: "Ingredients you know",
-		v1d: "Argan oil, white clay, camomile. Actives you can actually read.",
-		v2t: "Honest pricing",
-		v2d: "Quality skincare that looks after your skin and your wallet.",
-		v3t: "For every day",
-		v3d: "Simple routines that fit your rhythm, not the other way round.",
-		soldOut: "Sold out",
-		essentialCare: "Essential care"
-	}
-};
 function OureliaToast({ message, type = "success", onClose }) {
 	useEffect(() => {
 		const timer = setTimeout(onClose, 3e3);
@@ -167,6 +13,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 	}, [onClose]);
 	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
+		className: "au-toast",
 		style: {
 			position: "fixed",
 			top: "88px",
@@ -180,8 +27,6 @@ function OureliaToast({ message, type = "success", onClose }) {
 			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
-			minWidth: "290px",
-			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
 			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
@@ -251,118 +96,6 @@ function smoothScrollTo(id) {
 		block: "start"
 	});
 }
-var SPREADS = [
-	{
-		num: "01",
-		claim: {
-			fr: "Or liquide pour vos cheveux",
-			es: "Oro líquido para tu cabello",
-			en: "Liquid gold for your hair"
-		},
-		story: {
-			fr: "Une formule pure qui nourrit en profondeur, redonnant force et brillance naturelle dès la première utilisation.",
-			es: "Fórmula pura que nutre en profundidad, devolviéndole fuerza y un brillo natural desde el primer uso.",
-			en: "Pure formula that deeply nourishes, restoring strength and a natural shine from the very first use."
-		},
-		tags: {
-			fr: [
-				"Soin intense",
-				"Sans silicones",
-				"Brillance"
-			],
-			es: [
-				"Cuidado intenso",
-				"Sin siliconas",
-				"Brillo"
-			],
-			en: [
-				"Intense care",
-				"Silicone-free",
-				"Shine"
-			]
-		}
-	},
-	{
-		num: "02",
-		claim: {
-			fr: "Dix gestes en un",
-			es: "Diez gestos en uno",
-			en: "Ten rituals in one"
-		},
-		story: {
-			fr: "Un soin léger qui illumine, contrôle les frisottis et apporte de la brillance sans alourdir. L'étape finale qui transforme tout.",
-			es: "Un cuidado ligero que ilumina, controla el frizz y aporta brillo sin apelmazar. El paso final que lo transforma todo.",
-			en: "A weightless care that brightens, tames frizz and adds shine without weighing down. The final step that transforms everything."
-		},
-		tags: {
-			fr: [
-				"10 en 1",
-				"Anti-frisottis",
-				"Protection"
-			],
-			es: [
-				"10 en 1",
-				"Anti-frizz",
-				"Protección"
-			],
-			en: [
-				"10-in-1",
-				"Anti-frizz",
-				"Protection"
-			]
-		}
-	},
-	{
-		num: "03",
-		claim: {
-			fr: "Votre signature quotidienne",
-			es: "Tu firma, cada día",
-			en: "Your signature, every day"
-		},
-		story: {
-			fr: "Une note fraîche et lumineuse, pensée pour vous accompagner du matin au soir. Votre geste de beauté le plus personnel.",
-			es: "Una nota fresca y luminosa, pensada para acompañarte de la mañana a la noche. Tu gesto de belleza más personal.",
-			en: "A fresh, luminous note made to carry you from morning to night. Your most personal beauty gesture."
-		},
-		tags: {
-			fr: [
-				"Frais",
-				"Essentiel",
-				"Durable"
-			],
-			es: [
-				"Fresco",
-				"Esencial",
-				"Duradero"
-			],
-			en: [
-				"Fresh",
-				"Essential",
-				"Lasting"
-			]
-		}
-	}
-];
-var ICON_INK = "#241C13";
-var ICON_GOLD = "#C2A063";
-var ICON_PORCELAIN = "#F6F0E4";
-var ICON_PORCELAIN_EDGE = "#E6DCC8";
-var ICON_LIQUID = {
-	cabello: "#D9B888",
-	rostro: "#C9CBB0",
-	solar: "#EBCB78",
-	perfume: "#D7B4AC",
-	bucal: "#BCD0C0",
-	default: "#D9B888"
-};
-var ICON_BAND = {
-	cabello: "#F0E4D0",
-	rostro: "#ECEDDE",
-	solar: "#F6EAC9",
-	perfume: "#F0E1DC",
-	bucal: "#E5EEE7",
-	default: "#F0E4D0"
-};
 /** Infer a packaging shape from a product when the DB doesn't carry one. */
 function resolveShape(product) {
 	const explicit = (product?.shape || "").toString().toLowerCase();
@@ -386,362 +119,9 @@ function resolveShape(product) {
 	if (cat === "face care") return "pump";
 	return "bottle";
 }
-function ProductIcon({ shape, cat, catLabel, scale = 1 }) {
-	const s = (n) => Math.round(n * scale);
-	const liquid = ICON_LIQUID[cat.toLowerCase()] || ICON_LIQUID.default;
-	const band = ICON_BAND[cat.toLowerCase()] || ICON_BAND.default;
-	const wrapStyle = (w, h) => ({
-		position: "relative",
-		width: s(w),
-		height: s(h),
-		filter: `drop-shadow(0 ${s(10)}px ${s(26)}px rgba(33,26,20,0.13))`
-	});
-	const Label = ({ w, h, radius, style }) => /* @__PURE__ */ jsxs("div", {
-		style: {
-			position: "absolute",
-			background: band,
-			overflow: "hidden",
-			display: "flex",
-			flexDirection: "column",
-			alignItems: "center",
-			justifyContent: "center",
-			gap: s(3),
-			borderRadius: radius ?? s(2),
-			width: s(w),
-			height: s(h),
-			boxShadow: "inset 0 0 0 1px rgba(33,26,20,0.05)",
-			...style
-		},
-		children: [
-			/* @__PURE__ */ jsx("span", {
-				style: {
-					fontFamily: "'Cormorant Garamond',serif",
-					fontWeight: 600,
-					fontSize: s(8.5),
-					letterSpacing: "0.2em",
-					color: ICON_INK,
-					lineHeight: 1,
-					paddingLeft: "0.2em"
-				},
-				children: "Ourélia"
-			}),
-			/* @__PURE__ */ jsx("span", { style: {
-				width: s(18),
-				height: 1,
-				background: ICON_GOLD
-			} }),
-			/* @__PURE__ */ jsx("span", {
-				style: {
-					fontFamily: "'Jost',sans-serif",
-					fontWeight: 500,
-					fontSize: s(5.5),
-					letterSpacing: "0.18em",
-					textTransform: "uppercase",
-					color: "#9A8460",
-					lineHeight: 1
-				},
-				children: catLabel
-			})
-		]
-	});
-	if (shape === "pump") return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(58, 170),
-		children: [
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: 0,
-				left: "24%",
-				width: s(28),
-				height: s(10),
-				background: ICON_INK,
-				borderRadius: s(4)
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(9),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(8),
-				height: s(18),
-				background: ICON_INK
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(25),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(20),
-				height: s(8),
-				background: ICON_INK,
-				borderRadius: s(2)
-			} }),
-			/* @__PURE__ */ jsx("div", {
-				style: {
-					position: "absolute",
-					top: s(32),
-					left: 0,
-					width: s(58),
-					height: s(138),
-					background: ICON_PORCELAIN,
-					borderRadius: `${s(12)}px ${s(12)}px ${s(13)}px ${s(13)}px`,
-					boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-				},
-				children: /* @__PURE__ */ jsx("div", { style: {
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					width: "100%",
-					height: s(30),
-					background: liquid,
-					opacity: .45,
-					borderRadius: `0 0 ${s(12)}px ${s(12)}px`
-				} })
-			}),
-			/* @__PURE__ */ jsx(Label, {
-				w: 44,
-				h: 52,
-				style: {
-					top: s(66),
-					left: "50%",
-					transform: "translateX(-50%)"
-				}
-			})
-		]
-	});
-	if (shape === "tube") return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(54, 162),
-		children: [
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: 0,
-				left: 0,
-				width: s(54),
-				height: s(140),
-				background: ICON_PORCELAIN,
-				borderRadius: `${s(7)}px ${s(7)}px ${s(26)}px ${s(26)}px`,
-				boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(34),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(40),
-				height: s(3),
-				background: ICON_GOLD
-			} }),
-			/* @__PURE__ */ jsx(Label, {
-				w: 40,
-				h: 56,
-				style: {
-					top: s(46),
-					left: "50%",
-					transform: "translateX(-50%)"
-				}
-			}),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				bottom: 0,
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(54),
-				height: s(22),
-				background: ICON_INK,
-				borderRadius: `0 0 ${s(6)}px ${s(6)}px`
-			} })
-		]
-	});
-	if (shape === "jar") return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(128, 104),
-		children: [
-			/* @__PURE__ */ jsx("div", {
-				style: {
-					position: "absolute",
-					top: 0,
-					left: 0,
-					width: s(128),
-					height: s(34),
-					background: ICON_INK,
-					borderRadius: `${s(14)}px ${s(14)}px 0 0`
-				},
-				children: /* @__PURE__ */ jsx("div", { style: {
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					width: "100%",
-					height: s(3),
-					background: ICON_GOLD
-				} })
-			}),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(30),
-				left: 0,
-				width: s(128),
-				height: s(74),
-				background: ICON_PORCELAIN,
-				borderRadius: `0 0 ${s(18)}px ${s(18)}px`,
-				boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-			} }),
-			/* @__PURE__ */ jsx(Label, {
-				w: 78,
-				h: 46,
-				style: {
-					top: s(46),
-					left: "50%",
-					transform: "translateX(-50%)"
-				}
-			})
-		]
-	});
-	if (shape === "flacon") return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(104, 130),
-		children: [
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: 0,
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(28),
-				height: s(16),
-				background: ICON_INK,
-				borderRadius: s(3)
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(14),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(20),
-				height: s(9),
-				background: ICON_GOLD
-			} }),
-			/* @__PURE__ */ jsx("div", {
-				style: {
-					position: "absolute",
-					top: s(22),
-					left: 0,
-					width: s(104),
-					height: s(108),
-					background: ICON_PORCELAIN,
-					borderRadius: s(20),
-					boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-				},
-				children: /* @__PURE__ */ jsx("div", { style: {
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					width: "100%",
-					height: s(58),
-					background: liquid,
-					opacity: .42,
-					borderRadius: `0 0 ${s(20)}px ${s(20)}px`
-				} })
-			}),
-			/* @__PURE__ */ jsx(Label, {
-				w: 60,
-				h: 48,
-				radius: s(3),
-				style: {
-					top: s(50),
-					left: "50%",
-					transform: "translateX(-50%)"
-				}
-			})
-		]
-	});
-	if (shape === "pouch") return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(134, 96),
-		children: [
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: 0,
-				left: 0,
-				width: s(134),
-				height: s(96),
-				background: ICON_PORCELAIN,
-				borderRadius: s(16),
-				boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: 0,
-				left: 0,
-				width: "100%",
-				height: s(12),
-				background: ICON_INK,
-				borderRadius: `${s(16)}px ${s(16)}px 0 0`
-			} }),
-			/* @__PURE__ */ jsx(Label, {
-				w: 72,
-				h: 50,
-				style: {
-					top: "52%",
-					left: "50%",
-					transform: "translate(-50%,-50%)"
-				}
-			})
-		]
-	});
-	return /* @__PURE__ */ jsxs("div", {
-		style: wrapStyle(60, 156),
-		children: [
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(2),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(30),
-				height: s(20),
-				background: ICON_INK,
-				borderRadius: `${s(5)}px ${s(5)}px 0 0`
-			} }),
-			/* @__PURE__ */ jsx("div", { style: {
-				position: "absolute",
-				top: s(20),
-				left: "50%",
-				transform: "translateX(-50%)",
-				width: s(34),
-				height: s(4),
-				background: ICON_GOLD
-			} }),
-			/* @__PURE__ */ jsx("div", {
-				style: {
-					position: "absolute",
-					top: s(22),
-					left: 0,
-					width: s(60),
-					height: s(134),
-					background: ICON_PORCELAIN,
-					borderRadius: `${s(11)}px ${s(11)}px ${s(16)}px ${s(16)}px`,
-					boxShadow: `inset 0 0 0 1px ${ICON_PORCELAIN_EDGE}`
-				},
-				children: /* @__PURE__ */ jsx("div", { style: {
-					position: "absolute",
-					bottom: 0,
-					left: 0,
-					width: "100%",
-					height: s(34),
-					background: liquid,
-					opacity: .5,
-					borderRadius: `0 0 ${s(15)}px ${s(15)}px`
-				} })
-			}),
-			/* @__PURE__ */ jsx(Label, {
-				w: 46,
-				h: 52,
-				style: {
-					top: s(56),
-					left: "50%",
-					transform: "translateX(-50%)"
-				}
-			})
-		]
-	});
-}
 function ProductCard({ product, onError }) {
-	const { t, lang, categoryLabel, tagLabel, categoryTint } = useAurelia();
-	const copy = HOME_COPY[lang];
+	const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
+	const copy = t.home;
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [showPreorder, setShowPreorder] = useState(false);
@@ -761,7 +141,7 @@ function ProductCard({ product, onError }) {
 	const isBest = product.is_bestseller;
 	const isSale = !!product.price_old || !!product.is_sale;
 	const tag = isOut && !isPreorderable ? "out" : isBest ? "best" : isNew ? "new" : isSale ? "sale" : void 0;
-	const shape = resolveShape(product);
+	resolveShape(product);
 	return /* @__PURE__ */ jsxs("div", {
 		className: `au-prod-card ${isOut ? "is-out-of-stock" : ""}`,
 		style: isOut ? { opacity: .8 } : {},
@@ -792,15 +172,15 @@ function ProductCard({ product, onError }) {
 						src: product.image_url,
 						alt: `Soin Ourélia - ${product.name}`,
 						style: { mixBlendMode: "multiply" },
-						fallback: /* @__PURE__ */ jsx(ProductIcon, {
-							shape,
-							cat: product.category.name,
-							catLabel: categoryLabel(product.category.name)
+						fallback: /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+							category: product.category.name,
+							productName: product.name,
+							size: "md"
 						})
-					}) : /* @__PURE__ */ jsx(ProductIcon, {
-						shape,
-						cat: product.category.name,
-						catLabel: categoryLabel(product.category.name)
+					}) : /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+						category: product.category.name,
+						productName: product.name,
+						size: "md"
 					})
 				})]
 			}),
@@ -856,66 +236,47 @@ function ProductCard({ product, onError }) {
 						if (isOut && !isPreorderable) e.preventDefault();
 					},
 					children: [/* @__PURE__ */ jsxs("div", {
-						style: {
-							display: "flex",
-							alignItems: "center",
-							border: "1px solid var(--au-border)",
-							borderRadius: "4px",
-							overflow: "hidden",
-							height: "100%"
-						},
+						className: "au-qty-stepper",
 						children: [
 							/* @__PURE__ */ jsx("button", {
 								type: "button",
+								className: "au-qty-step-btn",
 								onClick: () => setQuantity(Math.max(1, quantity - 1)),
 								disabled: isOut && !isPreorderable || quantity <= 1,
-								style: {
-									padding: "0 10px",
-									background: "transparent",
-									border: "none",
-									cursor: isOut && !isPreorderable || quantity <= 1 ? "not-allowed" : "pointer",
-									color: "var(--au-text)"
-								},
-								children: "-"
+								"aria-label": "Diminuer la quantité",
+								children: "−"
 							}),
 							/* @__PURE__ */ jsx("input", {
-								type: "number",
-								min: "1",
-								max: isPreorderable ? void 0 : product.stock,
+								type: "text",
+								inputMode: "numeric",
+								pattern: "[0-9]*",
 								value: quantity,
 								onChange: (e) => {
-									const val = parseInt(e.target.value) || 1;
+									const clean = e.target.value.replace(/[^0-9]/g, "");
+									if (!clean) {
+										setQuantity(1);
+										return;
+									}
+									const val = parseInt(clean, 10);
 									if (!isPreorderable && val > product.stock) {
-										if (onError) onError("Le stock est insuffisant pour le moment.");
+										if (onError) onError(t.common.stockInsufficient);
 										setQuantity(product.stock);
 									} else setQuantity(Math.max(1, val));
 								},
 								className: "au-qty-input",
 								"aria-label": "Quantity",
-								disabled: isOut && !isPreorderable,
-								style: {
-									border: "none",
-									borderRadius: 0,
-									textAlign: "center",
-									width: "40px",
-									MozAppearance: "textfield"
-								}
+								disabled: isOut && !isPreorderable
 							}),
 							/* @__PURE__ */ jsx("button", {
 								type: "button",
+								className: "au-qty-step-btn",
 								onClick: () => {
 									if (!isPreorderable && quantity >= product.stock) {
-										if (onError) onError("Le stock est insuffisant pour le moment.");
+										if (onError) onError(t.common.stockInsufficient);
 									} else setQuantity(quantity + 1);
 								},
 								disabled: isOut && !isPreorderable,
-								style: {
-									padding: "0 10px",
-									background: "transparent",
-									border: "none",
-									cursor: isOut && !isPreorderable ? "not-allowed" : "pointer",
-									color: "var(--au-text)"
-								},
+								"aria-label": "Augmenter la quantité",
 								children: "+"
 							})
 						]
@@ -924,7 +285,7 @@ function ProductCard({ product, onError }) {
 						className: "au-add-btn",
 						onClick: isPreorderable ? () => setShowPreorder(true) : addToCart,
 						disabled: loading || isOut && !isPreorderable,
-						children: loading ? "…" : isPreorderable ? "Précommande" : isOut ? copy.soldOut : t.add
+						children: loading ? "…" : isPreorderable ? t.common.preorder : isOut ? copy.soldOut : t.add
 					})]
 				})]
 			}),
@@ -991,33 +352,33 @@ function WelcomeContent({ products = [], flash, errors }) {
 	const heroProduct = products.length > 0 ? products[0] : null;
 	const brandsList = Array.from(new Set(products.map((p) => p.brand).filter(Boolean)));
 	const categoriesList = Array.from(new Set(products.filter((p) => activeBrand ? p.brand === activeBrand : true).map((p) => p.category.name)));
-	const { lang, t, categoryLabel, categoryTint, tagLabel } = useAurelia();
-	const copy = HOME_COPY[lang];
+	const { t, categoryLabel, categoryTint, tagLabel } = useAurelia();
+	const copy = t.home;
 	heroProduct && resolveShape(heroProduct);
 	heroProduct?.category?.name;
 	const filteredProducts = products.filter((p) => activeCategory ? p.category.name === activeCategory : true).filter((p) => activeBrand ? p.brand === activeBrand : true);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsxs(Head, { children: [
-			/* @__PURE__ */ jsx("title", { children: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : "Ourélia" }),
+			/* @__PURE__ */ jsx("title", { children: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia (Ourelia)` : "Ourélia | Ourelia Beauty" }),
 			/* @__PURE__ */ jsx("meta", {
 				"head-key": "description",
 				name: "description",
-				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub
+				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia (Ourelia).` : `Ourélia (Ourelia Beauty) : ${copy.heroSub}`
 			}),
 			/* @__PURE__ */ jsx("meta", {
 				"head-key": "keywords",
 				name: "keywords",
-				content: activeCategory ? `${categoryLabel(activeCategory).toLowerCase()}, soins, beauté, Ourélia, cosmétiques` : "soins, beauté, cosmétiques, parfums, Ourélia, argan, bien-être"
+				content: activeCategory ? `${categoryLabel(activeCategory).toLowerCase()}, soins, beauté, Ourélia, Ourelia, cosmétiques` : "Ourelia, Ourélia, Ourelia Beauty, Ourélia Beauty, Ourelia maquillage, Ourélia maquillage, soins, beauté, cosmétiques, parfums, argan"
 			}),
 			/* @__PURE__ */ jsx("meta", {
 				"head-key": "og:title",
 				property: "og:title",
-				content: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia` : "Ourélia"
+				content: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia (Ourelia)` : "Ourélia | Ourelia Beauty"
 			}),
 			/* @__PURE__ */ jsx("meta", {
 				"head-key": "og:description",
 				property: "og:description",
-				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia.` : copy.heroSub
+				content: activeCategory ? `Découvrez notre sélection de produits de la catégorie ${categoryLabel(activeCategory).toLowerCase()} chez Ourélia (Ourelia).` : `Ourélia (Ourelia Beauty) : ${copy.heroSub}`
 			}),
 			/* @__PURE__ */ jsx("link", {
 				"head-key": "canonical",
@@ -1117,8 +478,8 @@ function WelcomeContent({ products = [], flash, errors }) {
 					children: copy.spreadTitle
 				})]
 			}), spreadProducts.map((product, i) => {
-				const spread = SPREADS[i] || SPREADS[0];
-				const shape = resolveShape(product);
+				const spread = copy.spreads[i] || copy.spreads[0];
+				resolveShape(product);
 				return /* @__PURE__ */ jsxs("div", {
 					className: "au-spread-row",
 					style: { flexDirection: i % 2 === 1 ? "row-reverse" : "row" },
@@ -1138,17 +499,15 @@ function WelcomeContent({ products = [], flash, errors }) {
 							src: product.image_url,
 							alt: `Soin Ourélia - ${product.name}`,
 							style: { mixBlendMode: "multiply" },
-							fallback: /* @__PURE__ */ jsx(ProductIcon, {
-								shape,
-								cat: product.category.name,
-								catLabel: categoryLabel(product.category.name),
-								scale: 1.7
+							fallback: /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+								category: product.category.name,
+								productName: product.name,
+								size: "lg"
 							})
-						}) : /* @__PURE__ */ jsx(ProductIcon, {
-							shape,
-							cat: product.category.name,
-							catLabel: categoryLabel(product.category.name),
-							scale: 1.7
+						}) : /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+							category: product.category.name,
+							productName: product.name,
+							size: "lg"
 						})]
 					}), /* @__PURE__ */ jsxs("div", {
 						className: "au-spread-body",
@@ -1175,11 +534,11 @@ function WelcomeContent({ products = [], flash, errors }) {
 							}),
 							/* @__PURE__ */ jsx("p", {
 								className: "au-body-text",
-								children: product.description || spread.story[lang]
+								children: product.description || spread.story
 							}),
 							/* @__PURE__ */ jsx("div", {
 								className: "au-tags",
-								children: spread.tags[lang].map((tag) => /* @__PURE__ */ jsx("span", {
+								children: spread.tags.map((tag) => /* @__PURE__ */ jsx("span", {
 									className: "au-tag",
 									children: tag
 								}, tag))
@@ -1279,7 +638,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 							},
 							children: [/* @__PURE__ */ jsx("option", {
 								value: "",
-								children: "Toutes les marques"
+								children: copy.allBrands
 							}), brandsList.map((b) => /* @__PURE__ */ jsx("option", {
 								value: b,
 								children: b
@@ -1290,7 +649,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 								setActiveCategory(null);
 								setActiveBrand(null);
 							},
-							children: activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`
+							children: activeCategory || activeBrand ? copy.viewAllWithCount(filteredProducts.length) : copy.productsCount(products.length)
 						})]
 					})]
 				}),
@@ -1334,13 +693,13 @@ function WelcomeContent({ products = [], flash, errors }) {
 								letterSpacing: "0.1em",
 								color: "var(--au-gold)"
 							},
-							children: "Chargement"
+							children: copy.loading
 						})]
 					}) : /* @__PURE__ */ jsx("button", {
 						type: "button",
 						className: "au-btn-ghost",
 						onClick: handleLoadMore,
-						children: "Charger plus"
+						children: copy.loadMore
 					})
 				})
 			]

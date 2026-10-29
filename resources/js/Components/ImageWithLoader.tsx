@@ -8,7 +8,7 @@ export default function ImageWithLoader({ src, alt, className, style, fallback, 
     const [isLoaded, setIsLoaded] = useState(false);
     const [hasError, setHasError] = useState(false);
 
-    if (hasError && fallback) {
+    if ((!src || hasError) && fallback) {
         return <>{fallback}</>;
     }
 

@@ -1,5 +1,14 @@
 import { jsx } from "react/jsx-runtime";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+//#region resources/js/Components/InputLabel.tsx
+function InputLabel({ value, className = "", children, ...props }) {
+	return /* @__PURE__ */ jsx("label", {
+		...props,
+		className: `block text-sm font-medium text-gray-700 ` + className,
+		children: value ? value : children
+	});
+}
+//#endregion
 //#region resources/js/Components/TextInput.tsx
 var TextInput_default = forwardRef(function TextInput({ type = "text", className = "", isFocused = false, ...props }, ref) {
 	const localRef = useRef(null);
@@ -15,4 +24,4 @@ var TextInput_default = forwardRef(function TextInput({ type = "text", className
 	});
 });
 //#endregion
-export { TextInput_default as t };
+export { InputLabel as n, TextInput_default as t };

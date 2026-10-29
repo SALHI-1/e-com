@@ -2,6 +2,9 @@ import React, { FormEventHandler } from 'react';
 import { useForm, usePage } from '@inertiajs/react';
 import Modal from '@/Components/Modal';
 import InputError from '@/Components/InputError';
+import { useAurelia } from '@/Layouts/ClientLayout';
+import ImageWithLoader from '@/Components/ImageWithLoader';
+import ProductImagePlaceholder from '@/Components/ProductImagePlaceholder';
 
 interface PreorderModalProps {
     show: boolean;
@@ -31,6 +34,8 @@ const MOROCCO_CITIES = [
 ];
 
 export default function PreorderModal({ show, onClose, product, quantity }: PreorderModalProps) {
+    const { t } = useAurelia();
+    const pDict = t.preorder;
     const { auth } = usePage<any>().props;
     const user = auth?.user;
 
@@ -66,27 +71,46 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
 
     if (!product) return null;
 
-
-
     return (
         <Modal show={show} onClose={onClose} maxWidth="md">
-            <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold" style={{ fontFamily: 'var(--au-font-serif)', color: 'var(--au-dark)' }}>
-                        Précommander
+            <div className="p-4 sm:p-6">
+                <div className="flex justify-between items-center mb-4 sm:mb-6">
+                    <h2 className="text-lg sm:text-xl font-bold" style={{ fontFamily: 'var(--au-font-serif)', color: 'var(--au-dark)' }}>
+                        {pDict.title}
                     </h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">×</button>
+                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl w-8 h-8 flex items-center justify-center rounded">×</button>
                 </div>
 
                 <div className="mb-6 flex gap-4 p-4 rounded-lg" style={{ background: 'var(--au-cream)' }}>
-                    {product.image_url && (
-                        <img src={product.image_url} alt={product.name} className="w-16 h-16 object-cover rounded" />
-                    )}
+                    <div className="w-16 h-16 rounded overflow-hidden flex-shrink-0">
+                        {product.image_url ? (
+                            <ImageWithLoader
+                                src={product.image_url}
+                                alt={product.name}
+                                className="w-full h-full object-cover"
+                                fallback={
+                                    <ProductImagePlaceholder
+                                        category={product.category?.name}
+                                        productName={product.name}
+                                        size="sm"
+                                        showBrand={false}
+                                    />
+                                }
+                            />
+                        ) : (
+                            <ProductImagePlaceholder
+                                category={product.category?.name}
+                                productName={product.name}
+                                size="sm"
+                                showBrand={false}
+                            />
+                        )}
+                    </div>
                     <div>
                         <h3 className="font-semibold text-sm">{product.name}</h3>
                         <p className="text-sm text-gray-600">{Number(product.price).toFixed(2)} dh</p>
                         <div className="mt-2 text-sm flex items-center gap-1" style={{ color: 'var(--au-gold)' }}>
-                            <span>Quantité:</span>
+                            <span>{pDict.quantity}</span>
                             <span className="font-bold">{quantity}</span>
                         </div>
                     </div>
@@ -95,7 +119,7 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                 <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                     {(!user || user.is_admin) && (
                         <div>
-                            <label className="au-label">Nom Complet</label>
+                            <label className="au-label">{pDict.fullName}</label>
                             <input
                                 type="text"
                                 className="au-input"
@@ -108,7 +132,7 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                     )}
 
                     <div>
-                        <label className="au-label">Téléphone (WhatsApp)</label>
+                        <label className="au-label">{pDict.phone}</label>
                         <div style={{ display: 'flex', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', background: 'var(--au-bg)' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px', background: 'var(--au-surface)', borderRight: '1px solid var(--au-border)', color: 'var(--au-text)', fontWeight: 500, fontSize: '1rem', letterSpacing: '0.05em' }}>
                                 +212
@@ -136,7 +160,7 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                     </div>
 
                     <div>
-                        <label className="au-label">Ville de livraison</label>
+                        <label className="au-label">{pDict.city}</label>
                         <select
                             className="au-input"
                             style={{ cursor: 'pointer' }}
@@ -144,14 +168,14 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                             onChange={e => setData('delivery_city', e.target.value)}
                             required
                         >
-                            <option value="" disabled>— Choisir une ville —</option>
+                            <option value="" disabled>{pDict.chooseCity}</option>
                             {MOROCCO_CITIES.map(c => <option key={c} value={c}>{c}</option>)}
                         </select>
                         <InputError message={errors.delivery_city} className="mt-1" />
                     </div>
 
                     <div>
-                        <label className="au-label">Adresse complète</label>
+                        <label className="au-label">{pDict.address}</label>
                         <textarea
                             className="au-textarea"
                             rows={3}
@@ -175,7 +199,7 @@ export default function PreorderModal({ show, onClose, product, quantity }: Preo
                             className="au-btn-gold"
                             style={{ width: '100%', textAlign: 'center' }}
                         >
-                            {processing ? 'En cours...' : 'Confirmer la précommande'}
+                            {processing ? pDict.submitting : pDict.confirm}
                         </button>
                     </div>
                 </form>

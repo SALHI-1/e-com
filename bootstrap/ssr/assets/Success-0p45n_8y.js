@@ -1,4 +1,4 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BxqbMFN4.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Cart/Success.tsx
@@ -12,7 +12,7 @@ function Success(props) {
 }
 function SuccessContent() {
 	const { t } = useAurelia();
-	const trans = t;
+	const sDict = t.success;
 	return /* @__PURE__ */ jsxs("div", {
 		className: "au-container",
 		style: {
@@ -25,7 +25,7 @@ function SuccessContent() {
 			textAlign: "center"
 		},
 		children: [
-			/* @__PURE__ */ jsx(Head, { title: `${trans.successTitle || "Merci pour votre commande !"} · Ourélia` }),
+			/* @__PURE__ */ jsx(Head, { title: `${sDict.title} · Ourélia` }),
 			/* @__PURE__ */ jsxs("svg", {
 				width: "64",
 				height: "64",
@@ -44,7 +44,7 @@ function SuccessContent() {
 					marginBottom: "16px",
 					maxWidth: "600px"
 				},
-				children: trans.successTitle || "Merci pour votre confiance !"
+				children: sDict.title
 			}),
 			/* @__PURE__ */ jsx("p", {
 				className: "au-body-text",
@@ -53,7 +53,7 @@ function SuccessContent() {
 					maxWidth: "500px",
 					color: "var(--au-text)"
 				},
-				children: trans.successMessage || "Votre commande a bien été enregistrée."
+				children: sDict.message
 			}),
 			/* @__PURE__ */ jsx("p", {
 				className: "au-body-text",
@@ -62,7 +62,7 @@ function SuccessContent() {
 					maxWidth: "500px",
 					color: "var(--au-text-muted)"
 				},
-				children: trans.successContact || "Nous allons vous contacter le plus tôt possible pour confirmer la commande."
+				children: sDict.contact
 			}),
 			/* @__PURE__ */ jsx(Link, {
 				href: route("home"),
@@ -72,7 +72,7 @@ function SuccessContent() {
 					alignSelf: "center",
 					textAlign: "center"
 				},
-				children: trans.continueShopping || "Continuer mes achats"
+				children: sDict.continueShopping
 			})
 		]
 	});

@@ -1,8 +1,11 @@
-import GuestLayout from '@/Layouts/GuestLayout';
+import GuestLayout, { useGuestLang } from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 
-export default function Register() {
+function RegisterForm() {
+    const { t } = useGuestLang();
+    const a = t.auth;
+
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -19,13 +22,13 @@ export default function Register() {
     };
 
     return (
-        <GuestLayout>
-            <Head title="Créer un compte — Aurélia" />
-            <h2 className="au-auth-title">Créer un compte</h2>
+        <>
+            <Head title={`${a.registerTitle} — Aurélia`} />
+            <h2 className="au-auth-title">{a.registerTitle}</h2>
 
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                 <div>
-                    <label className="au-label" htmlFor="name">Nom complet</label>
+                    <label className="au-label" htmlFor="name">{a.nameLabel}</label>
                     <input
                         id="name"
                         name="name"
@@ -41,7 +44,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="au-label" htmlFor="email">Email</label>
+                    <label className="au-label" htmlFor="email">{a.emailLabel}</label>
                     <input
                         id="email"
                         type="email"
@@ -56,7 +59,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="au-label" htmlFor="password">Mot de passe</label>
+                    <label className="au-label" htmlFor="password">{a.passwordLabel}</label>
                     <input
                         id="password"
                         type="password"
@@ -71,7 +74,7 @@ export default function Register() {
                 </div>
 
                 <div>
-                    <label className="au-label" htmlFor="password_confirmation">Confirmer le mot de passe</label>
+                    <label className="au-label" htmlFor="password_confirmation">{a.confirmPasswordLabel}</label>
                     <input
                         id="password_confirmation"
                         type="password"
@@ -85,15 +88,23 @@ export default function Register() {
                     {errors.password_confirmation && <p className="au-field-error">{errors.password_confirmation}</p>}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5rem' }}>
+                <div className="au-auth-action-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.5rem' }}>
                     <Link href={route('login')} className="au-auth-link">
-                        Déjà un compte ?
+                        {a.alreadyHaveAccount}
                     </Link>
                     <button type="submit" disabled={processing} className="au-btn-gold" style={{ padding: '0.7rem 2rem' }}>
-                        {processing ? 'Création…' : 'S\'inscrire'}
+                        {processing ? a.registering : a.registerBtn}
                     </button>
                 </div>
             </form>
+        </>
+    );
+}
+
+export default function Register() {
+    return (
+        <GuestLayout>
+            <RegisterForm />
         </GuestLayout>
     );
 }

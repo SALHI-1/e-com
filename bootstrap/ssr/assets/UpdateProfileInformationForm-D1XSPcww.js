@@ -1,6 +1,5 @@
 import { t as Ke } from "./transition-MXKqs4Qd.js";
-import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
-import { t as TextInput_default } from "./TextInput-CDaF8ym8.js";
+import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { Link, useForm, usePage } from "@inertiajs/react";

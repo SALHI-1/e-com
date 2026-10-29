@@ -187,19 +187,19 @@
     "/build/assets/Checkbox-BUETY56Z.js"
   ],
   "resources/js/Components/DangerButton.tsx": [
-    "/build/assets/DeleteUserForm-Cq0r606J.js"
+    "/build/assets/DeleteUserForm-DNhaPZp9.js"
   ],
   "resources/js/Components/Dropdown.tsx": [
     "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/ImageWithLoader.tsx": [
-    "/build/assets/Welcome-T5LnUu_F.js"
+    "/build/assets/ProductImagePlaceholder-Cg-ADBC2.js"
   ],
   "resources/js/Components/InputError.tsx": [
     "/build/assets/InputError-CCQKfEE5.js"
   ],
   "resources/js/Components/InputLabel.tsx": [
-    "/build/assets/InputLabel-4-xi2Z9Z.js"
+    "/build/assets/TextInput-CDhi48PK.js"
   ],
   "resources/js/Components/Modal.tsx": [
     "/build/assets/Modal-D5A3RQdx.js"
@@ -208,10 +208,13 @@
     "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
   ],
   "resources/js/Components/PreorderModal.tsx": [
-    "/build/assets/PreorderModal-BUnAXYOF.js"
+    "/build/assets/PreorderModal-COYnguxr.js"
   ],
   "resources/js/Components/PrimaryButton.tsx": [
     "/build/assets/PrimaryButton-Dlx63LxW.js"
+  ],
+  "resources/js/Components/ProductImagePlaceholder.tsx": [
+    "/build/assets/ProductImagePlaceholder-Cg-ADBC2.js"
   ],
   "resources/js/Components/ResponsiveNavLink.tsx": [
     "/build/assets/ResponsiveNavLink-DBOVWhQ9.js"
@@ -220,31 +223,31 @@
     "/build/assets/SecondaryButton-CLBMPam0.js"
   ],
   "resources/js/Components/TextInput.tsx": [
-    "/build/assets/TextInput-CDaF8ym8.js"
+    "/build/assets/TextInput-CDhi48PK.js"
   ],
   "resources/js/Layouts/AdminLayout.tsx": [
     "/build/assets/AdminLayout-B-B3bn_G.js"
   ],
   "resources/js/Layouts/AuthenticatedLayout.tsx": [
-    "/build/assets/Edit-2-Q-2kRB.js"
+    "/build/assets/Edit-DQfIZNB9.js"
   ],
   "resources/js/Layouts/ClientLayout.tsx": [
-    "/build/assets/ClientLayout-BEza7JXt.js"
+    "/build/assets/ClientLayout-BxqbMFN4.js"
   ],
   "resources/js/Layouts/GuestLayout.tsx": [
-    "/build/assets/GuestLayout-CCZbzRNY.js"
+    "/build/assets/GuestLayout-BhrsokB9.js"
   ],
   "resources/js/Pages/About.tsx": [
-    "/build/assets/About-vusy57Or.js"
+    "/build/assets/About-CLby1LAD.js"
   ],
   "resources/js/Pages/Admin/Admins/Index.tsx": [
-    "/build/assets/Index-nnmdena4.js"
+    "/build/assets/Index-DnQ-5bjP.js"
   ],
   "resources/js/Pages/Admin/Dashboard.tsx": [
     "/build/assets/Dashboard-CU4UcqgE.js"
   ],
   "resources/js/Pages/Admin/Login.tsx": [
-    "/build/assets/Login-BpuVsKBF.js"
+    "/build/assets/Login-Cirolasj.js"
   ],
   "resources/js/Pages/Admin/Orders/Index.tsx": [
     "/build/assets/Index-DTYZcQT8.js"
@@ -256,10 +259,10 @@
     "/build/assets/Show-jyaMURZw.js"
   ],
   "resources/js/Pages/Admin/Products/Create.tsx": [
-    "/build/assets/Create-C48v6wGv.js"
+    "/build/assets/Create-HRqpHAWb.js"
   ],
   "resources/js/Pages/Admin/Products/Edit.tsx": [
-    "/build/assets/Edit-CJ0kwrdX.js"
+    "/build/assets/Edit-C30Eio6V.js"
   ],
   "resources/js/Pages/Admin/Products/Index.tsx": [
     "/build/assets/Index-DLHV2KDV.js"
@@ -271,46 +274,58 @@
     "/build/assets/Trashed-GWXO9HXp.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
-    "/build/assets/ConfirmPassword-B_JIbd5O.js"
+    "/build/assets/ConfirmPassword-BvkeItRr.js"
   ],
   "resources/js/Pages/Auth/ForgotPassword.tsx": [
-    "/build/assets/ForgotPassword-D9pppjLq.js"
+    "/build/assets/ForgotPassword-BIUWyb8A.js"
   ],
   "resources/js/Pages/Auth/Login.tsx": [
-    "/build/assets/Login-X2tOd8q0.js"
+    "/build/assets/Login-CXrtapO3.js"
   ],
   "resources/js/Pages/Auth/Register.tsx": [
-    "/build/assets/Register-B9Ct5TYz.js"
+    "/build/assets/Register-BG3LPfAb.js"
   ],
   "resources/js/Pages/Auth/ResetPassword.tsx": [
-    "/build/assets/ResetPassword-B8g14q-d.js"
+    "/build/assets/ResetPassword-BwrF9hxe.js"
   ],
   "resources/js/Pages/Auth/VerifyEmail.tsx": [
-    "/build/assets/VerifyEmail-D2FVrdfj.js"
+    "/build/assets/VerifyEmail-BuB3qLAB.js"
   ],
   "resources/js/Pages/Cart/Index.tsx": [
-    "/build/assets/Index-CbNhiuHp.js"
+    "/build/assets/Index-C7q7Pcpq.js"
   ],
   "resources/js/Pages/Cart/Success.tsx": [
-    "/build/assets/Success-B-0Ee7Lt.js"
+    "/build/assets/Success-0p45n_8y.js"
   ],
   "resources/js/Pages/Product/Show.tsx": [
-    "/build/assets/Show-BQn4uAYr.js"
+    "/build/assets/Show-DmS-T71O.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-2-Q-2kRB.js"
+    "/build/assets/Edit-DQfIZNB9.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
-    "/build/assets/DeleteUserForm-Cq0r606J.js"
+    "/build/assets/DeleteUserForm-DNhaPZp9.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdatePasswordForm.tsx": [
-    "/build/assets/UpdatePasswordForm-pi-h2dom.js"
+    "/build/assets/UpdatePasswordForm-B5OYfF5q.js"
   ],
   "resources/js/Pages/Profile/Partials/UpdateProfileInformationForm.tsx": [
-    "/build/assets/UpdateProfileInformationForm-BBmKlf_W.js"
+    "/build/assets/UpdateProfileInformationForm-D1XSPcww.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-T5LnUu_F.js"
+    "/build/assets/Welcome-8414Idat.js"
+  ],
+  "resources/js/langue/eng.ts": [
+    "/build/assets/langue-CbfI8lEO.js"
+  ],
+  "resources/js/langue/esp.ts": [
+    "/build/assets/langue-CbfI8lEO.js"
+  ],
+  "resources/js/langue/fr.ts": [
+    "/build/assets/langue-CbfI8lEO.js"
+  ],
+  "resources/js/langue/index.ts": [
+    "/build/assets/langue-CbfI8lEO.js"
   ],
   "resources/js/ssr.tsx": []
 }

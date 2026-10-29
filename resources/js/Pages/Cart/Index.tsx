@@ -2,6 +2,8 @@ import { PageProps } from '@/types';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import { useState, useMemo, useEffect } from 'react';
 import ClientLayout, { useAurelia } from '@/Layouts/ClientLayout';
+import ImageWithLoader from '@/Components/ImageWithLoader';
+import ProductImagePlaceholder from '@/Components/ProductImagePlaceholder';
 
 interface CartItem {
     product: {
@@ -70,25 +72,26 @@ function Toast({ message, type = 'success', onClose }: { message: string; type?:
     const isSuccess = type === 'success';
 
     return (
-        <div style={{
-            position: 'fixed',
-            top: '88px',
-            right: '24px',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: '14px',
-            padding: '18px 22px',
-            borderRadius: '6px',
-            background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
-            boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
-            color: 'var(--au-bg, #F6F0E4)',
-            minWidth: '290px',
-            maxWidth: '400px',
-            animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-            borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
-            fontFamily: 'var(--au-font-sans, sans-serif)',
-        }}>
+        <div
+            className="au-toast"
+            style={{
+                position: 'fixed',
+                top: '88px',
+                right: '24px',
+                zIndex: 9999,
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '14px',
+                padding: '18px 22px',
+                borderRadius: '6px',
+                background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
+                boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
+                color: 'var(--au-bg, #F6F0E4)',
+                animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
+                borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
+                fontFamily: 'var(--au-font-sans, sans-serif)',
+            }}
+        >
             {/* Icône */}
             <span style={{
                 fontSize: '18px',
@@ -159,6 +162,7 @@ export default function Index(props: Props) {
 
 function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
     const { t } = useAurelia();
+    const cDict = t.cart;
     const [showCheckout, setShowCheckout] = useState(false);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' | 'info' } | null>(null);
 
@@ -179,7 +183,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
         if (flash?.success) {
             setToast({ message: flash.success, type: 'success' });
         } else if (errors?.cart || errors?.stock) {
-            setToast({ message: errors.cart || errors.stock || 'Une erreur est survenue.', type: 'error' });
+            setToast({ message: errors.cart || errors.stock || cDict.genericError, type: 'error' });
         }
     }, [flash?.success, errors?.cart, errors?.stock]);
 
@@ -250,13 +254,29 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                             <div className="au-cart-items">
                                 {cartItems.map((item) => (
                                     <div key={item.product.id} className="au-cart-item">
-                                        {item.product.image_url && (
-                                            <img
-                                                src={item.product.image_url}
-                                                alt={item.product.name}
-                                                className="au-cart-item-img"
-                                            />
-                                        )}
+                                        <div className="au-cart-item-img" style={{ overflow: 'hidden' }}>
+                                            {item.product.image_url ? (
+                                                <ImageWithLoader
+                                                    src={item.product.image_url}
+                                                    alt={item.product.name}
+                                                    fallback={
+                                                        <ProductImagePlaceholder
+                                                            category={item.product.category?.name}
+                                                            productName={item.product.name}
+                                                            size="sm"
+                                                            showBrand={false}
+                                                        />
+                                                    }
+                                                />
+                                            ) : (
+                                                <ProductImagePlaceholder
+                                                    category={item.product.category?.name}
+                                                    productName={item.product.name}
+                                                    size="sm"
+                                                    showBrand={false}
+                                                />
+                                            )}
+                                        </div>
                                         <div className="au-cart-item-info">
                                             <p className="au-cart-item-name">{item.product.name}</p>
                                             {item.product.category && (
@@ -264,7 +284,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             )}
                                             <p className="au-cart-item-price">{item.product.price} dh / {t.unit}</p>
                                         </div>
-                                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '80px', height: '36px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', width: '88px', minWidth: '88px', flexShrink: 0, height: '36px' }}>
                                             <button
                                                 type="button"
                                                 onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
@@ -274,27 +294,29 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                                 -
                                             </button>
                                             <input
-                                                type="number"
-                                                min="1"
-                                                max={item.product.stock}
+                                                type="text"
+                                                inputMode="numeric"
+                                                pattern="[0-9]*"
                                                 value={item.quantity}
                                                 onChange={(e) => {
-                                                    const val = parseInt(e.target.value) || 1;
+                                                    const clean = e.target.value.replace(/[^0-9]/g, '');
+                                                    if (!clean) return;
+                                                    const val = parseInt(clean, 10);
                                                     if (val > item.product.stock) {
-                                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                                        setToast({ message: cDict.stockInsufficient, type: 'info' });
                                                         updateQuantity(item.product.id, item.product.stock);
                                                     } else {
                                                         updateQuantity(item.product.id, Math.max(1, val));
                                                     }
                                                 }}
                                                 className="au-qty"
-                                                style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '100%', MozAppearance: 'textfield', padding: 0 }}
+                                                style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '100%', MozAppearance: 'textfield', appearance: 'textfield', padding: 0 }}
                                             />
                                             <button
                                                 type="button"
                                                 onClick={() => {
                                                     if (item.quantity >= item.product.stock) {
-                                                        setToast({ message: 'Le stock est insuffisant pour le moment.', type: 'info' });
+                                                        setToast({ message: cDict.stockInsufficient, type: 'info' });
                                                     } else {
                                                         updateQuantity(item.product.id, item.quantity + 1);
                                                     }
@@ -308,7 +330,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                         <button
                                             onClick={() => removeItem(item.product.id)}
                                             className="au-cart-remove"
-                                            title="Retirer du panier"
+                                            title={cDict.removeTooltip}
                                         >
                                             ✕
                                         </button>
@@ -318,7 +340,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
 
                             {/* ── Summary + Checkout ── */}
                             <div className="au-cart-summary">
-                                <h2 className="au-cart-summary-title">Récapitulatif</h2>
+                                <h2 className="au-cart-summary-title">{cDict.summary}</h2>
                                 <div className="au-cart-summary-row">
                                     <span>{t.subtotal}</span>
                                     <span>{totalAmount.toFixed(2)} dh</span>
@@ -350,7 +372,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                         marginBottom: '0.4rem',
                                         lineHeight: 1.4,
                                     }}>
-                                        💡 Livraison gratuite pour Casablanca & Tanger, ou pour toute commande supérieure à 299 dh.
+                                        {cDict.freeShippingNotice}
                                     </div>
                                 )}
 
@@ -425,7 +447,7 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                                 className="au-input"
                                                 style={{ cursor: 'pointer' }}
                                             >
-                                                <option value="">— Choisir une ville —</option>
+                                                <option value="">{cDict.chooseCity}</option>
                                                 {MOROCCO_CITIES.map(city => (
                                                     <option key={city} value={city}>{city}</option>
                                                 ))}
@@ -435,8 +457,8 @@ function CartContent({ auth, cartItems, totalAmount, flash, errors }: Props) {
                                             {data.delivery_city && (
                                                 <p style={{ fontSize: '0.78rem', marginTop: '0.3rem', color: deliveryFee === 0 ? 'var(--au-gold)' : 'var(--au-text-muted)' }}>
                                                     {deliveryFee === 0
-                                                        ? `✓ Livraison gratuite pour ${data.delivery_city}`
-                                                        : `Frais de livraison : ${deliveryFee} dh`}
+                                                        ? cDict.freeShippingForCity(data.delivery_city)
+                                                        : cDict.deliveryFeeForCity(deliveryFee)}
                                                 </p>
                                             )}
                                         </div>

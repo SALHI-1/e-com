@@ -1,7 +1,6 @@
 import { t as Modal } from "./Modal-D5A3RQdx.js";
 import { t as AdminLayout } from "./AdminLayout-B-B3bn_G.js";
-import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
-import { t as TextInput_default } from "./TextInput-CDaF8ym8.js";
+import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";
 import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";

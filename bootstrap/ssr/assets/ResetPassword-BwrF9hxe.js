@@ -1,23 +1,25 @@
-import { t as Guest } from "./GuestLayout-CCZbzRNY.js";
-import { Head, Link, useForm } from "@inertiajs/react";
-import { jsx, jsxs } from "react/jsx-runtime";
-//#region resources/js/Pages/Auth/Register.tsx
-function Register() {
+import { n as useGuestLang, t as Guest } from "./GuestLayout-BhrsokB9.js";
+import { Head, useForm } from "@inertiajs/react";
+import { Fragment, jsx, jsxs } from "react/jsx-runtime";
+//#region resources/js/Pages/Auth/ResetPassword.tsx
+function ResetPasswordForm({ token, email }) {
+	const { t } = useGuestLang();
+	const a = t.auth;
 	const { data, setData, post, processing, errors, reset } = useForm({
-		name: "",
-		email: "",
+		token,
+		email,
 		password: "",
 		password_confirmation: ""
 	});
 	const submit = (e) => {
 		e.preventDefault();
-		post(route("register"), { onFinish: () => reset("password", "password_confirmation") });
+		post(route("password.store"), { onFinish: () => reset("password", "password_confirmation") });
 	};
-	return /* @__PURE__ */ jsxs(Guest, { children: [
-		/* @__PURE__ */ jsx(Head, { title: "Créer un compte — Aurélia" }),
+	return /* @__PURE__ */ jsxs(Fragment, { children: [
+		/* @__PURE__ */ jsx(Head, { title: `${a.resetPasswordTitle} — Aurélia` }),
 		/* @__PURE__ */ jsx("h2", {
 			className: "au-auth-title",
-			children: "Créer un compte"
+			children: a.resetPasswordTitle
 		}),
 		/* @__PURE__ */ jsxs("form", {
 			onSubmit: submit,
@@ -30,39 +32,17 @@ function Register() {
 				/* @__PURE__ */ jsxs("div", { children: [
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
-						htmlFor: "name",
-						children: "Nom complet"
-					}),
-					/* @__PURE__ */ jsx("input", {
-						id: "name",
-						name: "name",
-						type: "text",
-						value: data.name,
-						onChange: (e) => setData("name", e.target.value),
-						className: "au-input",
-						autoComplete: "name",
-						autoFocus: true,
-						required: true
-					}),
-					errors.name && /* @__PURE__ */ jsx("p", {
-						className: "au-field-error",
-						children: errors.name
-					})
-				] }),
-				/* @__PURE__ */ jsxs("div", { children: [
-					/* @__PURE__ */ jsx("label", {
-						className: "au-label",
 						htmlFor: "email",
-						children: "Email"
+						children: a.emailLabel
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "email",
 						type: "email",
 						name: "email",
 						value: data.email,
-						onChange: (e) => setData("email", e.target.value),
 						className: "au-input",
 						autoComplete: "username",
+						onChange: (e) => setData("email", e.target.value),
 						required: true
 					}),
 					errors.email && /* @__PURE__ */ jsx("p", {
@@ -74,16 +54,17 @@ function Register() {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "password",
-						children: "Mot de passe"
+						children: a.passwordLabel
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "password",
 						type: "password",
 						name: "password",
 						value: data.password,
-						onChange: (e) => setData("password", e.target.value),
 						className: "au-input",
 						autoComplete: "new-password",
+						autoFocus: true,
+						onChange: (e) => setData("password", e.target.value),
 						required: true
 					}),
 					errors.password && /* @__PURE__ */ jsx("p", {
@@ -95,16 +76,16 @@ function Register() {
 					/* @__PURE__ */ jsx("label", {
 						className: "au-label",
 						htmlFor: "password_confirmation",
-						children: "Confirmer le mot de passe"
+						children: a.confirmPasswordLabel
 					}),
 					/* @__PURE__ */ jsx("input", {
 						id: "password_confirmation",
 						type: "password",
 						name: "password_confirmation",
 						value: data.password_confirmation,
-						onChange: (e) => setData("password_confirmation", e.target.value),
 						className: "au-input",
 						autoComplete: "new-password",
+						onChange: (e) => setData("password_confirmation", e.target.value),
 						required: true
 					}),
 					errors.password_confirmation && /* @__PURE__ */ jsx("p", {
@@ -112,28 +93,27 @@ function Register() {
 						children: errors.password_confirmation
 					})
 				] }),
-				/* @__PURE__ */ jsxs("div", {
+				/* @__PURE__ */ jsx("div", {
 					style: {
 						display: "flex",
 						alignItems: "center",
-						justifyContent: "space-between",
+						justifyContent: "flex-end",
 						marginTop: "0.5rem"
 					},
-					children: [/* @__PURE__ */ jsx(Link, {
-						href: route("login"),
-						className: "au-auth-link",
-						children: "Déjà un compte ?"
-					}), /* @__PURE__ */ jsx("button", {
+					children: /* @__PURE__ */ jsx("button", {
 						type: "submit",
 						disabled: processing,
 						className: "au-btn-gold",
 						style: { padding: "0.7rem 2rem" },
-						children: processing ? "Création…" : "S'inscrire"
-					})]
+						children: processing ? a.loggingIn : a.resetPasswordBtn
+					})
 				})
 			]
 		})
 	] });
 }
+function ResetPassword(props) {
+	return /* @__PURE__ */ jsx(Guest, { children: /* @__PURE__ */ jsx(ResetPasswordForm, { ...props }) });
+}
 //#endregion
-export { Register as default };
+export { ResetPassword as default };

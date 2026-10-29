@@ -1,6 +1,5 @@
 import { t as Modal } from "./Modal-D5A3RQdx.js";
-import { t as InputLabel } from "./InputLabel-4-xi2Z9Z.js";
-import { t as TextInput_default } from "./TextInput-CDaF8ym8.js";
+import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as SecondaryButton } from "./SecondaryButton-CLBMPam0.js";
 import { useForm } from "@inertiajs/react";

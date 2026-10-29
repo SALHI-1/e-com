@@ -1,4 +1,4 @@
-import { t as Guest } from "./GuestLayout-CCZbzRNY.js";
+import { t as Guest } from "./GuestLayout-BhrsokB9.js";
 import { Head, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Login.tsx

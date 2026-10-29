@@ -5,78 +5,9 @@ import ClientLayout, { useAurelia, Lang, ProductCategory, ProductTag } from '@/L
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import ImageWithLoader from '@/Components/ImageWithLoader';
 import PreorderModal from '@/Components/PreorderModal';
+import ProductImagePlaceholder from '@/Components/ProductImagePlaceholder';
 
-/* ============================================================================
- * Home page copy (Shared from the static design)
- * ========================================================================== */
-interface HomeCopy {
-  heroKicker: string; heroTitle: string; heroItalic: string; heroSub: string;
-  heroCta: string; heroLink: string; heroPanelCap: string; heroPanelTag: string;
-  manifestoKicker: string; manifestoText: string;
-  spreadKicker: string; spreadTitle: string;
-  catTitle: string; catSub: string;
-  bestTitle: string; bestSub: string; viewAll: string; productsWord: string;
-  darkKicker: string; darkTitle: string; darkTitleIt: string; darkText: string; darkCta: string;
-  v1t: string; v1d: string; v2t: string; v2d: string; v3t: string; v3d: string;
-  soldOut: string; essentialCare: string;
-}
 
-const HOME_COPY: Record<Lang, HomeCopy> = {
-  fr: {
-    heroKicker: 'Soins essentiels · chaque jour',
-    heroTitle: 'Beauté honnête', heroItalic: 'pour votre routine',
-    heroSub: 'Des formules simples et efficaces pour les cheveux, le visage et la peau. L\'essentiel, sans excès.',
-    heroCta: 'Voir la collection', heroLink: 'Notre histoire', heroPanelCap: 'oro líquido', heroPanelTag: 'Huile d\'argan',
-    manifestoKicker: 'La maison',
-    manifestoText: 'Les bons soins n\'ont pas besoin d\'être compliqués ou chers. Nous sélectionnons des formules efficaces, avec des ingrédients que vous reconnaissez, et les présentons sans bruit — car la beauté honnête commence par l\'essentiel.',
-    spreadKicker: 'Icônes Ourélia', spreadTitle: 'Les signatures',
-    catTitle: 'Acheter par catégorie', catSub: 'Tout ce dont votre routine a besoin',
-    bestTitle: 'Les favoris', bestSub: 'Ce que nos clientes choisissent le plus', viewAll: 'Tout voir', productsWord: 'Produits',
-    darkKicker: 'Notre philosophie', darkTitle: 'Moins de produits.', darkTitleIt: 'De meilleures formules.',
-    darkText: 'Nous croyons aux soins essentiels : des ingrédients qui fonctionnent, des emballages honnêtes et des prix justes. Sans promesses impossibles.',
-    darkCta: 'Découvrez-nous',
-    v1t: 'Ingrédients reconnaissables', v1d: 'Huile d\'argan, argile blanche, camomille. Des actifs que vous savez lire.',
-    v2t: 'Prix honnête', v2d: 'Une cosmétique de qualité qui prend soin de votre peau et de votre porte-monnaie.',
-    v3t: 'Pour chaque jour', v3d: 'Des routines simples qui s\'adaptent à votre rythme, pas l\'inverse.',
-    soldOut: 'Épuisé', essentialCare: 'Soin essentiel',
-  },
-  es: {
-    heroKicker: 'Cuidado esencial · cada día',
-    heroTitle: 'Belleza honesta', heroItalic: 'para tu rutina diaria',
-    heroSub: 'Fórmulas sencillas y eficaces para el cabello, el rostro y la piel. Lo esencial, sin excesos.',
-    heroCta: 'Ver la colección', heroLink: 'Nuestra historia', heroPanelCap: 'oro líquido', heroPanelTag: 'Aceite de argán',
-    manifestoKicker: 'La maison',
-    manifestoText: 'El buen cuidado no necesita ser complicado ni caro. Seleccionamos fórmulas eficaces, con ingredientes que reconoces, y las presentamos sin ruido — porque la belleza honesta empieza por lo esencial.',
-    spreadKicker: 'Iconos Ourélia', spreadTitle: 'Las firmas',
-    catTitle: 'Compra por categoría', catSub: 'Todo lo que tu rutina necesita',
-    bestTitle: 'Los favoritos', bestSub: 'Lo que más repiten nuestras clientas', viewAll: 'Ver todo', productsWord: 'Productos',
-    darkKicker: 'Nuestra filosofía', darkTitle: 'Menos productos.', darkTitleIt: 'Mejores fórmulas.',
-    darkText: 'Creemos en el cuidado esencial: ingredientes que funcionan, envases honestos y precios justos. Sin promesas imposibles.',
-    darkCta: 'Conócenos',
-    v1t: 'Ingredientes reconocibles', v1d: 'Aceite de argán, arcilla blanca, camomila. Activos que sabes leer.',
-    v2t: 'Precio honesto', v2d: 'Cosmética de calidad que cuida tu piel y tu bolsillo.',
-    v3t: 'Para cada día', v3d: 'Rutinas sencillas que se adaptan a tu ritmo, no al revés.',
-    soldOut: 'Agotado', essentialCare: 'Cuidado esencial',
-  },
-  en: {
-    heroKicker: 'Essential care · every day',
-    heroTitle: 'Honest beauty', heroItalic: 'for your daily ritual',
-    heroSub: 'Simple, effective formulas for hair, face and skin. The essentials, nothing more.',
-    heroCta: 'Shop the collection', heroLink: 'Our story', heroPanelCap: 'oro líquido', heroPanelTag: 'Argan oil',
-    manifestoKicker: 'The maison',
-    manifestoText: 'Good care doesn\u2019t need to be complicated or expensive. We choose effective formulas, with ingredients you recognise, and present them without the noise — because honest beauty starts with the essentials.',
-    spreadKicker: 'Ourélia icons', spreadTitle: 'The signatures',
-    catTitle: 'Shop by category', catSub: 'Everything your routine needs',
-    bestTitle: 'The favourites', bestSub: 'What our customers reach for again', viewAll: 'View all', productsWord: 'Products',
-    darkKicker: 'Our philosophy', darkTitle: 'Fewer products.', darkTitleIt: 'Better formulas.',
-    darkText: 'We believe in essential care: ingredients that work, honest packaging and fair prices. No impossible promises.',
-    darkCta: 'About us',
-    v1t: 'Ingredients you know', v1d: 'Argan oil, white clay, camomile. Actives you can actually read.',
-    v2t: 'Honest pricing', v2d: 'Quality skincare that looks after your skin and your wallet.',
-    v3t: 'For every day', v3d: 'Simple routines that fit your rhythm, not the other way round.',
-    soldOut: 'Sold out', essentialCare: 'Essential care',
-  },
-};
 
 /* ============================================================================
  * Toast Ourélia — notification dans le thème de l'application
@@ -91,25 +22,26 @@ function OureliaToast({ message, type = 'success', onClose }: { message: string;
   const isSuccess = type === 'success';
 
   return (
-    <div style={{
-      position: 'fixed',
-      top: '88px',
-      right: '24px',
-      zIndex: 9999,
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: '14px',
-      padding: '18px 22px',
-      borderRadius: '6px',
-      background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
-      boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
-      color: 'var(--au-bg, #F6F0E4)',
-      minWidth: '290px',
-      maxWidth: '400px',
-      animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
-      borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
-      fontFamily: 'var(--au-font-sans, sans-serif)',
-    }}>
+    <div
+      className="au-toast"
+      style={{
+        position: 'fixed',
+        top: '88px',
+        right: '24px',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '14px',
+        padding: '18px 22px',
+        borderRadius: '6px',
+        background: isError ? '#5c1f1f' : 'var(--au-dark, #211A14)',
+        boxShadow: '0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)',
+        color: 'var(--au-bg, #F6F0E4)',
+        animation: 'toastSlideIn .4s cubic-bezier(.16,1,.3,1)',
+        borderLeft: `4px solid ${isError ? '#e07070' : 'var(--au-gold, #C2A063)'}`,
+        fontFamily: 'var(--au-font-sans, sans-serif)',
+      }}
+    >
       {/* Icône */}
       <span style={{
         fontSize: '18px',
@@ -180,38 +112,6 @@ function smoothScrollTo(id: string) {
   }
 }
 
-const SPREADS = [
-  {
-    num: '01',
-    claim: { fr: 'Or liquide pour vos cheveux', es: 'Oro líquido para tu cabello', en: 'Liquid gold for your hair' },
-    story: {
-      fr: 'Une formule pure qui nourrit en profondeur, redonnant force et brillance naturelle dès la première utilisation.',
-      es: 'Fórmula pura que nutre en profundidad, devolviéndole fuerza y un brillo natural desde el primer uso.',
-      en: 'Pure formula that deeply nourishes, restoring strength and a natural shine from the very first use.',
-    },
-    tags: { fr: ['Soin intense', 'Sans silicones', 'Brillance'], es: ['Cuidado intenso', 'Sin siliconas', 'Brillo'], en: ['Intense care', 'Silicone-free', 'Shine'] },
-  },
-  {
-    num: '02',
-    claim: { fr: 'Dix gestes en un', es: 'Diez gestos en uno', en: 'Ten rituals in one' },
-    story: {
-      fr: 'Un soin léger qui illumine, contrôle les frisottis et apporte de la brillance sans alourdir. L\'étape finale qui transforme tout.',
-      es: 'Un cuidado ligero que ilumina, controla el frizz y aporta brillo sin apelmazar. El paso final que lo transforma todo.',
-      en: 'A weightless care that brightens, tames frizz and adds shine without weighing down. The final step that transforms everything.',
-    },
-    tags: { fr: ['10 en 1', 'Anti-frisottis', 'Protection'], es: ['10 en 1', 'Anti-frizz', 'Protección'], en: ['10-in-1', 'Anti-frizz', 'Protection'] },
-  },
-  {
-    num: '03',
-    claim: { fr: 'Votre signature quotidienne', es: 'Tu firma, cada día', en: 'Your signature, every day' },
-    story: {
-      fr: 'Une note fraîche et lumineuse, pensée pour vous accompagner du matin au soir. Votre geste de beauté le plus personnel.',
-      es: 'Una nota fresca y luminosa, pensada para acompañarte de la mañana a la noche. Tu gesto de belleza más personal.',
-      en: 'A fresh, luminous note made to carry you from morning to night. Your most personal beauty gesture.',
-    },
-    tags: { fr: ['Frais', 'Essentiel', 'Durable'], es: ['Fresco', 'Esencial', 'Duradero'], en: ['Fresh', 'Essential', 'Lasting'] },
-  },
-];
 
 /* ============================================================================
  * CSS Icons (Fallback when no image is present)
@@ -357,8 +257,8 @@ function ProductIcon({ shape, cat, catLabel, scale = 1 }: { shape: string; cat: 
  * Product Card Component (Wired to Database and DB Cart)
  * ========================================================================== */
 function ProductCard({ product, onError }: { product: any; onError?: (msg: string) => void }) {
-  const { t, lang, categoryLabel, tagLabel, categoryTint } = useAurelia();
-  const copy = HOME_COPY[lang];
+  const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
+  const copy = t.home;
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [showPreorder, setShowPreorder] = useState(false);
@@ -395,10 +295,10 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
               src={product.image_url}
               alt={`Soin Ourélia - ${product.name}`}
               style={{ mixBlendMode: 'multiply' }}
-              fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />}
+              fallback={<ProductImagePlaceholder category={product.category.name} productName={product.name} size="md" />}
             />
           ) : (
-            <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} />
+            <ProductImagePlaceholder category={product.category.name} productName={product.name} size="md" />
           )}
         </Link>
       </div>
@@ -425,24 +325,30 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
         </div>
 
         <div className="au-qty-add" onClick={(e) => { if (isOut && !isPreorderable) e.preventDefault(); }}>
-          <div style={{ display: 'flex', alignItems: 'center', border: '1px solid var(--au-border)', borderRadius: '4px', overflow: 'hidden', height: '100%' }}>
+          <div className="au-qty-stepper">
             <button
               type="button"
+              className="au-qty-step-btn"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
               disabled={(isOut && !isPreorderable) || quantity <= 1}
-              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: (isOut && !isPreorderable) || quantity <= 1 ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+              aria-label="Diminuer la quantité"
             >
-              -
+              −
             </button>
             <input
-              type="number"
-              min="1"
-              max={isPreorderable ? undefined : product.stock}
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={quantity}
               onChange={(e) => {
-                const val = parseInt(e.target.value) || 1;
+                const clean = e.target.value.replace(/[^0-9]/g, '');
+                if (!clean) {
+                  setQuantity(1);
+                  return;
+                }
+                const val = parseInt(clean, 10);
                 if (!isPreorderable && val > product.stock) {
-                  if (onError) onError('Le stock est insuffisant pour le moment.');
+                  if (onError) onError(t.common.stockInsufficient);
                   setQuantity(product.stock);
                 } else {
                   setQuantity(Math.max(1, val));
@@ -451,25 +357,25 @@ function ProductCard({ product, onError }: { product: any; onError?: (msg: strin
               className="au-qty-input"
               aria-label="Quantity"
               disabled={isOut && !isPreorderable}
-              style={{ border: 'none', borderRadius: 0, textAlign: 'center', width: '40px', MozAppearance: 'textfield' }}
             />
             <button
               type="button"
+              className="au-qty-step-btn"
               onClick={() => {
                 if (!isPreorderable && quantity >= product.stock) {
-                  if (onError) onError('Le stock est insuffisant pour le moment.');
+                  if (onError) onError(t.common.stockInsufficient);
                 } else {
                   setQuantity(quantity + 1);
                 }
               }}
               disabled={isOut && !isPreorderable}
-              style={{ padding: '0 10px', background: 'transparent', border: 'none', cursor: (isOut && !isPreorderable) ? 'not-allowed' : 'pointer', color: 'var(--au-text)' }}
+              aria-label="Augmenter la quantité"
             >
               +
             </button>
           </div>
           <button type="button" className="au-add-btn" onClick={isPreorderable ? () => setShowPreorder(true) : addToCart} disabled={loading || (isOut && !isPreorderable)}>
-            {loading ? '…' : isPreorderable ? 'Précommande' : isOut ? copy.soldOut : t.add}
+            {loading ? '…' : isPreorderable ? t.common.preorder : isOut ? copy.soldOut : t.add}
           </button>
         </div>
       </div>
@@ -559,8 +465,8 @@ function WelcomeContent({ products = [], flash, errors }: any) {
       .map((p: any) => p.category.name)
   )) as string[];
 
-  const { lang, t, categoryLabel, categoryTint, tagLabel } = useAurelia();
-  const copy = HOME_COPY[lang];
+  const { t, categoryLabel, categoryTint, tagLabel } = useAurelia();
+  const copy = t.home;
 
   const heroShape = heroProduct ? resolveShape(heroProduct) : 'bottle';
   const heroCat = heroProduct?.category?.name || 'Hair Care';
@@ -636,7 +542,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
           </div>
 
           {spreadProducts.map((product: any, i: number) => {
-            const spread = SPREADS[i] || SPREADS[0];
+            const spread = copy.spreads[i] || copy.spreads[0];
             const shape = resolveShape(product);
             return (
               <div
@@ -651,10 +557,10 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                       src={product.image_url}
                       alt={`Soin Ourélia - ${product.name}`}
                       style={{ mixBlendMode: 'multiply' }}
-                      fallback={<ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />}
+                      fallback={<ProductImagePlaceholder category={product.category.name} productName={product.name} size="lg" />}
                     />
                   ) : (
-                    <ProductIcon shape={shape} cat={product.category.name} catLabel={categoryLabel(product.category.name)} scale={1.7} />
+                    <ProductImagePlaceholder category={product.category.name} productName={product.name} size="lg" />
                   )}
                 </Link>
                 <div className="au-spread-body">
@@ -663,9 +569,9 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                   <Link href={route('product.show', product.id)} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
                     <h3 className="au-h3">{product.name}</h3>
                   </Link>
-                  <p className="au-body-text">{product.description || spread.story[lang]}</p>
+                  <p className="au-body-text">{product.description || spread.story}</p>
                   <div className="au-tags">
-                    {spread.tags[lang].map((tag: string) => (
+                    {spread.tags.map((tag: string) => (
                       <span className="au-tag" key={tag}>{tag}</span>
                     ))}
                   </div>
@@ -733,12 +639,12 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 onChange={(e) => setActiveBrand(e.target.value || null)}
                 style={{ padding: '6px 12px', fontSize: '14px', borderRadius: '4px', border: '1px solid var(--au-border)', background: 'transparent', fontFamily: 'var(--au-font-sans)', outline: 'none' }}
               >
-                <option value="">Toutes les marques</option>
+                <option value="">{copy.allBrands}</option>
                 {brandsList.map(b => <option key={b} value={b}>{b}</option>)}
               </select>
             )}
             <span className="au-link-underline cursor-pointer" onClick={() => { setActiveCategory(null); setActiveBrand(null); }}>
-              {activeCategory || activeBrand ? `Tout voir (${filteredProducts.length})` : `${products.length} ${copy.productsWord}`}
+              {activeCategory || activeBrand ? copy.viewAllWithCount(filteredProducts.length) : copy.productsCount(products.length)}
             </span>
           </div>
         </div>
@@ -755,7 +661,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
             {loadingMore ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
                 <div className="animate-spin" style={{ width: '24px', height: '24px', borderRadius: '50%', border: '2px dotted var(--au-gold)', borderTopColor: 'transparent' }}></div>
-                <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>Chargement</span>
+                <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--au-gold)' }}>{copy.loading}</span>
               </div>
             ) : (
               <button
@@ -763,7 +669,7 @@ function WelcomeContent({ products = [], flash, errors }: any) {
                 className="au-btn-ghost"
                 onClick={handleLoadMore}
               >
-                Charger plus
+                {copy.loadMore}
               </button>
             )}
           </div>

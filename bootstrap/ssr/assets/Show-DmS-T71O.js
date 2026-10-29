@@ -1,5 +1,6 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BEza7JXt.js";
-import { t as PreorderModal } from "./PreorderModal-BUnAXYOF.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-BxqbMFN4.js";
+import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
+import { t as PreorderModal } from "./PreorderModal-COYnguxr.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -46,6 +47,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 	}, [onClose]);
 	const isError = type === "error";
 	return /* @__PURE__ */ jsxs("div", {
+		className: "au-toast",
 		style: {
 			position: "fixed",
 			top: "88px",
@@ -59,8 +61,6 @@ function OureliaToast({ message, type = "success", onClose }) {
 			background: isError ? "#5c1f1f" : "var(--au-dark, #211A14)",
 			boxShadow: "0 12px 40px rgba(33,26,20,.28), 0 2px 8px rgba(0,0,0,.12)",
 			color: "var(--au-bg, #F6F0E4)",
-			minWidth: "290px",
-			maxWidth: "400px",
 			animation: "toastSlideIn .4s cubic-bezier(.16,1,.3,1)",
 			borderLeft: `4px solid ${isError ? "#e07070" : "var(--au-gold, #C2A063)"}`,
 			fontFamily: "var(--au-font-sans, sans-serif)"
@@ -124,6 +124,7 @@ function OureliaToast({ message, type = "success", onClose }) {
 }
 function ProductDetail({ product, flash, errors, auth }) {
 	const { t, categoryLabel, tagLabel, categoryTint } = useAurelia();
+	const pDict = t.product;
 	const [quantity, setQuantity] = useState(1);
 	const [loading, setLoading] = useState(false);
 	const [toast, setToast] = useState(null);
@@ -143,7 +144,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 		let finalQty = parseInt(quantity) || 1;
 		if (finalQty > product.stock) {
 			setToast({
-				message: "Le stock est insuffisant pour le moment.",
+				message: pDict.stockInsufficient,
 				type: "info"
 			});
 			setQuantity(product.stock);
@@ -181,7 +182,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 				/* @__PURE__ */ jsx("meta", {
 					"head-key": "description",
 					name: "description",
-					content: product.description || `Découvrez ${product.name} chez Ourélia.`
+					content: product.description || pDict.defaultDescription
 				}),
 				/* @__PURE__ */ jsx("link", {
 					"head-key": "canonical",
@@ -235,8 +236,8 @@ function ProductDetail({ product, flash, errors, auth }) {
 							top: "16px",
 							left: "16px"
 						},
-						children: tag === "out" ? "Épuisé" : tagLabel(tag)
-					}), product.image_url ? /* @__PURE__ */ jsx("img", {
+						children: tag === "out" ? pDict.soldOut : tagLabel(tag)
+					}), product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
 						src: product.image_url,
 						alt: `Soin Ourélia - ${product.name}`,
 						style: {
@@ -244,28 +245,16 @@ function ProductDetail({ product, flash, errors, auth }) {
 							height: "100%",
 							objectFit: "cover",
 							mixBlendMode: "multiply"
-						}
-					}) : /* @__PURE__ */ jsxs("div", {
-						style: {
-							padding: "40px",
-							textAlign: "center",
-							color: "var(--au-text)"
 						},
-						children: [/* @__PURE__ */ jsx("div", {
-							style: {
-								fontSize: "12px",
-								letterSpacing: "0.1em",
-								textTransform: "uppercase",
-								marginBottom: "8px"
-							},
-							children: "Ourélia"
-						}), /* @__PURE__ */ jsx("div", {
-							style: {
-								fontFamily: "var(--au-font-serif)",
-								fontSize: "24px"
-							},
-							children: categoryLabel(product.category.name)
-						})]
+						fallback: /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+							category: product.category.name,
+							productName: product.name,
+							size: "lg"
+						})
+					}) : /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+						category: product.category.name,
+						productName: product.name,
+						size: "lg"
 					})]
 				}), /* @__PURE__ */ jsxs("div", {
 					style: { padding: "20px 0" },
@@ -291,12 +280,12 @@ function ProductDetail({ product, flash, errors, auth }) {
 								gap: "8px",
 								marginBottom: "16px"
 							},
-							children: [/* @__PURE__ */ jsx(StarRating, { rating: Math.round(product.reviews_avg_rating || 0) }), /* @__PURE__ */ jsxs("span", {
+							children: [/* @__PURE__ */ jsx(StarRating, { rating: Math.round(product.reviews_avg_rating || 0) }), /* @__PURE__ */ jsx("span", {
 								style: {
 									fontSize: "13px",
 									color: "var(--au-text-muted)"
 								},
-								children: [product.reviews_count || 0, " avis"]
+								children: pDict.reviewsCount(product.reviews_count || 0)
 							})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
@@ -322,9 +311,10 @@ function ProductDetail({ product, flash, errors, auth }) {
 								whiteSpace: "pre-line",
 								color: "var(--au-text-muted)"
 							},
-							children: product.description || "Un soin essentiel, conçu avec des ingrédients naturels pour répondre aux besoins de votre peau avec efficacité."
+							children: product.description || pDict.defaultDescription
 						}),
 						/* @__PURE__ */ jsxs("div", {
+							className: "au-prod-action-row",
 							style: {
 								display: "flex",
 								gap: "16px",
@@ -339,6 +329,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 									borderRadius: "4px",
 									overflow: "hidden",
 									width: "120px",
+									flexShrink: 0,
 									height: "48px"
 								},
 								children: [
@@ -360,11 +351,25 @@ function ProductDetail({ product, flash, errors, auth }) {
 										children: "-"
 									}),
 									/* @__PURE__ */ jsx("input", {
-										type: "number",
-										min: "1",
-										max: product.stock,
+										type: "text",
+										inputMode: "numeric",
+										pattern: "[0-9]*",
 										value: quantity,
-										onChange: (e) => setQuantity(e.target.value),
+										onChange: (e) => {
+											const clean = e.target.value.replace(/[^0-9]/g, "");
+											if (!clean) {
+												setQuantity(1);
+												return;
+											}
+											const val = parseInt(clean, 10);
+											if (!isPreorderable && val > product.stock) {
+												setToast({
+													message: pDict.stockInsufficient,
+													type: "info"
+												});
+												setQuantity(product.stock);
+											} else setQuantity(Math.max(1, val));
+										},
 										disabled: isOut && !isPreorderable,
 										style: {
 											width: "40px",
@@ -373,6 +378,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 											borderRadius: 0,
 											textAlign: "center",
 											MozAppearance: "textfield",
+											appearance: "textfield",
 											padding: 0
 										}
 									}),
@@ -381,7 +387,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 										onClick: () => {
 											const curr = parseInt(quantity) || 1;
 											if (!isPreorderable && curr >= product.stock) setToast({
-												message: "Le stock est insuffisant pour le moment.",
+												message: pDict.stockInsufficient,
 												type: "info"
 											});
 											else setQuantity(curr + 1);
@@ -411,7 +417,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 									alignItems: "center",
 									justifyContent: "center"
 								},
-								children: loading ? "…" : isPreorderable ? "Précommander" : isOut ? "Épuisé" : t.addCart
+								children: loading ? "…" : isPreorderable ? pDict.preorder : isOut ? pDict.soldOut : t.addCart
 							})]
 						}),
 						isOut && /* @__PURE__ */ jsx("p", {
@@ -420,7 +426,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								fontSize: "0.9rem",
 								marginTop: "10px"
 							},
-							children: "Ce produit est actuellement en rupture de stock."
+							children: pDict.outOfStockNotice
 						})
 					]
 				})]
@@ -434,7 +440,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 				children: [/* @__PURE__ */ jsx("h2", {
 					className: "au-h4",
 					style: { marginBottom: "24px" },
-					children: "Avis clients"
+					children: pDict.reviewsTitle
 				}), /* @__PURE__ */ jsxs("div", {
 					style: {
 						display: "grid",
@@ -447,7 +453,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 							marginBottom: "16px",
 							fontFamily: "var(--au-font-serif)"
 						},
-						children: "Laisser un avis"
+						children: pDict.leaveReview
 					}), auth.user ? userReview ? /* @__PURE__ */ jsxs("div", {
 						style: {
 							padding: "24px",
@@ -461,7 +467,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								color: "var(--au-text-muted)",
 								marginBottom: "12px"
 							},
-							children: "Vous avez déjà évalué ce produit :"
+							children: pDict.alreadyReviewed
 						}), /* @__PURE__ */ jsx("div", {
 							style: {
 								display: "flex",
@@ -481,7 +487,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								preserveScroll: true,
 								onSuccess: () => {
 									setToast({
-										message: "Votre avis a été enregistré avec succès.",
+										message: pDict.reviewSuccess,
 										type: "success"
 									});
 									form.reset();
@@ -503,7 +509,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 									marginBottom: "8px",
 									color: "var(--au-text-muted)"
 								},
-								children: "Note"
+								children: pDict.ratingLabel
 							}), /* @__PURE__ */ jsx("div", {
 								style: {
 									display: "flex",
@@ -545,7 +551,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 							type: "submit",
 							className: "au-btn",
 							style: { padding: "12px 24px" },
-							children: "Publier mon avis"
+							children: pDict.submitReview
 						})]
 					}) : /* @__PURE__ */ jsxs("div", {
 						style: {
@@ -560,7 +566,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								color: "var(--au-text-muted)",
 								marginBottom: "16px"
 							},
-							children: "Vous devez être connecté pour laisser un avis."
+							children: pDict.loginRequired
 						}), /* @__PURE__ */ jsx(Link, {
 							href: route("login"),
 							className: "au-btn-outline",
@@ -568,7 +574,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 								display: "inline-block",
 								padding: "10px 20px"
 							},
-							children: "Se connecter"
+							children: pDict.loginBtn
 						})]
 					})] }), /* @__PURE__ */ jsx("div", { children: product.reviews && product.reviews.length > 0 ? /* @__PURE__ */ jsx("div", {
 						style: {
@@ -599,7 +605,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 										fontSize: "12px",
 										color: "var(--au-text-muted)"
 									},
-									children: new Date(review.created_at).toLocaleDateString("fr-FR")
+									children: new Date(review.created_at).toLocaleDateString(pDict.dateLocale)
 								})]
 							}), /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx(StarRating, {
 								rating: review.rating,
@@ -612,7 +618,7 @@ function ProductDetail({ product, flash, errors, auth }) {
 							color: "var(--au-text-muted)",
 							fontStyle: "italic"
 						},
-						children: "Aucun avis pour le moment. Soyez le premier à donner votre avis !"
+						children: pDict.noReviews
 					}) })]
 				})]
 			}),

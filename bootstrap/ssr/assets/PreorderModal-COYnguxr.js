@@ -1,5 +1,7 @@
+import { n as useAurelia } from "./ClientLayout-BxqbMFN4.js";
 import { t as Modal } from "./Modal-D5A3RQdx.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
+import { n as ImageWithLoader, t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cg-ADBC2.js";
 import { useForm, usePage } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import React from "react";
@@ -107,6 +109,8 @@ var MOROCCO_CITIES = [
 	"Oulad Frej"
 ];
 function PreorderModal({ show, onClose, product, quantity }) {
+	const { t } = useAurelia();
+	const pDict = t.preorder;
 	const { auth } = usePage().props;
 	const user = auth?.user;
 	const { data, setData, post, processing, errors, reset } = useForm({
@@ -144,30 +148,44 @@ function PreorderModal({ show, onClose, product, quantity }) {
 		onClose,
 		maxWidth: "md",
 		children: /* @__PURE__ */ jsxs("div", {
-			className: "p-6",
+			className: "p-4 sm:p-6",
 			children: [
 				/* @__PURE__ */ jsxs("div", {
-					className: "flex justify-between items-center mb-6",
+					className: "flex justify-between items-center mb-4 sm:mb-6",
 					children: [/* @__PURE__ */ jsx("h2", {
-						className: "text-xl font-bold",
+						className: "text-lg sm:text-xl font-bold",
 						style: {
 							fontFamily: "var(--au-font-serif)",
 							color: "var(--au-dark)"
 						},
-						children: "Précommander"
+						children: pDict.title
 					}), /* @__PURE__ */ jsx("button", {
 						onClick: onClose,
-						className: "text-gray-400 hover:text-gray-600",
+						className: "text-gray-400 hover:text-gray-600 text-2xl w-8 h-8 flex items-center justify-center rounded",
 						children: "×"
 					})]
 				}),
 				/* @__PURE__ */ jsxs("div", {
 					className: "mb-6 flex gap-4 p-4 rounded-lg",
 					style: { background: "var(--au-cream)" },
-					children: [product.image_url && /* @__PURE__ */ jsx("img", {
-						src: product.image_url,
-						alt: product.name,
-						className: "w-16 h-16 object-cover rounded"
+					children: [/* @__PURE__ */ jsx("div", {
+						className: "w-16 h-16 rounded overflow-hidden flex-shrink-0",
+						children: product.image_url ? /* @__PURE__ */ jsx(ImageWithLoader, {
+							src: product.image_url,
+							alt: product.name,
+							className: "w-full h-full object-cover",
+							fallback: /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+								category: product.category?.name,
+								productName: product.name,
+								size: "sm",
+								showBrand: false
+							})
+						}) : /* @__PURE__ */ jsx(ProductImagePlaceholder, {
+							category: product.category?.name,
+							productName: product.name,
+							size: "sm",
+							showBrand: false
+						})
 					}), /* @__PURE__ */ jsxs("div", { children: [
 						/* @__PURE__ */ jsx("h3", {
 							className: "font-semibold text-sm",
@@ -180,7 +198,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 						/* @__PURE__ */ jsxs("div", {
 							className: "mt-2 text-sm flex items-center gap-1",
 							style: { color: "var(--au-gold)" },
-							children: [/* @__PURE__ */ jsx("span", { children: "Quantité:" }), /* @__PURE__ */ jsx("span", {
+							children: [/* @__PURE__ */ jsx("span", { children: pDict.quantity }), /* @__PURE__ */ jsx("span", {
 								className: "font-bold",
 								children: quantity
 							})]
@@ -198,7 +216,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 						(!user || user.is_admin) && /* @__PURE__ */ jsxs("div", { children: [
 							/* @__PURE__ */ jsx("label", {
 								className: "au-label",
-								children: "Nom Complet"
+								children: pDict.fullName
 							}),
 							/* @__PURE__ */ jsx("input", {
 								type: "text",
@@ -215,7 +233,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 						/* @__PURE__ */ jsxs("div", { children: [
 							/* @__PURE__ */ jsx("label", {
 								className: "au-label",
-								children: "Téléphone (WhatsApp)"
+								children: pDict.phone
 							}),
 							/* @__PURE__ */ jsxs("div", {
 								style: {
@@ -267,7 +285,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 						/* @__PURE__ */ jsxs("div", { children: [
 							/* @__PURE__ */ jsx("label", {
 								className: "au-label",
-								children: "Ville de livraison"
+								children: pDict.city
 							}),
 							/* @__PURE__ */ jsxs("select", {
 								className: "au-input",
@@ -278,7 +296,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 								children: [/* @__PURE__ */ jsx("option", {
 									value: "",
 									disabled: true,
-									children: "— Choisir une ville —"
+									children: pDict.chooseCity
 								}), MOROCCO_CITIES.map((c) => /* @__PURE__ */ jsx("option", {
 									value: c,
 									children: c
@@ -292,7 +310,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 						/* @__PURE__ */ jsxs("div", { children: [
 							/* @__PURE__ */ jsx("label", {
 								className: "au-label",
-								children: "Adresse complète"
+								children: pDict.address
 							}),
 							/* @__PURE__ */ jsx("textarea", {
 								className: "au-textarea",
@@ -320,7 +338,7 @@ function PreorderModal({ show, onClose, product, quantity }) {
 									width: "100%",
 									textAlign: "center"
 								},
-								children: processing ? "En cours..." : "Confirmer la précommande"
+								children: processing ? pDict.submitting : pDict.confirm
 							})
 						})
 					]
