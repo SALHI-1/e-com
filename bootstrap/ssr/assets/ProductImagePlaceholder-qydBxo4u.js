@@ -1,5 +1,5 @@
 import { s as fr } from "./langue-BtFliKHl.js";
-import { n as useAurelia } from "./ClientLayout-C7YwqqfL.js";
+import { n as useAurelia } from "./ClientLayout-K39zwBYh.js";
 import { jsx, jsxs } from "react/jsx-runtime";
 import "react";
 //#region resources/js/Components/ProductImagePlaceholder.tsx

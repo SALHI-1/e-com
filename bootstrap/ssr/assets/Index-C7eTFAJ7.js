@@ -1,5 +1,5 @@
 import { t as Modal } from "./Modal-D5A3RQdx.js";
-import { t as AdminLayout } from "./AdminLayout-D3tHsjk_.js";
+import { t as AdminLayout } from "./AdminLayout-DYuByY_V.js";
 import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";

@@ -81,12 +81,12 @@ html {
 }
 
 @keyframes auMarquee {
-  0% {
-    transform: translate3d(0, 0, 0);
+  from {
+    transform: translateX(0);
   }
 
-  100% {
-    transform: translate3d(-50%, 0, 0);
+  to {
+    transform: translateX(-50%);
   }
 }
 
@@ -287,96 +287,34 @@ html {
 }
 
 /* ---------------------------------------------------------------------------
-   Brand marquee — luxury editorial ticker
+   Brand marquee
    ------------------------------------------------------------------------ */
 .au-marquee {
-  position: relative;
+  background: var(--au-dark);
   overflow: hidden;
-  width: 100%;
-  background: linear-gradient(180deg, #18130E 0%, #0F0C09 50%, #16110B 100%);
-  border-top: 1px solid rgba(198, 164, 101, 0.28);
-  border-bottom: 1px solid rgba(198, 164, 101, 0.22);
-  box-shadow: 
-    0 4px 20px -2px rgba(10, 7, 5, 0.5),
-    inset 0 1px 0 rgba(220, 190, 140, 0.12),
-    inset 0 -1px 0 rgba(220, 190, 140, 0.08);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 1) 3%, rgba(0, 0, 0, 1) 97%, transparent 100%);
-  user-select: none;
+  border-bottom: 1px solid var(--au-dark-2);
 }
 
 .au-marquee-track {
   display: flex;
   width: max-content;
-  will-change: transform;
-  animation: auMarquee 42s linear infinite;
-}
-
-.au-marquee:hover .au-marquee-track {
-  animation-play-state: paused;
+  animation: auMarquee 32s linear infinite;
 }
 
 .au-marquee-group {
   display: flex;
   align-items: center;
   flex: none;
-  padding: 13px 0;
+  padding: 14px 0;
 }
 
 .au-marquee-item {
-  display: inline-flex;
-  align-items: center;
-  padding: 0 28px;
-  white-space: nowrap;
-  cursor: default;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
-}
-
-.au-marquee-text {
   font-family: var(--au-font-serif);
   font-style: italic;
-  font-weight: 500;
   font-size: 18px;
-  letter-spacing: 0.04em;
-  background: linear-gradient(135deg, #FAF4E8 0%, #E2CCA6 40%, #F5E8D0 75%, #D4BB8E 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #E2CCA6;
-  text-shadow: 0 0 20px rgba(226, 204, 166, 0.15);
-  transition: text-shadow 0.3s ease;
-}
-
-.au-marquee-item:hover {
-  transform: translateY(-1px) scale(1.02);
-}
-
-.au-marquee-item:hover .au-marquee-text {
-  text-shadow: 0 0 16px rgba(247, 229, 192, 0.6), 0 0 30px rgba(198, 164, 101, 0.35);
-}
-
-.au-marquee-star {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 14px;
-  height: 14px;
-  color: #C6A465;
-  opacity: 0.85;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, filter 0.3s ease;
-}
-
-.au-star-icon {
-  width: 11px;
-  height: 11px;
-  display: block;
-  filter: drop-shadow(0 0 4px rgba(198, 164, 101, 0.5));
-}
-
-.au-marquee-group:hover .au-marquee-star {
-  transform: rotate(45deg);
-  opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(247, 229, 192, 0.8));
+  color: var(--au-gold-pale);
+  padding: 0 30px;
+  white-space: nowrap;
 }
 
 .au-dot {
@@ -385,26 +323,6 @@ html {
   background: var(--au-gold);
   transform: rotate(45deg);
   flex: none;
-}
-
-@media (max-width: 768px) {
-  .au-marquee-group {
-    padding: 10px 0;
-  }
-
-  .au-marquee-item {
-    padding: 0 18px;
-  }
-
-  .au-marquee-text {
-    font-size: 15px;
-    letter-spacing: 0.03em;
-  }
-
-  .au-star-icon {
-    width: 9px;
-    height: 9px;
-  }
 }
 
 /* ---------------------------------------------------------------------------
@@ -1510,6 +1428,7 @@ html {
   .au-cat-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+
   .au-prod-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -1882,7 +1801,7 @@ html {
     text-align: center;
   }
 
-  .au-hero-grid > div:first-child {
+  .au-hero-grid>div:first-child {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2096,7 +2015,7 @@ html {
   .au-prod-footer {
     gap: 6px;
   }
-  
+
   .au-prod-price-group {
     width: 100%;
     margin-bottom: 2px;
@@ -2109,7 +2028,7 @@ html {
   .au-cat-card {
     height: 100px;
   }
-  
+
   .au-add-btn {
     font-size: 9.5px;
     letter-spacing: .08em;
@@ -2122,11 +2041,13 @@ html {
 .au-lang-fade {
   animation: auLangFadeIn 0.35s ease-out;
 }
+
 @keyframes auLangFadeIn {
   from {
     opacity: 0;
     filter: blur(2px);
   }
+
   to {
     opacity: 1;
     filter: blur(0);
@@ -2147,6 +2068,7 @@ html {
   background: var(--au-bg);
   padding: 40px 20px;
 }
+
 .au-auth-logo {
   font-family: var(--au-font-serif);
   font-weight: 600;
@@ -2156,6 +2078,7 @@ html {
   text-decoration: none;
   margin-bottom: 30px;
 }
+
 .au-auth-card {
   width: 100%;
   max-width: 440px;
@@ -2165,6 +2088,7 @@ html {
   box-shadow: 0 4px 24px rgba(33, 26, 20, 0.04);
   border: 1px solid var(--au-border);
 }
+
 .au-auth-title {
   font-family: var(--au-font-serif);
   font-size: 32px;
@@ -2185,7 +2109,9 @@ html {
   color: var(--au-text-muted);
   margin-bottom: 8px;
 }
-.au-input, .au-textarea {
+
+.au-input,
+.au-textarea {
   width: 100%;
   background: transparent;
   border: 1px solid var(--au-border-2);
@@ -2196,15 +2122,19 @@ html {
   color: var(--au-ink);
   transition: border-color .2s ease;
 }
-.au-input:focus, .au-textarea:focus {
+
+.au-input:focus,
+.au-textarea:focus {
   border-color: var(--au-gold);
   outline: none;
 }
+
 .au-field-error {
   color: var(--au-sale);
   font-size: 12px;
   margin-top: 6px;
 }
+
 .au-auth-link {
   font-family: var(--au-font-sans);
   font-size: 12px;
@@ -2214,13 +2144,16 @@ html {
   border-bottom: 1px solid transparent;
   transition: all .2s ease;
 }
+
 .au-auth-link:hover {
   color: var(--au-ink);
   border-bottom-color: var(--au-ink);
 }
+
 .au-checkbox {
   accent-color: var(--au-gold);
 }
+
 .au-btn-gold {
   background: var(--au-gold);
   color: #fff;
@@ -2237,9 +2170,11 @@ html {
   text-decoration: none;
   transition: background .2s ease;
 }
+
 .au-btn-gold:hover {
   background: var(--au-ink);
 }
+
 .au-btn-ghost {
   background: transparent;
   color: var(--au-ink);
@@ -2256,6 +2191,7 @@ html {
   text-decoration: none;
   transition: all .2s ease;
 }
+
 .au-btn-ghost:hover {
   background: var(--au-bg-soft);
 }
@@ -2270,6 +2206,7 @@ html {
     opacity: 0;
     transform: translateX(60px) scale(.96);
   }
+
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
@@ -2277,8 +2214,14 @@ html {
 }
 
 @keyframes toastFadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; transform: translateX(40px); }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateX(40px);
+  }
 }
 
 /* ── Cart ── */
@@ -2288,6 +2231,7 @@ html {
   padding: 80px 44px;
   min-height: 60vh;
 }
+
 .au-cart-title {
   font-family: var(--au-font-serif);
   font-size: 48px;
@@ -2296,23 +2240,27 @@ html {
   margin-bottom: 48px;
   text-align: center;
 }
+
 .au-empty {
   text-align: center;
   padding: 80px 20px;
   background: var(--au-bg-soft);
   border-radius: 4px;
 }
+
 .au-cart-grid {
   display: grid;
   grid-template-columns: 1fr 380px;
   gap: 60px;
   align-items: start;
 }
+
 .au-cart-items {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
+
 .au-cart-item {
   display: flex;
   align-items: center;
@@ -2320,15 +2268,18 @@ html {
   padding-bottom: 24px;
   border-bottom: 1px solid var(--au-border);
 }
+
 .au-cart-item-img {
   width: 90px;
   height: 120px;
   object-fit: cover;
   border-radius: 3px;
 }
+
 .au-cart-item-info {
   flex: 1;
 }
+
 .au-cart-item-name {
   font-family: var(--au-font-serif);
   font-size: 22px;
@@ -2336,6 +2287,7 @@ html {
   color: var(--au-ink);
   margin: 0 0 4px;
 }
+
 .au-cart-item-cat {
   font-family: var(--au-font-sans);
   font-size: 11px;
@@ -2344,12 +2296,14 @@ html {
   color: var(--au-text-muted);
   margin: 0 0 8px;
 }
+
 .au-cart-item-price {
   font-family: var(--au-font-sans);
   font-size: 14px;
   color: var(--au-ink);
   margin: 0;
 }
+
 .au-qty {
   width: 44px;
   padding: 6px;
@@ -2362,11 +2316,13 @@ html {
   font-family: var(--au-font-sans);
   -moz-appearance: textfield;
 }
+
 .au-qty::-webkit-outer-spin-button,
 .au-qty::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
 .au-cart-item-subtotal {
   font-family: var(--au-font-sans);
   font-size: 16px;
@@ -2375,6 +2331,7 @@ html {
   width: 80px;
   text-align: right;
 }
+
 .au-cart-remove {
   background: none;
   border: none;
@@ -2384,6 +2341,7 @@ html {
   transition: color .2s ease;
   padding: 8px;
 }
+
 .au-cart-remove:hover {
   color: var(--au-sale);
 }
@@ -2396,6 +2354,7 @@ html {
   position: sticky;
   top: 120px;
 }
+
 .au-cart-summary-title {
   font-family: var(--au-font-serif);
   font-size: 26px;
@@ -2405,6 +2364,7 @@ html {
   padding-bottom: 16px;
   border-bottom: 1px solid var(--au-border);
 }
+
 .au-cart-summary-row {
   display: flex;
   justify-content: space-between;
@@ -2413,6 +2373,7 @@ html {
   font-size: 15px;
   color: var(--au-text-muted);
 }
+
 .au-cart-summary-total {
   display: flex;
   justify-content: space-between;
@@ -2424,6 +2385,7 @@ html {
   font-weight: 500;
   color: var(--au-ink);
 }
+
 .au-checkout-note {
   background: var(--au-bg-soft);
   padding: 16px;
@@ -2440,12 +2402,15 @@ html {
     grid-template-columns: 1fr;
     gap: 40px;
   }
+
   .au-auth-card {
     padding: 32px 24px;
   }
+
   .au-cart-section {
     padding: 48px 24px;
   }
+
   .au-cart-summary {
     position: static;
     width: 100%;
@@ -2457,23 +2422,28 @@ html {
   .au-cart-section {
     padding: 36px 16px;
   }
+
   .au-cart-summary {
     padding: 28px 20px;
     margin: 0 auto;
     width: 100%;
     box-sizing: border-box;
   }
+
   .au-cart-grid {
     width: 100%;
   }
+
   .au-cart-item {
     flex-wrap: wrap;
     position: relative;
   }
+
   .au-cart-item-subtotal {
     text-align: left;
     width: auto;
   }
+
   .au-cart-remove {
     position: absolute;
     top: 0;
@@ -2627,7 +2597,9 @@ html {
   }
 
   /* Form inputs touch-friendly, no iOS auto-zoom */
-  .au-input, .au-textarea, select.au-input {
+  .au-input,
+  .au-textarea,
+  select.au-input {
     font-size: 16px !important;
   }
 }
@@ -2658,7 +2630,7 @@ html {
     gap: 12px;
   }
 
-  .au-prod-action-row > div:first-child {
+  .au-prod-action-row>div:first-child {
     width: 100% !important;
     height: 46px !important;
   }

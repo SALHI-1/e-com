@@ -190,7 +190,7 @@
     "/build/assets/DeleteUserForm-DNhaPZp9.js"
   ],
   "resources/js/Components/Dropdown.tsx": [
-    "/build/assets/AdminLayout-D3tHsjk_.js"
+    "/build/assets/AdminLayout-DYuByY_V.js"
   ],
   "resources/js/Components/ImageWithLoader.tsx": [
     "/build/assets/ImageWithLoader-C9lsqNz9.js"
@@ -205,19 +205,19 @@
     "/build/assets/Modal-D5A3RQdx.js"
   ],
   "resources/js/Components/NavLink.tsx": [
-    "/build/assets/AdminLayout-D3tHsjk_.js"
+    "/build/assets/AdminLayout-DYuByY_V.js"
   ],
   "resources/js/Components/PreorderModal.tsx": [
-    "/build/assets/PreorderModal-6brq-_rI.js"
+    "/build/assets/PreorderModal-Vo4LMsUt.js"
   ],
   "resources/js/Components/PrimaryButton.tsx": [
     "/build/assets/PrimaryButton-Dlx63LxW.js"
   ],
   "resources/js/Components/ProductImagePlaceholder.tsx": [
-    "/build/assets/ProductImagePlaceholder-Cn-w4Vxs.js"
+    "/build/assets/ProductImagePlaceholder-qydBxo4u.js"
   ],
   "resources/js/Components/ResponsiveNavLink.tsx": [
-    "/build/assets/AdminLayout-D3tHsjk_.js"
+    "/build/assets/AdminLayout-DYuByY_V.js"
   ],
   "resources/js/Components/SecondaryButton.tsx": [
     "/build/assets/SecondaryButton-CLBMPam0.js"
@@ -226,49 +226,49 @@
     "/build/assets/TextInput-CDhi48PK.js"
   ],
   "resources/js/Layouts/AdminLayout.tsx": [
-    "/build/assets/AdminLayout-D3tHsjk_.js"
+    "/build/assets/AdminLayout-DYuByY_V.js"
   ],
   "resources/js/Layouts/ClientLayout.tsx": [
-    "/build/assets/ClientLayout-C7YwqqfL.js"
+    "/build/assets/ClientLayout-K39zwBYh.js"
   ],
   "resources/js/Layouts/GuestLayout.tsx": [
     "/build/assets/GuestLayout-AszfP-wk.js"
   ],
   "resources/js/Pages/About.tsx": [
-    "/build/assets/About-DiuOnjZ2.js"
+    "/build/assets/About-BIOOZC2I.js"
   ],
   "resources/js/Pages/Admin/Admins/Index.tsx": [
-    "/build/assets/Index-CoceNPtI.js"
+    "/build/assets/Index-C7eTFAJ7.js"
   ],
   "resources/js/Pages/Admin/Dashboard.tsx": [
-    "/build/assets/Dashboard-B_OiUGiK.js"
+    "/build/assets/Dashboard-LyZDZZcE.js"
   ],
   "resources/js/Pages/Admin/Login.tsx": [
     "/build/assets/Login-BAa_g2o4.js"
   ],
   "resources/js/Pages/Admin/Orders/Index.tsx": [
-    "/build/assets/Index-BwsDe6cz.js"
+    "/build/assets/Index-Da-t1T7n.js"
   ],
   "resources/js/Pages/Admin/Orders/List.tsx": [
-    "/build/assets/List-BQTIpzTV.js"
+    "/build/assets/List-qYvRjZy2.js"
   ],
   "resources/js/Pages/Admin/Orders/Show.tsx": [
-    "/build/assets/Show-cFMkvw_t.js"
+    "/build/assets/Show-BepdAR42.js"
   ],
   "resources/js/Pages/Admin/Products/Create.tsx": [
-    "/build/assets/Create-CY2IIddW.js"
+    "/build/assets/Create-DgTC-Pa_.js"
   ],
   "resources/js/Pages/Admin/Products/Edit.tsx": [
-    "/build/assets/Edit-hnNchgmt.js"
+    "/build/assets/Edit-DqbvV8Ae.js"
   ],
   "resources/js/Pages/Admin/Products/Index.tsx": [
-    "/build/assets/Index-81zgMmst.js"
+    "/build/assets/Index-UZreEgF3.js"
   ],
   "resources/js/Pages/Admin/Products/ProductModal.tsx": [
     "/build/assets/ProductModal-C9Ye4NSv.js"
   ],
   "resources/js/Pages/Admin/Products/Trashed.tsx": [
-    "/build/assets/Trashed-CaJC4B2C.js"
+    "/build/assets/Trashed-Bc8vlEbt.js"
   ],
   "resources/js/Pages/Auth/ConfirmPassword.tsx": [
     "/build/assets/ConfirmPassword-DcZqH-6B.js"
@@ -289,16 +289,16 @@
     "/build/assets/VerifyEmail-B9Se-Q_-.js"
   ],
   "resources/js/Pages/Cart/Index.tsx": [
-    "/build/assets/Index-DDSwd1Ri.js"
+    "/build/assets/Index-D_JIPm7i.js"
   ],
   "resources/js/Pages/Cart/Success.tsx": [
-    "/build/assets/Success-BsmygGyL.js"
+    "/build/assets/Success-BkP5WGb5.js"
   ],
   "resources/js/Pages/Product/Show.tsx": [
-    "/build/assets/Show-bmpsgQGc.js"
+    "/build/assets/Show-ERqD3FGo.js"
   ],
   "resources/js/Pages/Profile/Edit.tsx": [
-    "/build/assets/Edit-CxL_VOXZ.js"
+    "/build/assets/Edit-DGyvGIlJ.js"
   ],
   "resources/js/Pages/Profile/Partials/DeleteUserForm.tsx": [
     "/build/assets/DeleteUserForm-DNhaPZp9.js"
@@ -310,7 +310,7 @@
     "/build/assets/UpdateProfileInformationForm-D1XSPcww.js"
   ],
   "resources/js/Pages/Welcome.tsx": [
-    "/build/assets/Welcome-DtCdG0tm.js"
+    "/build/assets/Welcome-C-M-wnzF.js"
   ],
   "resources/js/langue/eng.ts": [
     "/build/assets/langue-BtFliKHl.js"

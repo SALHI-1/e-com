@@ -1,7 +1,7 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-C7YwqqfL.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-K39zwBYh.js";
 import { t as ImageWithLoader } from "./ImageWithLoader-C9lsqNz9.js";
-import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cn-w4Vxs.js";
-import { t as PreorderModal } from "./PreorderModal-6brq-_rI.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-qydBxo4u.js";
+import { t as PreorderModal } from "./PreorderModal-Vo4LMsUt.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";

@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-D3tHsjk_.js";
+import { t as AdminLayout } from "./AdminLayout-DYuByY_V.js";
 import ProductModal from "./ProductModal-C9Ye4NSv.js";
 import { Head, Link, router } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";

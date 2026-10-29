@@ -1,6 +1,6 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-C7YwqqfL.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-K39zwBYh.js";
 import { t as Modal } from "./Modal-D5A3RQdx.js";
-import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-Cn-w4Vxs.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-qydBxo4u.js";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useRef, useState } from "react";
@@ -16,9 +16,8 @@ function Edit(props) {
 function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 	const { auth } = usePage().props;
 	const user = auth.user;
-	const { t, lang } = useAurelia();
+	const { t } = useAurelia();
 	const p = t.profilePage;
-	const locale = lang === "eng" ? "en-US" : lang === "esp" ? "es-ES" : "fr-FR";
 	const [activeTab, setActiveTab] = useState("orders");
 	const infoForm = useForm({
 		name: user.name || "",
@@ -116,7 +115,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 							user.phone && /* @__PURE__ */ jsxs("span", { children: ["• ", user.phone] }),
 							/* @__PURE__ */ jsx("span", {
 								className: "au-profile-meta-tag",
-								children: p.memberTag
+								children: "Membre Ourélia"
 							})
 						]
 					})] })]
@@ -140,7 +139,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 								children: activeOrders
 							}), /* @__PURE__ */ jsx("div", {
 								className: "au-profile-stat-lbl",
-								children: p.activeOrdersLabel
+								children: "En cours"
 							})]
 						}),
 						/* @__PURE__ */ jsxs("div", {
@@ -318,7 +317,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 			}) : /* @__PURE__ */ jsx("div", { children: orders.map((order) => {
 				const badge = getStatusStyle(order.status);
 				const statusDisplay = p.statusLabels[order.status] || order.status;
-				const formattedDate = new Date(order.created_at).toLocaleDateString(locale, {
+				const formattedDate = new Date(order.created_at).toLocaleDateString(void 0, {
 					year: "numeric",
 					month: "short",
 					day: "numeric"
@@ -328,37 +327,55 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 					children: [
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-order-top",
-							children: [/* @__PURE__ */ jsxs("div", {
-								className: "au-order-top-left",
-								children: [/* @__PURE__ */ jsxs("div", {
-									className: "au-order-id-row",
-									children: [/* @__PURE__ */ jsx("span", {
-										className: "au-order-num",
-										children: order.order_number
-									}), /* @__PURE__ */ jsx("span", {
-										className: "au-order-status-badge",
-										style: {
-											backgroundColor: badge.bg,
-											color: badge.color,
-											border: `1px solid ${badge.border}`
-										},
-										children: statusDisplay
-									})]
-								}), /* @__PURE__ */ jsxs("div", {
-									className: "au-order-date",
-									children: [
-										p.orderDate,
-										": ",
-										formattedDate
-									]
+							children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsxs("div", {
+								style: {
+									display: "flex",
+									alignItems: "center",
+									gap: "10px"
+								},
+								children: [/* @__PURE__ */ jsx("span", {
+									style: {
+										fontWeight: 700,
+										fontSize: "15px",
+										color: "var(--au-ink)"
+									},
+									children: order.order_number
+								}), /* @__PURE__ */ jsx("span", {
+									className: "au-order-status-badge",
+									style: {
+										backgroundColor: badge.bg,
+										color: badge.color,
+										border: `1px solid ${badge.border}`
+									},
+									children: statusDisplay
 								})]
 							}), /* @__PURE__ */ jsxs("div", {
-								className: "au-order-top-right",
+								style: {
+									fontSize: "12px",
+									color: "var(--au-text-muted)",
+									marginTop: "4px"
+								},
+								children: [
+									p.orderDate,
+									": ",
+									formattedDate
+								]
+							})] }), /* @__PURE__ */ jsxs("div", {
+								style: { textAlign: "right" },
 								children: [/* @__PURE__ */ jsx("span", {
-									className: "au-order-total-lbl",
+									style: {
+										fontSize: "12px",
+										color: "var(--au-text-muted)",
+										textTransform: "uppercase"
+									},
 									children: p.orderTotal
 								}), /* @__PURE__ */ jsxs("div", {
-									className: "au-order-total-val",
+									style: {
+										fontFamily: "var(--au-font-serif)",
+										fontSize: "20px",
+										fontWeight: 700,
+										color: "var(--au-ink)"
+									},
 									children: [
 										order.total_amount,
 										" ",
@@ -373,7 +390,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-order-body",
 							children: [order.items && order.items.length > 0 && /* @__PURE__ */ jsx("div", {
-								className: "au-order-items-list",
+								style: { marginBottom: "16px" },
 								children: order.items.map((item) => /* @__PURE__ */ jsxs("div", {
 									className: "au-order-item-row",
 									children: [
@@ -388,31 +405,66 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 											className: "au-order-item-img"
 										}),
 										/* @__PURE__ */ jsxs("div", {
-											className: "au-order-item-details",
+											style: {
+												flex: 1,
+												minWidth: 0
+											},
 											children: [/* @__PURE__ */ jsx("div", {
-												className: "au-order-item-title",
-												children: item.product?.name || p.productFallback
+												style: {
+													fontWeight: 600,
+													fontSize: "14px",
+													color: "var(--au-ink)",
+													whiteSpace: "nowrap",
+													overflow: "hidden",
+													textOverflow: "ellipsis"
+												},
+												children: item.product?.name || "Produit"
 											}), /* @__PURE__ */ jsxs("div", {
-												className: "au-order-item-sub",
-												children: [/* @__PURE__ */ jsxs("span", { children: [
+												style: {
+													fontSize: "12px",
+													color: "var(--au-text-muted)",
+													marginTop: "2px"
+												},
+												children: [
 													item.quantity,
 													" × ",
 													item.unit_price,
-													" DH"
-												] }), item.is_preorder && /* @__PURE__ */ jsx("span", {
-													className: "au-order-item-preorder",
-													children: p.preorderBadge
-												})]
+													" DH",
+													item.is_preorder && /* @__PURE__ */ jsx("span", {
+														style: {
+															marginLeft: "8px",
+															background: "#EDE9FE",
+															color: "#5B21B6",
+															padding: "1px 6px",
+															borderRadius: "4px",
+															fontSize: "10px",
+															fontWeight: 600
+														},
+														children: "Précommande"
+													})
+												]
 											})]
 										}),
 										/* @__PURE__ */ jsxs("div", {
-											className: "au-order-item-price",
+											style: {
+												fontWeight: 600,
+												fontSize: "14px",
+												color: "var(--au-ink)",
+												whiteSpace: "nowrap"
+											},
 											children: [(item.quantity * item.unit_price).toFixed(2), " DH"]
 										})
 									]
 								}, item.id))
 							}), order.shipping_address && /* @__PURE__ */ jsxs("div", {
-								className: "au-order-address-box",
+								style: {
+									background: "var(--au-bg)",
+									border: "1px solid var(--au-border)",
+									borderRadius: "6px",
+									padding: "10px 14px",
+									fontSize: "12px",
+									color: "var(--au-text-muted)"
+								},
 								children: [
 									/* @__PURE__ */ jsxs("strong", {
 										style: { color: "var(--au-ink)" },
@@ -426,13 +478,23 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 						/* @__PURE__ */ jsxs("div", {
 							className: "au-order-footer",
 							children: [/* @__PURE__ */ jsx("span", {
-								className: "au-order-count",
+								style: {
+									fontSize: "12px",
+									color: "var(--au-text-muted)"
+								},
 								children: p.articlesCount(order.items?.length || 0)
 							}), /* @__PURE__ */ jsxs("a", {
 								href: route("profile.order.ticket", order.id),
 								target: "_blank",
 								rel: "noopener noreferrer",
-								className: "au-btn-ghost au-order-ticket-btn",
+								className: "au-btn-ghost",
+								style: {
+									padding: "8px 16px",
+									fontSize: "11px",
+									display: "inline-flex",
+									alignItems: "center",
+									gap: "6px"
+								},
 								children: [/* @__PURE__ */ jsx("svg", {
 									width: "14",
 									height: "14",
@@ -565,7 +627,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 									id: "profile-phone",
 									type: "tel",
 									className: "au-input",
-									placeholder: p.phonePlaceholder,
+									placeholder: "06 12 34 56 78",
 									value: infoForm.data.phone,
 									onChange: (e) => infoForm.setData("phone", e.target.value)
 								}),
@@ -786,7 +848,6 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 									})
 								] }),
 								/* @__PURE__ */ jsxs("div", {
-									className: "au-modal-actions",
 									style: {
 										display: "flex",
 										justifyContent: "flex-end",
@@ -796,7 +857,7 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 									children: [/* @__PURE__ */ jsx("button", {
 										type: "button",
 										onClick: () => setConfirmingDeletion(false),
-										className: "au-btn-ghost au-modal-btn",
+										className: "au-btn-ghost",
 										style: {
 											padding: "10px 20px",
 											fontSize: "12px"
@@ -805,7 +866,6 @@ function ProfileContent({ mustVerifyEmail, status, orders = [] }) {
 									}), /* @__PURE__ */ jsx("button", {
 										type: "submit",
 										disabled: deleteForm.processing,
-										className: "au-modal-btn",
 										style: {
 											background: "#EF4444",
 											color: "#fff",

@@ -498,16 +498,35 @@ function ClientLayout({ auth, cartCount = 0, title, categories = [
 						]
 					})]
 				}),
-				/* @__PURE__ */ jsx("div", {
+				/* @__PURE__ */ jsx("section", {
 					className: "au-marquee",
+					"aria-label": "Brand Philosophy",
 					children: /* @__PURE__ */ jsx("div", {
 						className: "au-marquee-track",
-						children: [0, 1].map((groupIndex) => /* @__PURE__ */ jsx("div", {
+						children: [
+							0,
+							1,
+							2,
+							3
+						].map((groupIndex) => /* @__PURE__ */ jsx("div", {
 							className: "au-marquee-group",
-							children: t.marquee.map((item, i) => /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("span", {
+							"aria-hidden": groupIndex > 0 ? "true" : void 0,
+							children: [...t.marquee, ...t.marquee].map((item, i) => /* @__PURE__ */ jsxs(Fragment$1, { children: [/* @__PURE__ */ jsx("span", {
 								className: "au-marquee-item",
-								children: item
-							}), /* @__PURE__ */ jsx("span", { className: "au-dot" })] }, i))
+								children: /* @__PURE__ */ jsx("span", {
+									className: "au-marquee-text",
+									children: item
+								})
+							}), /* @__PURE__ */ jsx("span", {
+								className: "au-marquee-star",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ jsx("svg", {
+									viewBox: "0 0 24 24",
+									fill: "currentColor",
+									className: "au-star-icon",
+									children: /* @__PURE__ */ jsx("path", { d: "M12 0L14.4 9.6L24 12L14.4 14.4L12 24L9.6 14.4L0 12L9.6 9.6L12 0Z" })
+								})
+							})] }, i))
 						}, groupIndex))
 					})
 				}),

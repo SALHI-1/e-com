@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-D3tHsjk_.js";
+import { t as AdminLayout } from "./AdminLayout-DYuByY_V.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 import { useState } from "react";

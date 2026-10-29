@@ -1,4 +1,4 @@
-import { t as AdminLayout } from "./AdminLayout-D3tHsjk_.js";
+import { t as AdminLayout } from "./AdminLayout-DYuByY_V.js";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Admin/Orders/Show.tsx

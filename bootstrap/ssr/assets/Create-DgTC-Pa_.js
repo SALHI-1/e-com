@@ -1,29 +1,28 @@
-import { t as AdminLayout } from "./AdminLayout-D3tHsjk_.js";
+import { t as AdminLayout } from "./AdminLayout-DYuByY_V.js";
 import { n as InputLabel, t as TextInput_default } from "./TextInput-CDhi48PK.js";
 import { t as InputError } from "./InputError-CCQKfEE5.js";
 import { t as Checkbox } from "./Checkbox-BUETY56Z.js";
 import { t as PrimaryButton } from "./PrimaryButton-Dlx63LxW.js";
 import { Head, Link, useForm } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
-//#region resources/js/Pages/Admin/Products/Edit.tsx
-function Edit({ product, categories }) {
+//#region resources/js/Pages/Admin/Products/Create.tsx
+function Create({ categories }) {
 	const { data, setData, post, processing, errors } = useForm({
-		name: product.name,
-		brand: product.brand || "",
-		category_id: product.category_id,
-		description: product.description,
-		price: product.price,
-		stock: product.stock,
-		volume: product.volume || "",
-		is_new: product.is_new,
-		is_bestseller: product.is_bestseller,
-		allow_preorder: product.allow_preorder,
-		image: null,
-		_method: "PUT"
+		name: "",
+		brand: "",
+		category_id: categories.length > 0 ? categories[0].id : "",
+		description: "",
+		price: "",
+		stock: "",
+		volume: "",
+		is_new: false,
+		is_bestseller: false,
+		allow_preorder: false,
+		image: null
 	});
 	const submit = (e) => {
 		e.preventDefault();
-		post(route("admin.products.update", product.id), { forceFormData: true });
+		post(route("admin.products.store"));
 	};
 	return /* @__PURE__ */ jsxs(AdminLayout, {
 		header: /* @__PURE__ */ jsxs("div", {
@@ -44,15 +43,12 @@ function Edit({ product, categories }) {
 						d: "M10 19l-7-7m0 0l7-7m-7 7h18"
 					})
 				})
-			}), /* @__PURE__ */ jsx("div", {
-				className: "min-w-0",
-				children: /* @__PURE__ */ jsxs("h2", {
-					className: "text-xl sm:text-2xl font-serif font-bold text-[#0F204B] truncate",
-					children: ["Edit: ", product.name]
-				})
+			}), /* @__PURE__ */ jsx("h2", {
+				className: "text-xl sm:text-2xl font-serif font-bold text-[#0F204B]",
+				children: "Add New Product"
 			})]
 		}),
-		children: [/* @__PURE__ */ jsx(Head, { title: `Edit Product: ${product.name}` }), /* @__PURE__ */ jsx("div", {
+		children: [/* @__PURE__ */ jsx(Head, { title: "Add Product" }), /* @__PURE__ */ jsx("div", {
 			className: "py-6 sm:py-10 bg-gray-50",
 			children: /* @__PURE__ */ jsx("div", {
 				className: "mx-auto max-w-2xl px-3 sm:px-6 lg:px-8",
@@ -102,16 +98,20 @@ function Edit({ product, categories }) {
 									htmlFor: "category_id",
 									value: "Category *"
 								}),
-								/* @__PURE__ */ jsx("select", {
+								/* @__PURE__ */ jsxs("select", {
 									id: "category_id",
 									className: "mt-1 block w-full border-gray-300 focus:border-[#0F204B] focus:ring-[#0F204B] rounded-lg shadow-xs text-xs sm:text-sm",
 									value: data.category_id,
 									onChange: (e) => setData("category_id", e.target.value),
 									required: true,
-									children: categories.map((cat) => /* @__PURE__ */ jsx("option", {
+									children: [/* @__PURE__ */ jsx("option", {
+										value: "",
+										disabled: true,
+										children: "Select a category"
+									}), categories.map((cat) => /* @__PURE__ */ jsx("option", {
 										value: cat.id,
 										children: cat.name
-									}, cat.id))
+									}, cat.id))]
 								}),
 								/* @__PURE__ */ jsx(InputError, {
 									message: errors.category_id,
@@ -204,7 +204,7 @@ function Edit({ product, categories }) {
 										children: [
 											/* @__PURE__ */ jsxs("p", {
 												className: "text-xs text-gray-600 mb-2 truncate max-w-xs mx-auto",
-												children: ["New file: ", data.image.name]
+												children: ["Selected: ", data.image.name]
 											}),
 											/* @__PURE__ */ jsx("img", {
 												src: URL.createObjectURL(data.image),
@@ -215,35 +215,7 @@ function Edit({ product, categories }) {
 												type: "button",
 												onClick: () => setData("image", null),
 												className: "text-red-600 hover:text-red-800 text-xs font-semibold",
-												children: "Remove new image"
-											})
-										]
-									}) : product.image_url ? /* @__PURE__ */ jsxs("div", {
-										className: "text-center w-full",
-										children: [
-											/* @__PURE__ */ jsx("p", {
-												className: "text-xs text-gray-600 mb-2",
-												children: "Current image"
-											}),
-											/* @__PURE__ */ jsx("img", {
-												src: product.image_url,
-												alt: "Current",
-												className: "mx-auto max-h-44 object-contain mb-3 rounded-lg"
-											}),
-											/* @__PURE__ */ jsx("div", {
-												className: "flex text-xs sm:text-sm text-gray-600 justify-center",
-												children: /* @__PURE__ */ jsxs("label", {
-													htmlFor: "file-upload",
-													className: "relative cursor-pointer bg-white rounded-md font-semibold text-[#0F204B] hover:underline focus-within:outline-none",
-													children: [/* @__PURE__ */ jsx("span", { children: "Replace image" }), /* @__PURE__ */ jsx("input", {
-														id: "file-upload",
-														name: "image",
-														type: "file",
-														className: "sr-only",
-														accept: "image/*",
-														onChange: (e) => setData("image", e.target.files ? e.target.files[0] : null)
-													})]
-												})
+												children: "Remove image"
 											})
 										]
 									}) : /* @__PURE__ */ jsxs("div", {
@@ -339,7 +311,7 @@ function Edit({ product, categories }) {
 								}), /* @__PURE__ */ jsx(PrimaryButton, {
 									disabled: processing,
 									className: "w-full sm:w-auto bg-[#0F204B] justify-center",
-									children: processing ? "Saving…" : "Update Product"
+									children: processing ? "Saving…" : "Save Product"
 								})]
 							})
 						]
@@ -350,4 +322,4 @@ function Edit({ product, categories }) {
 	});
 }
 //#endregion
-export { Edit as default };
+export { Create as default };

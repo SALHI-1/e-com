@@ -1,4 +1,4 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-C7YwqqfL.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-K39zwBYh.js";
 import { Head, Link } from "@inertiajs/react";
 import { jsx, jsxs } from "react/jsx-runtime";
 //#region resources/js/Pages/Cart/Success.tsx
