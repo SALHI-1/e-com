@@ -1,8 +1,8 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-K39zwBYh.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-67eTMzq0.js";
 import { t as ApplicationLogo } from "./ApplicationLogo-C6sWqI6d.js";
 import { t as ImageWithLoader } from "./ImageWithLoader-C9lsqNz9.js";
-import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-qydBxo4u.js";
-import { t as PreorderModal } from "./PreorderModal-Vo4LMsUt.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-C2H2EuqQ.js";
+import { t as PreorderModal } from "./PreorderModal-BDg_OyON.js";
 import { Head, Link, router, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useEffect, useState } from "react";
@@ -358,6 +358,39 @@ function WelcomeContent({ products = [], flash, errors }) {
 	heroProduct && resolveShape(heroProduct);
 	heroProduct?.category?.name;
 	const filteredProducts = products.filter((p) => activeCategory ? p.category.name === activeCategory : true).filter((p) => activeBrand ? p.brand === activeBrand : true);
+	useEffect(() => {
+		if (typeof window === "undefined") return;
+		if (!("IntersectionObserver" in window)) {
+			document.querySelectorAll(".au-reveal, .au-reveal-scale, .au-reveal-left, .au-reveal-right, .au-reveal-group").forEach((el) => el.classList.add("is-revealed"));
+			return;
+		}
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add("is-revealed");
+					observer.unobserve(entry.target);
+				}
+			});
+		}, {
+			root: null,
+			rootMargin: "0px 0px -45px 0px",
+			threshold: .1
+		});
+		const observeUnrevealed = () => {
+			document.querySelectorAll(".au-reveal:not(.is-revealed), .au-reveal-scale:not(.is-revealed), .au-reveal-left:not(.is-revealed), .au-reveal-right:not(.is-revealed), .au-reveal-group:not(.is-revealed)").forEach((el) => observer.observe(el));
+		};
+		observeUnrevealed();
+		const timer = setTimeout(observeUnrevealed, 200);
+		return () => {
+			clearTimeout(timer);
+			observer.disconnect();
+		};
+	}, [
+		filteredProducts,
+		visibleCount,
+		activeCategory,
+		activeBrand
+	]);
 	return /* @__PURE__ */ jsxs(Fragment, { children: [
 		/* @__PURE__ */ jsxs(Head, { children: [
 			/* @__PURE__ */ jsx("title", { children: activeCategory ? `${categoryLabel(activeCategory)} · Ourélia (Ourelia)` : "Ourélia | Ourelia Beauty" }),
@@ -396,40 +429,44 @@ function WelcomeContent({ products = [], flash, errors }) {
 			className: "au-container au-hero",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "au-hero-grid",
-				children: [/* @__PURE__ */ jsxs("div", { children: [
-					/* @__PURE__ */ jsxs("div", {
-						className: "au-eyebrow",
-						children: [/* @__PURE__ */ jsx("span", { className: "au-eyebrow-line" }), /* @__PURE__ */ jsx("span", {
-							className: "au-eyebrow-label",
-							children: copy.heroKicker
-						})]
-					}),
-					/* @__PURE__ */ jsx("h1", {
-						className: "au-h1",
-						children: copy.heroTitle
-					}),
-					/* @__PURE__ */ jsx("div", {
-						className: "au-h1-italic",
-						children: copy.heroItalic
-					}),
-					/* @__PURE__ */ jsx("p", {
-						className: "au-lead",
-						children: copy.heroSub
-					}),
-					/* @__PURE__ */ jsxs("div", {
-						className: "au-cta-row",
-						children: [/* @__PURE__ */ jsx("button", {
-							type: "button",
-							className: "au-btn",
-							onClick: () => smoothScrollTo("collection"),
-							children: copy.heroCta
-						}), /* @__PURE__ */ jsx(Link, {
-							href: "/about",
-							className: "au-link-underline",
-							children: copy.heroLink
-						})]
-					})
-				] }), /* @__PURE__ */ jsx("div", {
+				children: [/* @__PURE__ */ jsxs("div", {
+					className: "au-reveal",
+					children: [
+						/* @__PURE__ */ jsxs("div", {
+							className: "au-eyebrow",
+							children: [/* @__PURE__ */ jsx("span", { className: "au-eyebrow-line" }), /* @__PURE__ */ jsx("span", {
+								className: "au-eyebrow-label",
+								children: copy.heroKicker
+							})]
+						}),
+						/* @__PURE__ */ jsx("h1", {
+							className: "au-h1",
+							children: copy.heroTitle
+						}),
+						/* @__PURE__ */ jsx("div", {
+							className: "au-h1-italic",
+							children: copy.heroItalic
+						}),
+						/* @__PURE__ */ jsx("p", {
+							className: "au-lead",
+							children: copy.heroSub
+						}),
+						/* @__PURE__ */ jsxs("div", {
+							className: "au-cta-row",
+							children: [/* @__PURE__ */ jsx("button", {
+								type: "button",
+								className: "au-btn",
+								onClick: () => smoothScrollTo("collection"),
+								children: copy.heroCta
+							}), /* @__PURE__ */ jsx(Link, {
+								href: "/about",
+								className: "au-link-underline",
+								children: copy.heroLink
+							})]
+						})
+					]
+				}), /* @__PURE__ */ jsx("div", {
+					className: "au-reveal-scale",
 					style: {
 						display: "flex",
 						alignItems: "center",
@@ -448,7 +485,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 			})
 		}),
 		/* @__PURE__ */ jsx("div", {
-			className: "au-manifesto",
+			className: "au-manifesto au-reveal",
 			children: /* @__PURE__ */ jsxs("div", {
 				className: "au-manifesto-inner",
 				children: [
@@ -470,7 +507,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 		spreadProducts.length > 0 && /* @__PURE__ */ jsxs("div", {
 			className: "au-container au-spreads",
 			children: [/* @__PURE__ */ jsxs("div", {
-				className: "au-spreads-head",
+				className: "au-spreads-head au-reveal",
 				children: [/* @__PURE__ */ jsx("div", {
 					className: "au-section-eyebrow",
 					children: copy.spreadKicker
@@ -482,7 +519,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 				const spread = copy.spreads[i] || copy.spreads[0];
 				resolveShape(product);
 				return /* @__PURE__ */ jsxs("div", {
-					className: "au-spread-row",
+					className: "au-spread-row au-reveal",
 					style: { flexDirection: i % 2 === 1 ? "row-reverse" : "row" },
 					children: [/* @__PURE__ */ jsxs(Link, {
 						href: route("product.show", product.id),
@@ -567,7 +604,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 		/* @__PURE__ */ jsxs("div", {
 			className: "au-container au-categories",
 			children: [/* @__PURE__ */ jsx("div", {
-				className: "au-section-head",
+				className: "au-section-head au-reveal",
 				children: /* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
 					className: "au-section-eyebrow",
 					children: copy.catTitle
@@ -576,7 +613,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 					children: copy.catSub
 				})] })
 			}), /* @__PURE__ */ jsx("div", {
-				className: "au-cat-grid",
+				className: "au-cat-grid au-reveal-group",
 				children: categoriesList.map((cat, i) => {
 					products.filter((p) => p.category.name === cat && (activeBrand ? p.brand === activeBrand : true)).length;
 					return /* @__PURE__ */ jsx("a", {
@@ -610,7 +647,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 			id: "collection",
 			children: [
 				/* @__PURE__ */ jsxs("div", {
-					className: "au-section-head au-section-head--lg",
+					className: "au-section-head au-section-head--lg au-reveal",
 					children: [/* @__PURE__ */ jsxs("div", { children: [/* @__PURE__ */ jsx("div", {
 						className: "au-section-eyebrow",
 						children: copy.bestTitle
@@ -655,7 +692,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 					})]
 				}),
 				/* @__PURE__ */ jsx("div", {
-					className: "au-prod-grid",
+					className: "au-prod-grid au-reveal-group",
 					children: filteredProducts.slice(0, visibleCount).map((product) => /* @__PURE__ */ jsx(ProductCard, {
 						product,
 						onError: (msg) => setToast({
@@ -671,6 +708,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 						marginTop: "48px",
 						minHeight: "40px"
 					},
+					className: "au-reveal",
 					children: loadingMore ? /* @__PURE__ */ jsxs("div", {
 						style: {
 							display: "flex",
@@ -711,7 +749,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 				className: "au-container au-dark-inner",
 				children: [
 					/* @__PURE__ */ jsxs("div", {
-						className: "au-dark-head",
+						className: "au-dark-head au-reveal",
 						children: [
 							/* @__PURE__ */ jsx("div", {
 								className: "au-dark-kicker",
@@ -735,7 +773,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 						]
 					}),
 					/* @__PURE__ */ jsxs("div", {
-						className: "au-values-grid",
+						className: "au-values-grid au-reveal-group",
 						children: [
 							/* @__PURE__ */ jsxs("div", {
 								className: "au-value",
@@ -791,7 +829,7 @@ function WelcomeContent({ products = [], flash, errors }) {
 						]
 					}),
 					/* @__PURE__ */ jsx("div", {
-						className: "au-dark-cta-wrap",
+						className: "au-dark-cta-wrap au-reveal",
 						children: /* @__PURE__ */ jsx(Link, {
 							href: "/about",
 							className: "au-btn-outline-dark",

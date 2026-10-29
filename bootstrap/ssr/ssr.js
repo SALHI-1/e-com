@@ -19,7 +19,7 @@ createServer((page) => createInertiaApp({
 	render: ReactDOMServer.renderToString,
 	title: (title) => title ? `Ourélia | ${title}` : "Ourélia",
 	resolve: (name) => resolvePageComponent(`./Pages/${name}.tsx`, /* #__PURE__ */ Object.assign({
-		"./Pages/About.tsx": () => import("./assets/About-BIOOZC2I.js"),
+		"./Pages/About.tsx": () => import("./assets/About-D8c5knjl.js"),
 		"./Pages/Admin/Admins/Index.tsx": () => import("./assets/Index-C7eTFAJ7.js"),
 		"./Pages/Admin/Dashboard.tsx": () => import("./assets/Dashboard-LyZDZZcE.js"),
 		"./Pages/Admin/Login.tsx": () => import("./assets/Login-BAa_g2o4.js"),
@@ -37,14 +37,14 @@ createServer((page) => createInertiaApp({
 		"./Pages/Auth/Register.tsx": () => import("./assets/Register-BUHowwlD.js"),
 		"./Pages/Auth/ResetPassword.tsx": () => import("./assets/ResetPassword-3-fwsdgH.js"),
 		"./Pages/Auth/VerifyEmail.tsx": () => import("./assets/VerifyEmail-B9Se-Q_-.js"),
-		"./Pages/Cart/Index.tsx": () => import("./assets/Index-D_JIPm7i.js"),
-		"./Pages/Cart/Success.tsx": () => import("./assets/Success-BkP5WGb5.js"),
-		"./Pages/Product/Show.tsx": () => import("./assets/Show-ERqD3FGo.js"),
-		"./Pages/Profile/Edit.tsx": () => import("./assets/Edit-DGyvGIlJ.js"),
+		"./Pages/Cart/Index.tsx": () => import("./assets/Index-IGZHbmNM.js"),
+		"./Pages/Cart/Success.tsx": () => import("./assets/Success-81I-uRQn.js"),
+		"./Pages/Product/Show.tsx": () => import("./assets/Show-BTdkkuTs.js"),
+		"./Pages/Profile/Edit.tsx": () => import("./assets/Edit-qBMbTGbf.js"),
 		"./Pages/Profile/Partials/DeleteUserForm.tsx": () => import("./assets/DeleteUserForm-DNhaPZp9.js"),
 		"./Pages/Profile/Partials/UpdatePasswordForm.tsx": () => import("./assets/UpdatePasswordForm-B5OYfF5q.js"),
 		"./Pages/Profile/Partials/UpdateProfileInformationForm.tsx": () => import("./assets/UpdateProfileInformationForm-D1XSPcww.js"),
-		"./Pages/Welcome.tsx": () => import("./assets/Welcome-C-M-wnzF.js")
+		"./Pages/Welcome.tsx": () => import("./assets/Welcome-voqEOxO-.js")
 	})),
 	setup: ({ App, props }) => {
 		global.route = (name, params, absolute) => route(name, params, absolute, {

@@ -1,6 +1,6 @@
-import { n as useAurelia, t as ClientLayout } from "./ClientLayout-K39zwBYh.js";
+import { n as useAurelia, t as ClientLayout } from "./ClientLayout-67eTMzq0.js";
 import { t as Modal } from "./Modal-D5A3RQdx.js";
-import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-qydBxo4u.js";
+import { t as ProductImagePlaceholder } from "./ProductImagePlaceholder-C2H2EuqQ.js";
 import { Head, Link, useForm, usePage } from "@inertiajs/react";
 import { Fragment, jsx, jsxs } from "react/jsx-runtime";
 import { useRef, useState } from "react";
