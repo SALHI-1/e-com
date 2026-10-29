@@ -1382,6 +1382,10 @@ html {
   line-height: 0;
 }
 
+.au-mobile-backdrop {
+  display: none;
+}
+
 .au-mobile-panel {
   display: none;
 }
@@ -1460,37 +1464,124 @@ html {
     padding: 16px 20px;
   }
 
-  /* slide-down mobile menu */
-  .au-mobile-panel {
+  /* ── Mobile 3/4 Drawer Navigation ────────────────────────────────── */
+
+  /* Backdrop: covers full screen, semi-transparent warm dark veil with blur */
+  .au-mobile-backdrop {
     display: block;
-    background: var(--au-bg);
-    border-bottom: 1px solid var(--au-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(22, 17, 13, 0.58);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .au-mobile-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 3/4 Drawer: slides in from the left, strictly occupies 3/4 of screen width (75vw) */
+  .au-mobile-panel {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: 75vw;
+    width: 75%;
+    max-width: 380px;
+    min-width: 240px;
+    background: var(--au-bg, #FAF6F0);
+    z-index: 999;
+    box-shadow: 14px 0 45px rgba(22, 17, 13, 0.28);
+    border-right: 1px solid var(--au-border);
+    transform: translateX(-100%);
+    transition: transform .32s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    max-height: 0;
-    transition: max-height .35s ease;
   }
 
   .au-mobile-panel.is-open {
-    max-height: 850px;
-    overflow-y: auto;
+    transform: translateX(0);
   }
 
+  /* Drawer Top Bar: Brand + Close button */
+  .au-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--au-border);
+    background: var(--au-bg, #FAF6F0);
+    flex-shrink: 0;
+  }
+
+  .au-drawer-logo {
+    font-family: var(--au-font-serif);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: .28em;
+    color: var(--au-ink);
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  .au-drawer-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--au-ink);
+    line-height: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s, color .2s;
+  }
+
+  .au-drawer-close:hover {
+    background: rgba(33, 26, 20, 0.08);
+    color: var(--au-gold, #C2A063);
+  }
+
+  /* Drawer Scrollable Body */
   .au-mobile-inner {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 14px 20px 32px;
     display: flex;
     flex-direction: column;
-    padding: 8px 24px 24px;
     gap: 4px;
+  }
+
+  .au-drawer-group {
+    display: flex;
+    flex-direction: column;
   }
 
   .au-mobile-link {
     font-family: var(--au-font-sans);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    letter-spacing: .14em;
+    letter-spacing: .12em;
     text-transform: uppercase;
     color: var(--au-ink);
     text-decoration: none;
-    padding: 14px 0;
+    padding: 12px 0;
     border-bottom: 1px solid var(--au-border);
     background: none;
     border-left: none;
@@ -1499,10 +1590,152 @@ html {
     text-align: left;
     cursor: pointer;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: color .2s, padding-left .2s;
+  }
+
+  .au-mobile-link:hover {
+    color: var(--au-gold, #C2A063);
+    padding-left: 4px;
+  }
+
+  .au-mobile-link--active {
+    color: var(--au-gold, #C2A063);
+    font-weight: 600;
   }
 
   .au-mobile-link--muted {
     color: var(--au-text-muted-2);
+    font-size: 12px;
+  }
+
+  .au-drawer-arrow {
+    font-size: 16px;
+    color: var(--au-border-2);
+    transition: transform .2s, color .2s;
+  }
+
+  .au-mobile-link:hover .au-drawer-arrow {
+    color: var(--au-gold, #C2A063);
+    transform: translateX(2px);
+  }
+
+  .au-drawer-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--au-gold, #C2A063);
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  /* Categories sub-section */
+  .au-drawer-section-title {
+    font-family: var(--au-font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--au-gold, #C2A063);
+    padding: 18px 0 6px;
+  }
+
+  .au-drawer-sublinks {
+    display: flex;
+    flex-direction: column;
+    padding-left: 4px;
+  }
+
+  .au-mobile-sublink {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--au-font-sans);
+    font-size: 12.5px;
+    font-weight: 400;
+    letter-spacing: .06em;
+    color: var(--au-text-muted-2);
+    text-decoration: none;
+    padding: 9px 0;
+    border-bottom: 1px dashed rgba(232, 223, 209, 0.6);
+    transition: all .2s;
+  }
+
+  .au-mobile-sublink:hover {
+    color: var(--au-ink);
+    padding-left: 4px;
+  }
+
+  .au-drawer-bullet {
+    font-size: 7px;
+    color: var(--au-gold, #C2A063);
+    opacity: .8;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .au-drawer-divider {
+    height: 1px;
+    background: var(--au-border);
+    margin: 14px 0 10px;
+  }
+
+  /* User logged in card */
+  .au-drawer-user-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--au-bg-soft, #f4efe6);
+    border: 1px solid var(--au-border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+
+  .au-drawer-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--au-ink, #211A14);
+    color: var(--au-cream, #F0E6D4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--au-font-serif);
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .au-drawer-user-meta {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .au-drawer-user-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--au-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .au-drawer-user-email {
+    font-size: 11px;
+    color: var(--au-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Dedicated mobile menu language selector */
@@ -1510,31 +1743,31 @@ html {
     background: var(--au-bg-soft, #f4efe6);
     border: 1px solid var(--au-border);
     border-radius: 8px;
-    padding: 14px 16px;
-    margin: 16px 0 8px;
+    padding: 12px 14px;
+    margin-top: 16px;
   }
 
   .au-mobile-lang-kicker {
     font-family: var(--au-font-sans);
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
     letter-spacing: .12em;
     text-transform: uppercase;
     color: var(--au-text-muted);
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: 6px;
+    margin-bottom: 8px;
   }
 
   .au-mobile-lang-pills {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 6px;
   }
 
   .au-mobile-lang-pill {
-    min-height: 44px;
+    min-height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1542,7 +1775,7 @@ html {
     border: 1px solid var(--au-border-2);
     border-radius: 6px;
     font-family: var(--au-font-sans);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: .08em;
     color: var(--au-ink);
@@ -2357,6 +2590,50 @@ html {
   .au-auth-card {
     padding: 24px 16px;
   }
+
+  /* Drawer 3/4 adjustments on small phones */
+  .au-mobile-panel {
+    width: 75vw;
+  }
+
+  .au-drawer-header {
+    padding: 14px 16px;
+  }
+
+  .au-drawer-logo {
+    font-size: 18px;
+    letter-spacing: .22em;
+  }
+
+  .au-mobile-inner {
+    padding: 10px 16px 26px;
+  }
+
+  .au-mobile-link {
+    font-size: 12px;
+    padding: 10px 0;
+    letter-spacing: .1em;
+  }
+
+  .au-mobile-sublink {
+    font-size: 11.5px;
+    padding: 8px 0;
+  }
+
+  .au-drawer-section-title {
+    font-size: 10.5px;
+    padding: 14px 0 4px;
+  }
+
+  .au-mobile-lang-section {
+    padding: 10px 12px;
+    margin-top: 12px;
+  }
+
+  .au-mobile-lang-pill {
+    min-height: 36px;
+    font-size: 11px;
+  }
 }
 
 /* ── Very Small Phones ≤ 360px ── */
@@ -2373,6 +2650,45 @@ html {
   .au-nav-right .au-lang-btn {
     padding: 4px 5px;
     font-size: 8.5px;
+  }
+
+  /* Drawer 3/4 adjustments on tiny phones (≤ 360px) */
+  .au-mobile-panel {
+    width: 75vw;
+  }
+
+  .au-drawer-header {
+    padding: 12px 14px;
+  }
+
+  .au-drawer-logo {
+    font-size: 16px;
+    letter-spacing: .18em;
+  }
+
+  .au-mobile-inner {
+    padding: 8px 12px 20px;
+  }
+
+  .au-mobile-link {
+    font-size: 11.5px;
+    padding: 9px 0;
+    letter-spacing: .08em;
+  }
+
+  .au-mobile-sublink {
+    font-size: 11px;
+    padding: 7px 0;
+  }
+
+  .au-mobile-lang-pills {
+    gap: 4px;
+  }
+
+  .au-mobile-lang-pill {
+    min-height: 34px;
+    font-size: 10px;
+    padding: 0 4px;
   }
 }
 
